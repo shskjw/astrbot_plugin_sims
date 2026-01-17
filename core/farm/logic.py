@@ -106,6 +106,35 @@ class FarmLogic:
             self.save_farm(user_id, farm)
 
     def buy_land(self, user_id: str, user_data: dict) -> dict:
+        farm = self.load_farm(user_id)
+        if not farm:
+             raise ValueError("你还没有农场")
+        
+        # 简单扩建逻辑：扩建第n块地需要 n * 1000 金币
+        current_size = len(farm.get('plots', []))
+        cost = current_size * 1000
+        
+        if user_data.get('money', 0) < cost:
+            raise ValueError(f"扩建需要 {cost} 金币")
+            
+        user_data['money'] -= cost
+        self.dm.save_user(user_id, user_data)
+        
+        farm['size'] = current_size + 1
+        # Use Plot().dict() or manual dict depending on Pydantic version and imports
+        # Assuming Plot is imported and using .dict() for compatibility
+        new_plot = {
+            "crop": None,
+            "plantedAt": None,
+            "water": 0,
+            "fertility": 0,
+            "health": 100,
+            "growthStage": 0,
+            "harvestReady": False
+        }
+        farm['plots'].append(new_plot)
+        self.save_farm(user_id, farm)
+        return farm
 
     # --- Seeds / Tools / Actions ---
     def _seeds_data(self):

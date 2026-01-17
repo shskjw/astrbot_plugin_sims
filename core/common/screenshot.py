@@ -4,6 +4,9 @@ from pathlib import Path
 try:
     from playwright.async_api import async_playwright
     _PLAYWRIGHT_AVAILABLE = True
+except ImportError:
+    print("Playwright not installed. Please install it with `pip install playwright && playwright install chromium`")
+    _PLAYWRIGHT_AVAILABLE = False
 except Exception as e:
     import traceback
     print("Playwright import failed:")
@@ -16,6 +19,7 @@ async def html_to_image_bytes(html: str, width: int = 900, height: int = 600, ti
     Returns None on failure.
     """
     if not _PLAYWRIGHT_AVAILABLE:
+        print("Playwright unavailable, cannot render image.")
         return None
     try:
         async with async_playwright() as p:

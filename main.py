@@ -163,7 +163,11 @@ class SimsPlugin(Star):
                 pass
         else:
             # 降级文本
-            yield event.plain_result("无法渲染帮助图片，请检查后台日志。")
+            from .core.common.screenshot import _PLAYWRIGHT_AVAILABLE
+            if not _PLAYWRIGHT_AVAILABLE:
+                 yield event.plain_result("无法渲染帮助图片。检测到缺少 Playwright 依赖。\n请在终端执行：\npip install playwright\nplaywright install chromium")
+            else:
+                 yield event.plain_result("无法渲染帮助图片，未知错误，请检查后台日志。")
 
     @filter.command("增加金币")
     async def cmd_admin_add_money(self, event: AstrMessageEvent, target_id: str, amount: int):
@@ -3076,6 +3080,14 @@ class SimsPlugin(Star):
         
         yield event.plain_result(f"✅ 转账成功！已向 {target.get('name', target_id)} 转账 {amount} 金币。")
 
+    @filter.command("酿酒配方")
+    async def cmd_brewing_recipes(self, event: AstrMessageEvent):
+        """查看可用的酿酒配方"""
+        try:
+            recipes = self.tavern.list_brewing_recipes()
+            text = "🍺 酿酒配方列表：\n"
+            for r in recipes:
+                text += f"\n🔖 {r['name']} ({r['type']})\n"
                 text += f"   {r['description']}\n"
                 text += f"   费用: {r['cost']}💰 | 时长: {r['brewing_hours']}小时\n"
                 text += f"   参与人数: {r['min_participants']}-{r['max_participants']}人\n"

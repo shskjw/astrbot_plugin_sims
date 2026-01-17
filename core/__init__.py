@@ -1,2 +1,3 @@
 # core package init: expose subsystems
-from . import farm, police, doctor, chef, firefighter, fishing, tavern, netbar, cinema, stock, property
+from . import farm, police, doctor, chef, firefighter, fishing, tavern, netbar, cinema, stock, property, weather, pet, relationship
+
