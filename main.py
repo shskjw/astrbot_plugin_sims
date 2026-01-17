@@ -107,6 +107,15 @@ class SimsPlugin(Star):
         """异步保存用户数据"""
         await self.data_manager.async_save_user(user_id, data)
     
+    def _bytes_to_image_path(self, img_bytes: bytes) -> str:
+        """将图片字节转换为临时文件路径，供 event.image_result 使用"""
+        import tempfile
+        import os
+        fd, path = tempfile.mkstemp(suffix=".png")
+        with os.fdopen(fd, 'wb') as tmp:
+            tmp.write(img_bytes)
+        return path
+    
     @filter.command("模拟人生")
     async def sims_help(self, event: AstrMessageEvent):
         """显示模拟人生帮助"""
@@ -168,6 +177,165 @@ class SimsPlugin(Star):
                  yield event.plain_result("无法渲染帮助图片。检测到缺少 Playwright 依赖。\n请在终端执行：\npip install playwright\nplaywright install chromium")
             else:
                  yield event.plain_result("无法渲染帮助图片，未知错误，请检查后台日志。")
+
+    # ========== 基础功能 ==========
+    
+    @filter.command("签到")
+    async def cmd_daily_sign(self, event: AstrMessageEvent):
+        """每日签到"""
+        from datetime import datetime, timedelta
+        user_id = event.get_sender_id()
+        user = await self._load_user(user_id)
+        
+        today = datetime.now().strftime("%Y-%m-%d")
+        last_sign = user.get('last_sign_date', '')
+        
+        if last_sign == today:
+            yield event.plain_result("❌ 你今天已经签到过了，明天再来吧！")
+            return
+        
+        # 计算连续签到
+        streak = user.get('sign_streak', 0)
+        yesterday = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
+        if last_sign == yesterday:
+            streak += 1
+        else:
+            streak = 1
+        
+        # 签到奖励：基础100 + 连续签到加成
+        base_reward = self.config_manager.daily_sign_reward
+        bonus = min(streak * 10, 100)  # 连续签到每天+10，最多+100
+        total_reward = base_reward + bonus
+        
+        user['money'] = user.get('money', 0) + total_reward
+        user['last_sign_date'] = today
+        user['sign_streak'] = streak
+        user['total_signs'] = user.get('total_signs', 0) + 1
+        
+        await self._save_user(user_id, user)
+        
+        msg = f"✅ 签到成功！\n"
+        msg += f"💰 获得 {total_reward} 金币"
+        if bonus > 0:
+            msg += f" (含连续签到加成 +{bonus})"
+        msg += f"\n📅 连续签到: {streak} 天"
+        msg += f"\n💵 当前余额: {user['money']} 金币"
+        yield event.plain_result(msg)
+
+    @filter.command("状态")
+    async def cmd_player_status(self, event: AstrMessageEvent):
+        """查看玩家状态"""
+        user_id = event.get_sender_id()
+        user = await self._load_user(user_id)
+        
+        msg = f"👤 玩家状态\n"
+        msg += f"━━━━━━━━━━━━━━━\n"
+        msg += f"🆔 ID: {user_id}\n"
+        msg += f"📛 名称: {user.get('name', '玩家')}\n"
+        msg += f"💰 金币: {user.get('money', 0)}\n"
+        msg += f"📅 签到天数: {user.get('total_signs', 0)}\n"
+        msg += f"🔥 连续签到: {user.get('sign_streak', 0)} 天\n"
+        
+        # 检查各系统状态
+        systems = []
+        try:
+            if self.farm.load_farm(user_id):
+                systems.append("🌾农场")
+        except: pass
+        try:
+            if self.police._load_all_police().get(user_id):
+                systems.append("👮警察")
+        except: pass
+        try:
+            if self.doctor._load(self.doctor._doctors_file()).get(user_id):
+                systems.append("👨‍⚕️医生")
+        except: pass
+        try:
+            if self.firefighter._load_firefighters().get(user_id):
+                systems.append("🚒消防员")
+        except: pass
+        try:
+            if self.fishing._load_users().get(user_id):
+                systems.append("🎣钓鱼")
+        except: pass
+        try:
+            if self.chef._load_chef_data(user_id):
+                systems.append("👨‍🍳厨师")
+        except: pass
+        try:
+            if self.netbar._load_netbars().get(user_id):
+                systems.append("🖥️网吧")
+        except: pass
+        try:
+            if self.cinema._load_cinemas().get(user_id):
+                systems.append("🎬电影院")
+        except: pass
+        try:
+            if self.tavern._load_tavern_data(user_id):
+                systems.append("🍺酒馆")
+        except: pass
+        
+        if systems:
+            msg += f"━━━━━━━━━━━━━━━\n"
+            msg += f"📋 已开启系统:\n"
+            msg += "  ".join(systems)
+        
+        yield event.plain_result(msg)
+
+    @filter.command("背包")
+    async def cmd_inventory(self, event: AstrMessageEvent):
+        """查看背包"""
+        user_id = event.get_sender_id()
+        user = await self._load_user(user_id)
+        
+        inventory = user.get('inventory', {})
+        
+        msg = f"🎒 我的背包\n"
+        msg += f"━━━━━━━━━━━━━━━\n"
+        
+        if not inventory:
+            msg += "背包是空的，快去探索获取物品吧！"
+        else:
+            for item_name, item_data in inventory.items():
+                if isinstance(item_data, dict):
+                    count = item_data.get('count', 1)
+                    msg += f"• {item_name} x{count}\n"
+                else:
+                    msg += f"• {item_name} x{item_data}\n"
+        
+        msg += f"━━━━━━━━━━━━━━━\n"
+        msg += f"💰 金币: {user.get('money', 0)}"
+        
+        yield event.plain_result(msg)
+
+    @filter.command("排行榜")
+    async def cmd_leaderboard(self, event: AstrMessageEvent):
+        """查看金币排行榜"""
+        # 加载所有用户数据
+        all_users = self.data_manager.load_all_users()
+        
+        if not all_users:
+            yield event.plain_result("暂无排行数据")
+            return
+        
+        # 按金币排序
+        sorted_users = sorted(
+            [(uid, data) for uid, data in all_users.items()],
+            key=lambda x: x[1].get('money', 0),
+            reverse=True
+        )[:10]  # 取前10名
+        
+        msg = "🏆 金币排行榜 TOP 10\n"
+        msg += "━━━━━━━━━━━━━━━\n"
+        
+        medals = ["🥇", "🥈", "🥉"]
+        for i, (uid, data) in enumerate(sorted_users):
+            rank = medals[i] if i < 3 else f"{i+1}."
+            name = data.get('name', uid[:8])
+            money = data.get('money', 0)
+            msg += f"{rank} {name}: {money} 💰\n"
+        
+        yield event.plain_result(msg)
 
     @filter.command("增加金币")
     async def cmd_admin_add_money(self, event: AstrMessageEvent, target_id: str, amount: int):
@@ -287,7 +455,8 @@ class SimsPlugin(Star):
             # 渲染图片（需要 Playwright 支持）
             img = await self.farm_renderer.render_image('farm_created.html', farmName=farm['name'], userName=user.get('name'))
             if img and isinstance(img, (bytes, bytearray)):
-                yield event.image_result(img)
+                img_path = self._bytes_to_image_path(img)
+                yield event.image_result(img_path)
             else:
                 yield event.plain_result('农场创建成功，但无法生成图片。')
         except Exception as e:
@@ -819,7 +988,8 @@ class SimsPlugin(Star):
             return
         img = await self.farm_renderer.render_image('farm_view.html', farm=farm)
         if img and isinstance(img, (bytes, bytearray)):
-            yield event.image_result(img)
+            img_path = self._bytes_to_image_path(img)
+            yield event.image_result(img_path)
         else:
             yield event.plain_result('无法生成农场图片，请检查模板或截图管线。')
 

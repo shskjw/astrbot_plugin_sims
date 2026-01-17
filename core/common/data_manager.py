@@ -170,6 +170,15 @@ class DataManager:
         """列出所有用户ID"""
         return [p.stem for p in self.users_dir.glob("*.json")]
 
+    def load_all_users(self) -> Dict[str, Dict[str, Any]]:
+        """加载所有用户数据"""
+        result = {}
+        for user_id in self.list_users():
+            user_data = self.load_user(user_id)
+            if user_data:
+                result[user_id] = user_data
+        return result
+
     # ========== 内部方法 ==========
     def _read_json(self, path: Path) -> Dict[str, Any]:
         """读取 JSON 文件"""
