@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #e8f5e9, #b2dfdb);
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        .header h1 {
+            color: #4caf50;
+            margin: 0;
+            font-size: 2em;
+        }
+        .pet-info {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #81c784;
+        }
+        .pet-name {
+            font-size: 1.8em;
+            color: #2e7d32;
+            margin: 10px 0;
+            text-align: center;
+        }
+        .level-exp {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .level {
+            font-size: 1.2em;
+            color: #f57c00;
+            margin-bottom: 5px;
+        }
+        .exp-bar {
+            width: 100%;
+            height: 10px;
+            background: #e8f5e9;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+        .exp-fill {
+            height: 100%;
+            background: #ffd54f;
+            border-radius: 5px;
+            transition: width 0.3s ease;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 1.5em;
+            color: #1976d2;
+            margin: 5px 0;
+        }
+        .status-bars {
+            margin: 20px 0;
+        }
+        .status-bar {
+            margin: 15px 0;
+        }
+        .status-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            color: #666;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.3s ease;
+        }
+        .health-bar { background: #4caf50; }
+        .hunger-bar { background: #ff9800; }
+        .mood-bar { background: #e91e63; }
+        .energy-bar { background: #2196f3; }
+        .skills-section {
+            margin: 20px 0;
+        }
+        .skill-tag {
+            display: inline-block;
+            background: #e8f5e9;
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin: 5px;
+            color: #2e7d32;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .cute-icon {
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐾 宠物状态 🐾</h1>
+        </div>
+        <div class="pet-info">
+            <div class="pet-name">
+                <span class="cute-icon">🌟</span>{{pet.name}}
+            </div>
+            <div class="level-exp">
+                <div class="level">Level {{pet.level}}</div>
+                <div class="exp-bar">
+                    <div class="exp-fill" style="width: {{(pet.exp / (pet.level * 100)) * 100}}%"></div>
+                </div>
+                <div style="font-size: 0.9em; color: #666; margin-top: 5px;">
+                    经验值: {{pet.exp}}/{{pet.level * 100}}
+                </div>
+            </div>
+            <div class="status-bars">
+                <div class="status-bar">
+                    <div class="status-label">
+                        <span>❤️ 生命值</span>
+                        <span>{{pet.currentStats.health}}/100</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill health-bar" style="width: {{pet.currentStats.health}}%"></div>
+                    </div>
+                </div>
+                <div class="status-bar">
+                    <div class="status-label">
+                        <span>🍖 饥饿度</span>
+                        <span>{{pet.currentStats.hunger}}/100</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill hunger-bar" style="width: {{pet.currentStats.hunger}}%"></div>
+                    </div>
+                </div>
+                <div class="status-bar">
+                    <div class="status-label">
+                        <span>😊 心情</span>
+                        <span>{{pet.currentStats.mood}}/100</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill mood-bar" style="width: {{pet.currentStats.mood}}%"></div>
+                    </div>
+                </div>
+                <div class="status-bar">
+                    <div class="status-label">
+                        <span>⚡ 体力</span>
+                        <span>{{pet.currentStats.energy}}/100</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill energy-bar" style="width: {{pet.currentStats.energy}}%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="skills-section">
+                <div style="margin-bottom: 10px; color: #666;">🎯 技能列表</div>
+                {{each pet.skills skill}}
+                <span class="skill-tag">{{skill}}</span>
+                {{/each}}
+            </div>
+        </div>
+        <div class="footer">
+            <p>💫 使用 #喂养宠物 {{pet.id}} 或 #宠物互动 {{pet.id}} 来照顾你的宠物 💫</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+  <link rel="shortcut icon" href="#"/>
+  <link rel="stylesheet" type="text/css" href="{{cssFile}}CSS/common.css"/>
+  <link rel="stylesheet" type="text/css" href="{{cssFile}}CSS/medicines.css"/>
+</head>
+<body>
+  <div class="container" id="container">
+    <!-- 装饰性背景元素 -->
+    <div class="cyber-circles">
+      <div class="circle circle-1"></div>
+      <div class="circle circle-2"></div>
+      <div class="circle circle-3"></div>
+    </div>
+
+    <!-- 标题区域 -->
+    <div class="head-box">
+      <div class="cyber-scanner"></div>
+      <div class="title">医院药品清单</div>
+      <div class="subtitle">
+        <span class="cyber-text">当前共有</span>
+        <span class="number-highlight">{{medicines_count}}</span>
+        <span class="cyber-text">种药品</span>
+      </div>
+    </div>
+    
+    <!-- 药品列表区域 -->
+    <div class="medicine-list">
+      {{each medicines medicine}}
+      <div class="medicine-item {{medicine.medicine_color_class}}">
+        <!-- 药品卡片装饰元素 -->
+        <div class="card-decoration">
+          <div class="corner-decor top-left"></div>
+          <div class="corner-decor top-right"></div>
+          <div class="corner-decor bottom-left"></div>
+          <div class="corner-decor bottom-right"></div>
+        </div>
+
+        <!-- 药品头部信息 -->
+        <div class="medicine-header">
+          <div class="medicine-name">{{medicine.name}}</div>
+          <div class="medicine-type">{{medicine.type}}</div>
+        </div>
+        
+        <!-- 药品详细信息 -->
+        <div class="medicine-info">
+          <div class="info-row effect-row">
+            <span class="label">药品功效：</span>
+            <span class="value">{{medicine.effect}}</span>
+          </div>
+          <div class="info-row application-row">
+            <span class="label">适用症状：</span>
+            <span class="value">{{medicine.application}}</span>
+          </div>
+          <div class="info-row side-effects-row">
+            <span class="label">副作用：</span>
+            <span class="value">{{medicine.side_effects}}</span>
+          </div>
+          <div class="info-row description-row">
+            <span class="label">药品说明：</span>
+            <span class="value">{{medicine.description}}</span>
+          </div>
+        </div>
+        
+        <!-- 药品底部信息 -->
+        <div class="medicine-footer">
+          <div class="effectiveness {{medicine.effectiveness_class}}" style="color: {{medicine.effectiveness_color}}">
+            <div class="effectiveness-bar">
+              <div class="effectiveness-fill" style="width: {{medicine.effectiveness}}%; background-color: {{medicine.effectiveness_color}}"></div>
+            </div>
+            <span class="effectiveness-value">{{medicine.effectiveness}}%</span>
+          </div>
+          <div class="price">
+            <span class="price-value">{{medicine.price}}</span>
+            <span class="price-currency">金币</span>
+          </div>
+        </div>
+
+        <!-- 悬浮特效元素 -->
+        <div class="hover-effects">
+          <div class="glow"></div>
+          <div class="sparkles">
+            <span class="sparkle"></span>
+            <span class="sparkle"></span>
+            <span class="sparkle"></span>
+          </div>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+
+    <!-- 底部装饰 -->
+    <div class="cyber-footer">
+      <div class="cyber-line"></div>
+      <div class="cyber-dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

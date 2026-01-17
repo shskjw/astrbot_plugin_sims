@@ -1,0 +1,280 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @font-face {
+            font-family: "MiaoFont";
+            src: url("./也字工厂喵喵体.ttf");
+        }
+
+        body {
+            font-family: "MiaoFont", sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a1f3c 0%, #2a3166 100%);
+            color: #fff;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0, 195, 255, 0.5);
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(255, 255, 255, 0.1),
+                transparent
+            );
+            transform: rotate(45deg);
+            animation: shine 4s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .usage-info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+        }
+
+        .surgery-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .surgery-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .surgery-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border-color: #4fc3f7;
+        }
+
+        .surgery-difficulty {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff4081, #7c4dff);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .surgery-type {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            background: rgba(79, 195, 247, 0.2);
+            border: 1px solid #4fc3f7;
+            margin-bottom: 10px;
+        }
+
+        .surgery-success {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            margin-left: 10px;
+            background: linear-gradient(45deg, #00bcd4, #2196f3);
+        }
+
+        .equipment-list {
+            margin: 15px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .equipment-item {
+            padding: 5px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            font-size: 0.9em;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .equipment-item[data-has="true"] {
+            border-color: #4caf50;
+            color: #4caf50;
+        }
+
+        .equipment-item[data-has="false"] {
+            border-color: #f44336;
+            color: #f44336;
+        }
+
+        .doctor-eligible {
+            display: inline-block;
+            padding: 8px 15px;
+            border-radius: 15px;
+            margin-top: 15px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #4caf50, #009688);
+            transition: all 0.3s ease;
+        }
+
+        .doctor-eligible.not-eligible {
+            background: linear-gradient(45deg, #f44336, #ff9800);
+        }
+
+        .surgery-info {
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .surgery-info p {
+            margin: 5px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .surgery-info p i {
+            margin-right: 8px;
+            color: #4fc3f7;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9em;
+        }
+
+        /* 自适应布局 */
+        @media (max-width: 768px) {
+            .surgery-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏥 高级手术中心</h1>
+            <p>当前可进行 {{surgeries.length}} 种手术</p>
+        </div>
+
+        <div class="usage-info">
+            <h3>📋 手术指南</h3>
+            <p>🔸 使用命令：<b>#进行手术 [患者ID] [手术ID]</b></p>
+            <p>🔸 当前医生等级：<b>{{doctorData.level}}</b> | 手术能力：<b>{{doctorData.skills.surgery}}</b></p>
+            <p>🔸 请确保技能等级充足且设备齐全后进行手术</p>
+        </div>
+
+        <div class="surgery-list">
+            {{each surgeries surgery}}
+            <div class="surgery-card">
+                <div class="surgery-difficulty">
+                    难度 {{surgery.difficulty}}/10
+                </div>
+
+                <h3>{{surgery.name}}</h3>
+                <div class="surgery-type">{{surgery.type}}</div>
+                <div class="surgery-success">
+                    成功率 {{surgery.success_rate}}%
+                </div>
+
+                <div class="surgery-info">
+                    <p><i>⏱️</i> 手术时长：{{surgery.duration}} 分钟</p>
+                    <p><i>⚠️</i> 风险等级：{{surgery.risk_level}}/10</p>
+                    <p><i>📈</i> 需求等级：{{surgery.required_level}}</p>
+                    <p><i>💰</i> 手术费用：{{surgery.price_formatted}} 元</p>
+                </div>
+
+                <p>{{surgery.description}}</p>
+
+                <div>
+                    <b>🔧 所需设备：</b>
+                    <div class="equipment-list">
+                        {{each surgery.equipment_info equip}}
+                        <span class="equipment-item" data-has="{{equip.hasEquipment}}">
+                            {{equip.name}} {{equip.hasEquipment ? '✅' : '❌'}}
+                        </span>
+                        {{/each}}
+                    </div>
+                </div>
+
+                <p><b>🏥 术后护理：</b>{{surgery.postoperative_care}}</p>
+
+                <div class="doctor-eligible {{surgery.eligible ? '' : 'not-eligible'}}">
+                    {{surgery.eligibleText}} {{surgery.hasAllEquipment ? '' : ' | 设备不足'}}
+                </div>
+            </div>
+            {{/each}}
+        </div>
+
+        <div class="footer">
+            <p>模拟人生 - 未来医疗中心</p>
+            <p>为人类健康保驾护航</p>
+        </div>
+    </div>
+</body>
+</html>

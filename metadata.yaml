@@ -1,0 +1,6 @@
+name: "astrbot_plugin_sims"
+author: "shskjw"
+desc: "模拟人生插件 - 农场/警察/医生/消防员/钓鱼/网吧/电影院/厨师/酒馆等多系统经营游戏"
+version: "2.0.0"
+repo: "https://github.com/shskjw/astrbot_plugin_sims"
+display_name: "🎮 模拟人生"

@@ -1,0 +1,211 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>食材图鉴</title>
+    <style>
+        :root {
+            --primary-color: #ff9ecd;
+            --secondary-color: #7b88ff;
+            --bg-color: #fef6f9;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --border-color: #e2e8f0;
+            --shadow-color: rgba(123, 136, 255, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 158, 205, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(123, 136, 255, 0.1) 0%, transparent 50%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            text-shadow: 2px 2px 4px var(--shadow-color);
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 3px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 1rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px var(--shadow-color);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px var(--shadow-color);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .ingredient-name {
+            font-size: 1.25rem;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .ingredient-info {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .ingredient-price {
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(123, 136, 255, 0.1);
+            color: var(--secondary-color);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .decoration {
+            position: fixed;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .decoration-1 {
+            top: 20px;
+            right: 20px;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%);
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .decoration-2 {
+            bottom: 20px;
+            left: 20px;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, var(--secondary-color) 0%, transparent 70%);
+            opacity: 0.1;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 1rem;
+            }
+
+            .title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="decoration decoration-1"></div>
+    <div class="decoration decoration-2"></div>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">✨ 食材图鉴 ✨</h1>
+        </header>
+        <main class="grid">
+            {{each ingredients item}}
+            <div class="card">
+                <h2 class="ingredient-name">{{item.name}}</h2>
+                <div class="ingredient-info">
+                    <span class="tag">{{item.type}}</span>
+                    {{if item.rarity}}
+                    <span class="tag">{{item.rarity}}星</span>
+                    {{/if}}
+                </div>
+                <div class="ingredient-info">
+                    {{if item.description}}
+                    <p>{{item.description}}</p>
+                    {{/if}}
+                </div>
+                <div class="ingredient-price">
+                    {{if item.price}}
+                    💰 {{item.price}} 金币
+                    {{/if}}
+                </div>
+            </div>
+            {{/each}}
+        </main>
+    </div>
+</body>
+</html>

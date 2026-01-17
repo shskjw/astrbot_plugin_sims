@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #ff9800;
+            margin: 0;
+            font-size: 2em;
+        }
+        .section-title {
+            color: #f57c00;
+            margin: 30px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ffe0b2;
+        }
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .item-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            border: 2px solid #ffcc80;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        .item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(255, 152, 0, 0.2);
+        }
+        .item-name {
+            font-size: 1.2em;
+            color: #e65100;
+            margin-bottom: 10px;
+        }
+        .item-type {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff9800;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+        }
+        .item-info {
+            color: #666;
+            font-size: 0.9em;
+            margin: 10px 0;
+        }
+        .item-price {
+            font-size: 1.1em;
+            color: #f57c00;
+            margin-top: 10px;
+            text-align: right;
+        }
+        .item-description {
+            font-style: italic;
+            color: #666;
+            margin: 10px 0;
+            font-size: 0.9em;
+        }
+        .item-stats {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+            flex-wrap: wrap;
+        }
+        .stat-tag {
+            background: #fff3e0;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.9em;
+            color: #e65100;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .cute-icon {
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+        .tab-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .tab-button {
+            background: #fff;
+            border: 2px solid #ffcc80;
+            padding: 10px 20px;
+            border-radius: 20px;
+            color: #f57c00;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .tab-button.active {
+            background: #ff9800;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏪 家园商店 🏪</h1>
+        </div>
+
+        <div class="tab-container">
+            <div class="tab-button active">家具区</div>
+            <div class="tab-button">园艺区</div>
+        </div>
+
+        <div class="section-title">
+            <span class="cute-icon">🪑</span>精选家具
+        </div>
+        <div class="items-grid">
+            {{each furniture item}}
+            <div class="item-card">
+                <div class="item-type">{{item.type}}</div>
+                <div class="item-name">
+                    <span class="cute-icon">✨</span>{{item.name}}
+                </div>
+                <div class="item-stats">
+                    <span class="stat-tag">
+                        <span class="cute-icon">🎨</span>{{item.style}}风格
+                    </span>
+                    <span class="stat-tag">
+                        <span class="cute-icon">⭐</span>舒适度+{{item.comfort}}
+                    </span>
+                </div>
+                <div class="item-description">{{item.description}}</div>
+                <div class="item-price">
+                    <span class="cute-icon">💰</span>{{item.price}}金币
+                </div>
+                <div class="item-info">
+                    商品ID: {{item.id}}
+                </div>
+            </div>
+            {{/each}}
+        </div>
+
+        <div class="section-title">
+            <span class="cute-icon">🌱</span>园艺种子
+        </div>
+        <div class="items-grid">
+            {{each seeds seed}}
+            <div class="item-card">
+                <div class="item-type">{{seed.type}}</div>
+                <div class="item-name">
+                    <span class="cute-icon">🌺</span>{{seed.name}}
+                </div>
+                <div class="item-stats">
+                    <span class="stat-tag">
+                        <span class="cute-icon">⏰</span>生长期{{seed.growthTime}}小时
+                    </span>
+                    <span class="stat-tag">
+                        <span class="cute-icon">💎</span>收获金币{{seed.reward}}
+                    </span>
+                </div>
+                <div class="item-description">{{seed.description}}</div>
+                <div class="item-price">
+                    <span class="cute-icon">💰</span>{{seed.price}}金币
+                </div>
+                <div class="item-info">
+                    种子ID: {{seed.id}}
+                </div>
+            </div>
+            {{/each}}
+        </div>
+
+        <div class="footer">
+            <p>💫 使用 #购买家具 家具ID 购买家具 | #种植 种子名称 开始种植 💫</p>
+            <p>🌟 购买前请确保余额充足，并选择适合的物品 🌟</p>
+        </div>
+    </div>
+</body>
+</html>

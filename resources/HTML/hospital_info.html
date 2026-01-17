@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        color: #333;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 10px;
+        color: #2c3e50;
+      }
+      .hospital-img {
+        width: 120px;
+        height: 120px;
+        margin: 0 auto;
+        display: block;
+      }
+      .info-section {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 15px 0;
+        border-left: 4px solid #3498db;
+      }
+      .equipment-list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-top: 10px;
+      }
+      .equipment-item {
+        background-color: #e8f4fc;
+        padding: 8px;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+      .department-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      .department-item {
+        background-color: #e8f4fc;
+        padding: 8px 12px;
+        border-radius: 15px;
+        font-size: 14px;
+      }
+      .upgrade-info {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #fff8e1;
+        border-radius: 5px;
+        border-left: 4px solid #ffc107;
+      }
+      .footer {
+        text-align: center;
+        font-size: 14px;
+        color: #7f8c8d;
+        margin-top: 20px;
+      }
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        margin-top: 15px;
+      }
+      .stat-item {
+        background-color: #e8f4fc;
+        padding: 10px;
+        border-radius: 5px;
+        text-align: center;
+      }
+      .stat-value {
+        font-size: 18px;
+        font-weight: bold;
+        color: #3498db;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🏥 医院信息 🏥</h1>
+        <img src="https://img.icons8.com/color/96/000000/hospital-3.png" class="hospital-img">
+      </div>
+      
+      <div class="info-section">
+        <h2>{{hospital_name}}</h2>
+        <p><b>医院等级：</b>{{hospital_level}} 级</p>
+        <p><b>医院声誉：</b>{{hospital_reputation}}</p>
+        <p><b>当前患者数：</b>{{hospital_patients}}/{{hospital_max_patients}}</p>
+        <p><b>医护人员：</b>{{hospital_staff}} 人</p>
+      </div>
+      
+      <h3>📋 开设科室</h3>
+      <div class="department-list">
+        <p>{{departments_str}}</p>
+      </div>
+      
+      <h3>🔧 医疗设备 ({{equipment_count}}件)</h3>
+      <div class="equipment-list">
+        {{#hospital_equipment}}
+        <div class="equipment-item">{{name}} ({{rating}})</div>
+        {{/hospital_equipment}}
+      </div>
+      
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-value">{{current_patients_count}}</div>
+          <div>当前接诊患者</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">{{total_patients_treated}}</div>
+          <div>累计治疗患者</div>
+        </div>
+      </div>
+      
+      {{#has_next_level}}
+      <div class="upgrade-info">
+        <h3>⬆️ 升级信息</h3>
+        <p><b>下一级：</b>{{next_level_name}} ({{next_level}}级)</p>
+        <p><b>升级费用：</b>{{upgrade_cost}}元</p>
+        <p><b>升级后最大患者容量：</b>{{next_level_max_patients}}</p>
+        <p><b>升级后可用科室：</b>{{next_level_departments}}</p>
+        <p>使用 <b>#升级医院</b> 命令进行升级</p>
+      </div>
+      {{/has_next_level}}
+      
+      <div class="footer">
+        <p>模拟人生 - 医生模拟系统</p>
+      </div>
+    </div>
+  </body>
+</html> 

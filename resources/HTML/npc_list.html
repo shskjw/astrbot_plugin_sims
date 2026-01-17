@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #fce4ec, #f8bbd0);
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #e91e63;
+            margin: 0;
+            font-size: 2em;
+        }
+        .npc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .npc-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            border: 2px solid #f8bbd0;
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .npc-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.2);
+        }
+        .npc-name {
+            font-size: 1.5em;
+            color: #e91e63;
+            margin-bottom: 10px;
+        }
+        .npc-info {
+            margin: 10px 0;
+            color: #666;
+        }
+        .npc-hobbies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin: 10px 0;
+        }
+        .hobby-tag {
+            background: #fce4ec;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.9em;
+            color: #e91e63;
+        }
+        .likes-dislikes {
+            margin: 15px 0;
+        }
+        .likes, .dislikes {
+            margin: 5px 0;
+        }
+        .likes span {
+            color: #4caf50;
+        }
+        .dislikes span {
+            color: #f44336;
+        }
+        .npc-id {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #e91e63;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 0.8em;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .cute-icon {
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💕 可追求的NPC 💕</h1>
+        </div>
+        <div class="npc-grid">
+            {{each npcs npc}}
+            <div class="npc-card">
+                <div class="npc-id">{{npc.id}}</div>
+                <div class="npc-name">
+                    <span class="cute-icon">{{npc.gender === '女' ? '👧' : '👦'}}</span>
+                    {{npc.name}}
+                </div>
+                <div class="npc-info">
+                    <div><span class="cute-icon">🎂</span>年龄：{{npc.age}}岁</div>
+                    <div><span class="cute-icon">🌟</span>性格：{{npc.personality}}</div>
+                </div>
+                <div class="npc-hobbies">
+                    {{each npc.hobby hobby}}
+                    <span class="hobby-tag">{{hobby}}</span>
+                    {{/each}}
+                </div>
+                <div class="likes-dislikes">
+                    <div class="likes">
+                        <span class="cute-icon">💖</span>喜欢：
+                        {{each npc.likes like index}}
+                        {{like}}{{if index !== npc.likes.length - 1}}、{{/if}}
+                        {{/each}}
+                    </div>
+                    <div class="dislikes">
+                        <span class="cute-icon">💔</span>讨厌：
+                        {{each npc.dislikes dislike index}}
+                        {{dislike}}{{if index !== npc.dislikes.length - 1}}、{{/if}}
+                        {{/each}}
+                    </div>
+                </div>
+                <div class="npc-description">
+                    <span class="cute-icon">📝</span>{{npc.description}}
+                </div>
+            </div>
+            {{/each}}
+        </div>
+        <div class="footer">
+            <p>💫 使用 #追求 NPC_ID 来开始追求心仪的对象 💫</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+    <link rel="stylesheet" type="text/css" href="{{cssFile}}common.css"/>
+    <style>
+        .container {
+            background: url('{{cssFile}}chef/contests_bg.jpg') no-repeat;
+            background-size: cover;
+            width: 800px;
+            color: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #FFD700;
+            text-shadow: 2px 2px 4px #000;
+        }
+        .contests-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        .contest-card {
+            background: rgba(0,0,0,0.7);
+            padding: 15px;
+            border-radius: 10px;
+            position: relative;
+        }
+        .contest-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #FFD700;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #555;
+        }
+        .contest-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        .contest-info .key {
+            color: #aaa;
+        }
+        .contest-info .value {
+            color: #8BC34A;
+        }
+        .timer {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,0,0,0.5);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+        }
+        .status {
+            position: absolute;
+            bottom: 10px;
+            right: 15px;
+        }
+        .status.joined {
+            color: #4CAF50;
+        }
+        .status.not-joined {
+            color: #FF5722;
+        }
+        .empty-message {
+            background: rgba(0,0,0,0.7);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-style: italic;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏆 活跃厨艺比赛 🏆</h1>
+        
+        {{if contests && contests.length > 0}}
+        <div class="contests-list">
+            {{each contests}}
+            <div class="contest-card">
+                <div class="contest-name">{{$value.name}}</div>
+                <div class="timer">⏱️ {{$value.remainingTime}}</div>
+                
+                <div class="contest-info">
+                    <span class="key">ID:</span>
+                    <span class="value">{{$value.id}}</span>
+                </div>
+                
+                <div class="contest-info">
+                    <span class="key">食谱:</span>
+                    <span class="value">{{$value.recipeName}}</span>
+                </div>
+                
+                <div class="contest-info">
+                    <span class="key">参与人数:</span>
+                    <span class="value">{{$value.participantCount}}人</span>
+                </div>
+                
+                <div class="status {{$value.isParticipant ? 'joined' : 'not-joined'}}">
+                    {{$value.isParticipant ? '✅ 已参与' : '⭕ 未参与'}}
+                </div>
+            </div>
+            {{/each}}
+        </div>
+        {{else}}
+        <div class="empty-message">
+            <p>目前没有正在进行的厨艺比赛</p>
+            <p>你可以使用 #发起厨艺比赛 [名称] [食谱] 来创建一个新比赛！</p>
+        </div>
+        {{/if}}
+        
+        <div class="footer">
+            使用 #参加厨艺比赛 [比赛ID] 加入感兴趣的比赛<br>
+            使用 #查看比赛详情 [比赛ID] 查看比赛详细信息
+        </div>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>VIP包间预订</title>
+    <link rel="stylesheet" href="../common/base.css">
+    <style>
+        body {
+            background-color: #fff5f7;
+            font-family: 'HYShiGuangTiW_0', sans-serif;
+        }
+        .container {
+            width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(255,105,180,0.2);
+        }
+        .header {
+            text-align: center;
+            color: #ff69b4;
+            margin-bottom: 20px;
+        }
+        .booking-card {
+            background-color: #fff0f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .booking-detail {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+        }
+        .tips {
+            background-color: #fff0f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .cute-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto;
+            display: block;
+        }
+        .highlight {
+            color: #ff69b4;
+            font-weight: bold;
+        }
+        .booking-id {
+            background-color: #ff69b4;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="../img/help/icon.png" class="cute-icon">
+        <div class="header">
+            <h1>🎉 VIP包间预订成功</h1>
+        </div>
+        
+        <div class="booking-card">
+            <div class="booking-detail">
+                <span><strong>预订编号：</strong></span>
+                <span class="booking-id">{{bookingId}}</span>
+            </div>
+            <div class="booking-detail">
+                <span><strong>包间类型：</strong></span>
+                <span>{{roomName}}</span>
+            </div>
+            <div class="booking-detail">
+                <span><strong>使用时长：</strong></span>
+                <span>{{duration}}小时</span>
+            </div>
+            <div class="booking-detail">
+                <span><strong>总费用：</strong></span>
+                <span class="highlight">{{totalCost}}元</span>
+            </div>
+            <div class="booking-detail">
+                <span><strong>开始时间：</strong></span>
+                <span>{{startTime}}</span>
+            </div>
+        </div>
+        
+        <div class="tips">
+            <h3 style="color: #ff69b4;">💡 温馨提示</h3>
+            <ul>
+                {{#tips}}
+                <li>{{.}}</li>
+                {{/tips}}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

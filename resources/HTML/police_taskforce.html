@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+    <link rel="shortcut icon" href="#"/>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a237e, #0d47a1);
+            color: white;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        .title {
+            font-size: 2em;
+            margin: 0;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .subtitle {
+            color: #bbdefb;
+            margin-top: 5px;
+        }
+        .badge {
+            background: rgba(26, 188, 156, 0.2);
+            border-radius: 4px;
+            padding: 3px 8px;
+            font-size: 0.8em;
+            color: #1abc9c;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .taskforce-section {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .taskforce-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+            color: #3498db;
+        }
+        .taskforce-name {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+            color: #ffd700;
+        }
+        .taskforce-description {
+            color: #bbdefb;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+        .members-section {
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .section-title {
+            color: #ffd700;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 5px;
+        }
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
+        }
+        .member-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .member-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .member-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        .member-type {
+            color: #ffd700;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .member-id {
+            color: #bbdefb;
+            font-size: 0.8em;
+            margin-bottom: 10px;
+        }
+        .member-stats {
+            display: flex;
+            justify-content: space-between;
+        }
+        .member-stat {
+            text-align: center;
+            flex: 1;
+        }
+        .stat-label {
+            color: #bbdefb;
+            font-size: 0.8em;
+            margin-bottom: 3px;
+        }
+        .stat-value {
+            color: #ffd700;
+        }
+        .cost-section {
+            margin-top: 20px;
+            background: rgba(231, 76, 60, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        .cost-label {
+            color: #bbdefb;
+            margin-bottom: 5px;
+        }
+        .cost-value {
+            font-size: 1.5em;
+            color: #e74c3c;
+        }
+        .tip-section {
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .tip-title {
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+        .tip-content {
+            color: #bbdefb;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">特别行动小组创建成功</h1>
+            <div class="subtitle">警员：{{name}}</div>
+            <div class="badge">领导能力 Lv.{{leadershipLevel}}</div>
+        </div>
+
+        <div class="taskforce-section">
+            <div class="taskforce-icon">👮‍♂️</div>
+            <div class="taskforce-name">{{taskForceName}}</div>
+            <div class="taskforce-description">专业执行高风险行动的精英警察小组</div>
+        </div>
+
+        <div class="members-section">
+            <div class="section-title">小组成员</div>
+            <div class="members-grid">
+                {{#each members}}
+                <div class="member-card">
+                    <div class="member-icon">
+                        {{#if (eq type "突击手")}}🔫{{/if}}
+                        {{#if (eq type "狙击手")}}🎯{{/if}}
+                        {{#if (eq type "侦察兵")}}🔍{{/if}}
+                        {{#if (eq type "战术支援")}}🛠️{{/if}}
+                        {{#if (eq type "医疗兵")}}⚕️{{/if}}
+                    </div>
+                    <div class="member-type">{{type}}</div>
+                    <div class="member-id">ID: {{id}}</div>
+                    <div class="member-stats">
+                        <div class="member-stat">
+                            <div class="stat-label">技能</div>
+                            <div class="stat-value">{{skill}}</div>
+                        </div>
+                        <div class="member-stat">
+                            <div class="stat-label">健康</div>
+                            <div class="stat-value">{{health}}%</div>
+                        </div>
+                        <div class="member-stat">
+                            <div class="stat-label">士气</div>
+                            <div class="stat-value">{{morale}}%</div>
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+
+        <div class="cost-section">
+            <div class="cost-label">创建费用</div>
+            <div class="cost-value">{{cost}}元</div>
+        </div>
+
+        <div class="tip-section">
+            <div class="tip-title">行动小贴士</div>
+            <div class="tip-content">
+                特别行动小组可以执行高风险高回报的特殊任务。成员的健康和士气会影响行动成功率，请确保在行动前给予充分休息。领导能力越高，你能指挥的队员越多，行动成功率也越高。使用 #特别行动 命令开始执行任务吧！
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 添加Handlebars自定义助手
+        if (typeof Handlebars !== 'undefined') {
+            Handlebars.registerHelper('eq', function(a, b) {
+                return a === b;
+            });
+        }
+    </script>
+</body>
+</html> 

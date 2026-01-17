@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>员工评价</title>
+    <link rel="stylesheet" href="../common/base.css">
+    <style>
+        body {
+            background-color: #fff5f7;
+            font-family: 'HYShiGuangTiW_0', sans-serif;
+        }
+        .container {
+            width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(255,105,180,0.2);
+        }
+        .header {
+            text-align: center;
+            color: #ff69b4;
+            margin-bottom: 20px;
+        }
+        .evaluation-card {
+            background-color: #fff0f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+        }
+        .score-bar {
+            height: 20px;
+            background-color: #ffb6c1;
+            border-radius: 10px;
+            margin-top: 5px;
+        }
+        .score-fill {
+            height: 100%;
+            background-color: #ff69b4;
+            border-radius: 10px;
+            width: {{totalScore}}%;
+        }
+        .suggestions {
+            margin: 20px 0;
+        }
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .action-tag {
+            background-color: #ff69b4;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+        }
+        .tips {
+            background-color: #fff0f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .cute-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto;
+            display: block;
+        }
+        .grade-badge {
+            background-color: #ff69b4;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 1.1em;
+            display: inline-block;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="../img/help/icon.png" class="cute-icon">
+        <div class="header">
+            <h1>📋 员工评价报告 <span class="grade-badge">{{grade}}</span></h1>
+        </div>
+        
+        <div class="evaluation-card">
+            <div>
+                <strong>员工姓名:</strong> {{employeeName}} (ID: {{employeeId}})
+            </div>
+            <div style="margin-top: 15px;">
+                <strong>综合评价:</strong>
+                <div class="score-bar">
+                    <div class="score-fill"></div>
+                </div>
+                <div style="text-align: center; margin-top: 5px;">{{totalScore}}分</div>
+            </div>
+        </div>
+        
+        <div class="suggestions">
+            <h3 style="color: #ff69b4;">💭 评价建议</h3>
+            <ul>
+                {{#suggestions}}
+                <li>{{.}}</li>
+                {{/suggestions}}
+            </ul>
+        </div>
+        
+        <div>
+            <h3 style="color: #ff69b4;">⚠️ 后续安排</h3>
+            <div class="actions">
+                {{#actions}}
+                <span class="action-tag">{{.}}</span>
+                {{/actions}}
+            </div>
+        </div>
+        
+        <div class="tips">
+            <h3 style="color: #ff69b4;">💡 管理提示</h3>
+            <p>请根据评价结果合理安排员工后续工作和发展计划</p>
+        </div>
+    </div>
+</body>
+</html>

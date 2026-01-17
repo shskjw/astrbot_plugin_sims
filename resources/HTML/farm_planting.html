@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能种植系统</title>
+    <link rel="stylesheet" href="farm.css">
+    <style>
+        /* 种植界面特定样式 */
+        .planting-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        /* 地块选择区域 */
+        .plot-selection {
+            background: var(--glass-bg);
+            border-radius: 15px;
+            padding: 20px;
+            animation: hologram-flicker 5s infinite;
+        }
+
+        .plot-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .plot-item {
+            position: relative;
+            aspect-ratio: 1;
+            background: var(--glass-bg);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .plot-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(30, 144, 255, 0.5);
+        }
+
+        .plot-item.selected {
+            background: linear-gradient(45deg, var(--primary-color), var(--highlight-color));
+            animation: glow-pulse 2s infinite;
+        }
+
+        /* 种子选择区域 */
+        .seed-selection {
+            background: var(--glass-bg);
+            border-radius: 15px;
+            padding: 20px;
+            animation: hologram-flicker 5s infinite;
+        }
+
+        .seed-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .seed-item {
+            background: var(--glass-bg);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .seed-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(30, 144, 255, 0.5);
+        }
+
+        .seed-item.selected {
+            background: linear-gradient(45deg, var(--primary-color), var(--highlight-color));
+            animation: glow-pulse 2s infinite;
+        }
+
+        .seed-icon {
+            font-size: 32px;
+            margin: 10px 0;
+        }
+
+        /* 种植预览 */
+        .planting-preview {
+            grid-column: 1 / -1;
+            background: var(--glass-bg);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            animation: hologram-flicker 5s infinite;
+        }
+
+        .preview-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .preview-plot {
+            width: 150px;
+            height: 150px;
+            background: var(--glass-bg);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            animation: float 3s infinite;
+        }
+
+        .preview-arrow {
+            font-size: 32px;
+            animation: pulse 2s infinite;
+        }
+
+        /* 操作指南 */
+        .planting-guide {
+            grid-column: 1 / -1;
+            background: var(--glass-bg);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .planting-guide h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        .planting-guide ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .planting-guide li {
+            margin: 10px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .planting-guide li::before {
+            content: '🌟';
+            position: absolute;
+            left: 0;
+            animation: float 2s infinite;
+        }
+
+        /* 确认按钮 */
+        .confirm-button {
+            background: linear-gradient(45deg, var(--primary-color), var(--highlight-color));
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            color: white;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .confirm-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(30, 144, 255, 0.5);
+        }
+
+        /* 季节提示 */
+        .season-bonus {
+            background: linear-gradient(45deg, var(--primary-color), var(--highlight-color));
+            border-radius: 15px;
+            padding: 10px 20px;
+            margin-top: 10px;
+            text-align: center;
+            animation: glow-pulse 3s infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- 星空背景 -->
+    <div class="starry-bg" id="starryBg"></div>
+
+    <!-- 主容器 -->
+    <div class="hologram-container">
+        <h1 class="farm-title">智能种植系统</h1>
+
+        <!-- 种植操作区域 -->
+        <div class="planting-container">
+            <!-- 地块选择 -->
+            <div class="plot-selection">
+                <h2>选择地块</h2>
+                <div class="plot-grid">
+                    {{#plots}}
+                    <div class="plot-item {{#selected}}selected{{/selected}}" onclick="selectPlot({{id}})">
+                        <div class="plot-number">{{id}}</div>
+                        <div class="plot-status">{{status}}</div>
+                    </div>
+                    {{/plots}}
+                </div>
+            </div>
+
+            <!-- 种子选择 -->
+            <div class="seed-selection">
+                <h2>选择种子</h2>
+                <div class="seed-grid">
+                    {{#seeds}}
+                    <div class="seed-item {{#selected}}selected{{/selected}}" onclick="selectSeed('{{name}}')">
+                        <div class="seed-icon">🌱</div>
+                        <div class="seed-name">{{name}}</div>
+                        <div class="seed-count">数量: {{count}}</div>
+                        {{#isSeasonBonus}}
+                        <div class="season-bonus">当季加成!</div>
+                        {{/isSeasonBonus}}
+                    </div>
+                    {{/seeds}}
+                </div>
+            </div>
+
+            <!-- 种植预览 -->
+            <div class="planting-preview">
+                <h2>种植预览</h2>
+                <div class="preview-content">
+                    <div class="preview-plot">
+                        {{#selectedPlot}}🏞️{{/selectedPlot}}
+                        {{^selectedPlot}}❓{{/selectedPlot}}
+                    </div>
+                    <div class="preview-arrow">➡️</div>
+                    <div class="preview-plot">
+                        {{#selectedSeed}}🌱{{/selectedSeed}}
+                        {{^selectedSeed}}❓{{/selectedSeed}}
+                    </div>
+                </div>
+                {{#bothSelected}}
+                <button class="confirm-button" onclick="confirmPlanting()">确认种植</button>
+                {{/bothSelected}}
+            </div>
+
+            <!-- 操作指南 -->
+            <div class="planting-guide">
+                <h3>🤖 智能种植指南</h3>
+                <ul>
+                    <li>选择一个空闲的地块进行种植</li>
+                    <li>选择要种植的种子</li>
+                    <li>当季种植可获得生长速度加成</li>
+                    <li>确保土地湿度和肥力适宜</li>
+                    <li>种植后记得定期浇水和施肥</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 机器人助手 -->
+    <div class="robot-assistant">
+        <div class="shopkeeper-bubble">需要种植帮助吗？</div>
+        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='30' r='20' fill='%231E90FF'/><rect x='30' y='50' width='40' height='40' rx='5' fill='%231E90FF'/><circle cx='40' cy='25' r='5' fill='white'/><circle cx='60' cy='25' r='5' fill='white'/><path d='M40 35 Q50 45 60 35' stroke='white' fill='none' stroke-width='2'/></svg>" alt="机器人助手">
+    </div>
+
+    <script>
+        // 生成星空背景
+        function createStarryBackground() {
+            const starryBg = document.getElementById('starryBg');
+            const numberOfStars = 100;
+
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starryBg.appendChild(star);
+            }
+        }
+
+        // 选择地块
+        function selectPlot(id) {
+            document.querySelectorAll('.plot-item').forEach(plot => {
+                plot.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+            updatePreview();
+        }
+
+        // 选择种子
+        function selectSeed(name) {
+            document.querySelectorAll('.seed-item').forEach(seed => {
+                seed.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+            updatePreview();
+        }
+
+        // 更新预览
+        function updatePreview() {
+            const selectedPlot = document.querySelector('.plot-item.selected');
+            const selectedSeed = document.querySelector('.seed-item.selected');
+            const confirmButton = document.querySelector('.confirm-button');
+
+            if (selectedPlot && selectedSeed) {
+                confirmButton.style.display = 'inline-block';
+            } else {
+                confirmButton.style.display = 'none';
+            }
+        }
+
+        // 确认种植
+        function confirmPlanting() {
+            const selectedPlot = document.querySelector('.plot-item.selected');
+            const selectedSeed = document.querySelector('.seed-item.selected');
+            
+            if (selectedPlot && selectedSeed) {
+                const plotId = selectedPlot.getAttribute('data-id');
+                const seedName = selectedSeed.querySelector('.seed-name').textContent;
+                // 这里可以添加种植确认的逻辑
+            }
+        }
+
+        // 页面加载时初始化
+        window.addEventListener('load', () => {
+            createStarryBackground();
+        });
+    </script>
+</body>
+</html>

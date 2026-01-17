@@ -1,0 +1,223 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @font-face {
+            font-family: "MiaoFont";
+            src: url("./也字工厂喵喵体.ttf");
+        }
+        
+        body {
+            font-family: "MiaoFont", sans-serif;
+            background: linear-gradient(135deg, #1a1f3c 0%, #2a3166 100%);
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0, 195, 255, 0.5);
+        }
+
+        .equipment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 20px 0;
+        }
+
+        .equipment-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .equipment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border-color: #4fc3f7;
+        }
+
+        .equipment-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.1),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        .equipment-card:hover::before {
+            left: 100%;
+        }
+
+        .equipment-name {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #4fc3f7;
+        }
+
+        .equipment-description {
+            color: #b3e5fc;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .equipment-price {
+            font-size: 1.2em;
+            color: #81d4fa;
+            margin-bottom: 15px;
+        }
+
+        .buy-button {
+            background: linear-gradient(45deg, #2196f3, #00bcd4);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-family: "MiaoFont";
+        }
+
+        .buy-button:hover {
+            background: linear-gradient(45deg, #00bcd4, #2196f3);
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(33, 150, 243, 0.5);
+        }
+
+        .equipment-icon {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 5px rgba(79, 195, 247, 0.5));
+        }
+
+        .status-bar {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-item {
+            text-align: center;
+        }
+
+        .status-label {
+            font-size: 0.9em;
+            color: #b3e5fc;
+        }
+
+        .status-value {
+            font-size: 1.2em;
+            color: #4fc3f7;
+            margin-top: 5px;
+        }
+
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px #4fc3f7; }
+            50% { box-shadow: 0 0 20px #4fc3f7; }
+            100% { box-shadow: 0 0 5px #4fc3f7; }
+        }
+
+        .glow-effect {
+            animation: glow 2s infinite;
+        }
+
+        /* 自适应布局 */
+        @media (max-width: 768px) {
+            .equipment-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏥 医疗设备采购中心</h1>
+        </div>
+
+        <div class="status-bar">
+            <div class="status-item">
+                <div class="status-label">当前资金</div>
+                <div class="status-value">{{user.money}} 金币</div>
+            </div>
+            <div class="status-item">
+                <div class="status-label">医院等级</div>
+                <div class="status-value">Lv.{{hospital.level}}</div>
+            </div>
+            <div class="status-item">
+                <div class="status-label">设备容量</div>
+                <div class="status-value">{{hospital.equipment_count}}/{{hospital.equipment_limit}}</div>
+            </div>
+        </div>
+
+        <div class="equipment-grid">
+            {{each equipment_list item}}
+            <div class="equipment-card">
+                <img src="{{item.icon}}" alt="{{item.name}}" class="equipment-icon">
+                <div class="equipment-name">{{item.name}}</div>
+                <div class="equipment-description">{{item.description}}</div>
+                <div class="equipment-price">💰 {{item.price}} 金币</div>
+                <button class="buy-button" onclick="buy('{{item.id}}')">购买设备</button>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+
+    <script>
+        function buy(id) {
+            // 发送购买请求
+            window.location.href = `#购买设备?equipment_id=${id}`;
+        }
+    </script>
+</body>
+</html>

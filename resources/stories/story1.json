@@ -1,0 +1,287 @@
+{
+    "id": "story1",
+    "title": "测试剧情1bug版",
+    "steps": [
+        {
+            "stepId": 0,
+            "text": "在「星穹咖啡厅」里，测试正在调试全息菜单：「新来的邻居？要试试看用璃月茶叶特调的星芋啵啵吗？」",
+            "choices": {
+                "1": {
+                    "text": "接过粉色饮品",
+                    "nextStep": 1,
+                    "effect": [
+                        "charm+10",
+                        "获得三月七的友谊"
+                    ]
+                },
+                "2": {
+                    "text": "询问量子计算机位置",
+                    "nextStep": 2,
+                    "requirement": "creditPoints>15",
+                    "effect": [
+                        "creditPoints+15",
+                        "获得实验室通行证"
+                    ]
+                }
+            }
+        },
+        {
+            "stepId": 1,
+            "text": "社区中心突然出现空间扭曲，测试的全息投影浮现：「检测到异常数据流，是否启动星核污染净化协议？」",
+            "choices": {
+                "1": {
+                    "text": "启动玉界锚点分析",
+                    "nextStep": 3,
+                    "requirement": "level>30",
+                    "effect": [
+                        "获得星槎设计图"
+                    ]
+                },
+                "2": {
+                    "text": "召唤岩脊建立屏障",
+                    "nextStep": 4,
+                    "requirement": "stamina>30",
+                    "effect": [
+                        "获得尘世之锁图纸"
+                    ]
+                }
+            }
+        },
+        {
+            "stepId": 2,
+            "text": "在职业中心，布洛妮娅的全息助手递来简历模板：「检测到您已完成筑城课程，请选择初始职业发展方向：」",
+            "choices": {
+                "1": {
+                    "text": "加入星际和平公司",
+                    "nextStep": 5,
+                    "effect": [
+                        "获得公司聘书",
+                        "creditPoints+5000"
+                    ]
+                },
+                "2": {
+                    "text": "应聘黑塔空间站",
+                    "nextStep": 6,
+                    "effect": [
+                        "获得研究员徽章",
+                        "level+1"
+                    ]
+                },
+                "3": {
+                    "text": "创立冒险者协会",
+                    "nextStep": 7,
+                    "requirement": "charm>50",
+                    "effect": [
+                        "获得协会印章",
+                        "获得丹恒联络方式"
+                    ]
+                }
+            }
+        },
+        {
+            "stepId": 3,
+            "text": "在星际和平公司入职培训中，发现部门主管竟是化名潜伏的测试！",
+            "choices": {
+                "1": {
+                    "text": "用岩元素重塑承重柱",
+                    "nextStep": 8,
+                    "requirement": "level>50",
+                    "effect": [
+                        "points+50",
+                        "获得自动建造模块"
+                    ]
+                },
+                "2": {
+                    "text": "申请调用空间站奇物",
+                    "nextStep": 9,
+                    "effect": [
+                        "获得黑塔通讯录",
+                        "creditPoints+30"
+                    ]
+                }
+            }
+        },
+        {
+            "stepId": 4,
+            "text": "黑塔空间站警报大作，发现被星核污染的甘雨！",
+            "choices": {
+                "1": {
+                    "text": "启动星穹列车撞击方案",
+                    "nextStep": 10,
+                    "requirement": "level>80",
+                    "effect": [
+                        "获得丹恒支援",
+                        "获得星核稳定器"
+                    ]
+                },
+                "2": {
+                    "text": "召唤璃月仙人协助",
+                    "nextStep": 11,
+                    "requirement": "stamina>50",
+                    "effect": [
+                        "获得仙术卷轴",
+                        "stamina+200"
+                    ]
+                }
+            }
+        },
+        {
+            "stepId": 5,
+            "text": "冒险者协会成立仪式上，尘歌壶从天而降",
+            "choices": {
+                "1": {
+                    "text": "注入岩脊能量",
+                    "nextStep": 12,
+                    "requirement": "stamina>50",
+                    "effect": [
+                        "获得洞天关牒",
+                        "money+1000"
+                    ]
+                },
+                "2": {
+                    "text": "连接星穹网络",
+                    "nextStep": 13,
+                    "effect": [
+                        "获得跃迁信标",
+                        "获得委托终端"
+                    ]
+                }
+            }
+        },
+        {
+            "stepId": 6,
+            "text": "地脉暴动事件-若陀龙王现身",
+            "choices": {
+                "1": {
+                    "text": "启动星核稳定装置",
+                    "nextStep": 14,
+                    "requirement": "creditPoints>100",
+                    "effect": [
+                        "获得联合执政协议",
+                        "获得跨世界许可"
+                    ]
+                },
+                "2": {
+                    "text": "召唤天动万象",
+                    "nextStep": 15,
+                    "requirement": "stamina>60",
+                    "effect": [
+                        "获得钟离信物",
+                        "points+100"
+                    ]
+                }
+            }
+        },
+
+{
+    "stepId": 7,
+    "text": "在黄金歌剧院顶层，景元将军的全息投影突然显现：「星核污染已扩散至鳞渊境，需要立即启动穷观阵！」",
+    "choices": {
+        "1": {
+            "text": "使用星槎设计图建造载具",
+            "nextStep": 8,
+            "requirement": "level>60",
+            "effect": [
+                "获得跃迁引擎核心",
+                "creditPoints-200"
+            ]
+        },
+        "2": {
+            "text": "激活尘世之锁召唤岩龙",
+            "nextStep": 9,
+            "requirement": "stamina>80",
+            "effect": [
+                "获得若陀龙鳞",
+                "stamina-50"
+            ]
+        }
+    }
+},
+{
+    "stepId": 8,
+    "text": "穷观阵中央浮现星核本体，卡芙卡的全息影像突然出现：「要听听我的建议吗，亲爱的开拓者？」",
+    "choices": {
+        "1": {
+            "text": "启动星核稳定装置",
+            "nextStep": 10,
+            "requirement": "获得星核稳定器",
+            "effect": [
+                "creditPoints+500",
+                "level+3"
+            ]
+        },
+        "2": {
+            "text": "使用仙术卷轴封印",
+            "nextStep": 11,
+            "requirement": "获得仙术卷轴",
+            "effect": [
+                "获得浮世青玉符",
+                "charm+30"
+            ]
+        }
+    }
+},
+{
+    "stepId": 9,
+    "text": "鳞渊境海底，被污染的钟离幻影持枪而立：「天动万象...」",
+    "choices": {
+        "1": {
+            "text": "召唤岩脊共鸣",
+            "nextStep": 12,
+            "requirement": "获得钟离信物",
+            "effect": [
+                "stamina+100",
+                "获得贯虹之槊碎片"
+            ]
+        },
+        "2": {
+            "text": "启动量子计算机破解",
+            "nextStep": 13,
+            "requirement": "获得实验室通行证",
+            "effect": [
+                "creditPoints+888",
+                "level+5"
+            ]
+        }
+    }
+},
+{
+    "stepId": 10,
+    "text": "黑塔空间站传来紧急通讯：「监测到星穹列车信号！是否接入？」",
+    "choices": {
+        "1": {
+            "text": "连接星穹列车通讯",
+            "nextStep": 14,
+            "effect": [
+                "获得帕姆的祝福",
+                "stamina+150"
+            ]
+        },
+        "2": {
+            "text": "保持独立行动",
+            "nextStep": 15,
+            "requirement": "charm>80",
+            "effect": [
+                "获得开拓者徽章",
+                "level+2"
+            ]
+        }
+    }
+},
+{
+    "stepId": 11,
+    "text": "仙舟「罗浮」突然跃迁至战场上空，符玄的占卜盘开始转动：「太卜司推演出三个解决方案...」",
+    "choices": {
+        "1": {
+            "text": "启动星核湮灭协议",
+            "nextStep": 16,
+            "requirement": "level>75",
+            "effect": [
+                "获得星神残响",
+                "stamina-200"
+            ]
+        }
+    }
+}
+    ]
+}

@@ -1,0 +1,284 @@
+/* 重置默认样式 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: #0a1929;
+  color: #333;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(73, 196, 255, 0.1);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(73, 196, 255, 0.5);
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(73, 196, 255, 0.8);
+}
+
+/* 科幻背景元素 */
+.cyber-circles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.1;
+  animation: pulse 4s infinite;
+}
+
+.circle-1 {
+  top: 10%;
+  left: 10%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, #49c4ff 0%, transparent 70%);
+  animation-delay: 0s;
+}
+
+.circle-2 {
+  bottom: 20%;
+  right: 15%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, #ff49e1 0%, transparent 70%);
+  animation-delay: 1s;
+}
+
+.circle-3 {
+  top: 50%;
+  left: 50%;
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, #49ffc4 0%, transparent 70%);
+  animation-delay: 2s;
+}
+
+/* 科幻装饰元素 */
+.cyber-scanner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: rgba(73, 196, 255, 0.5);
+  animation: scan 2s linear infinite;
+  opacity: 0.5;
+}
+
+.cyber-line {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(73, 196, 255, 0.5), transparent);
+  position: relative;
+  margin: 20px 0;
+}
+
+.cyber-dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.cyber-dots span {
+  width: 6px;
+  height: 6px;
+  background: rgba(73, 196, 255, 0.5);
+  border-radius: 50%;
+  animation: blink 1.5s infinite;
+}
+
+.cyber-dots span:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+.cyber-dots span:nth-child(3) {
+  animation-delay: 1s;
+}
+
+/* 装饰性角落元素 */
+.corner-decor {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  border: 2px solid rgba(73, 196, 255, 0.3);
+}
+
+.top-left {
+  top: 0;
+  left: 0;
+  border-right: none;
+  border-bottom: none;
+}
+
+.top-right {
+  top: 0;
+  right: 0;
+  border-left: none;
+  border-bottom: none;
+}
+
+.bottom-left {
+  bottom: 0;
+  left: 0;
+  border-right: none;
+  border-top: none;
+}
+
+.bottom-right {
+  bottom: 0;
+  right: 0;
+  border-left: none;
+  border-top: none;
+}
+
+/* 文本高亮效果 */
+.number-highlight {
+  color: #49c4ff;
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(73, 196, 255, 0.5);
+  padding: 0 5px;
+  font-size: 1.2em;
+}
+
+.cyber-text {
+  color: #34495e;
+  letter-spacing: 1px;
+}
+
+/* 效果条样式 */
+.effectiveness-bar {
+  width: 100px;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-right: 10px;
+}
+
+.effectiveness-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+/* 悬浮特效 */
+.glow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(73, 196, 255, 0.1), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.sparkles .sparkle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #fff;
+  border-radius: 50%;
+  opacity: 0;
+}
+
+/* 动画定义 */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.2;
+  }
+}
+
+@keyframes scan {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* 响应式布局辅助类 */
+@media screen and (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+  
+  .hide-mobile {
+    display: none;
+  }
+  
+  .cyber-circles {
+    opacity: 0.5;
+  }
+}
+
+/* 通用工具类 */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.mt-10 { margin-top: 10px; }
+.mb-10 { margin-bottom: 10px; }
+.ml-10 { margin-left: 10px; }
+.mr-10 { margin-right: 10px; }
+
+.shadow { box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
+.shadow-lg { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); }
+
+.rounded { border-radius: 4px; }
+.rounded-lg { border-radius: 8px; }
+
+/* 动画类 */
+.fade { transition: opacity 0.3s ease; }
+.scale { transition: transform 0.3s ease; }
+.hover-float:hover { animation: float 2s infinite; }

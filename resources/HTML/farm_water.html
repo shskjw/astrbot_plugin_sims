@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能灌溉系统</title>
+    <link rel="stylesheet" href="farm.css">
+    <style>
+        /* 浇水界面特定样式 */
+        .watering-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        /* 地块状态显示 */
+        .plot-status {
+            background: var(--glass-bg);
+            border-radius: 15px;
+            padding: 20px;
+            animation: hologram-flicker 5s infinite;
+        }
+
+        .water-level-display {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            background: var(--glass-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .water-level {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(180deg, #2196F3 0%, #03A9F4 100%);
+            transition: height 1s ease-in-out;
+        }
+
+        .water-waves {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: wave 3s linear infinite;
+        }
+
+        @keyframes wave {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0); }
+        }
+
+        /* 灌溉控制面板 */
+        .irrigation-controls {
+            background: var(--glass-bg);
+            border-radius: 15px;
+            padding: 20px;
+            animation: hologram-flicker 5s infinite;
+        }
+
+        .control-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .control-button {
+            background: var(--glass-bg);
+            border: 1px solid rgba(30, 144, 255, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(30, 144, 255, 0.5);
+        }
+
+        .control-button.active {
+            background: linear-gradient(45deg, var(--primary-color), var(--highlight-color));
+            animation: glow-pulse 2s infinite;
+        }
+
+        /* 浇水动画 */
+        .watering-animation {
+            grid-column: 1 / -1;
+            height: 200px;
+            background: var(--glass-bg);
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .water-drop {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #2196F3;
+            border-radius: 50%;
+            animation: drop 1s linear infinite;
+        }
+
+        @keyframes drop {
+            0% { transform: translateY(-100%); opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(200px); opacity: 0; }
+        }
+
+        /* 智能提示 */
+        .smart-tips {
+            grid-column: 1 / -1;
+            background: var(--glass-bg);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .smart-tips h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .tip-card {
+            background: var(--glass-bg);
+            border-radius: 10px;
+            padding: 15px;
+            animation: float 3s infinite;
+        }
+
+        .tip-icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        /* 状态指示器 */
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status-optimal { background-color: #4CAF50; }
+        .status-warning { background-color: #FFC107; }
+        .status-critical { background-color: #F44336; }
+    </style>
+</head>
+<body>
+    <!-- 星空背景 -->
+    <div class="starry-bg" id="starryBg"></div>
+
+    <!-- 主容器 -->
+    <div class="hologram-container">
+        <h1 class="farm-title">智能灌溉系统</h1>
+
+        <!-- 浇水操作区域 -->
+        <div class="watering-container">
+            <!-- 地块状态 -->
+            <div class="plot-status">
+                <h2>地块水分状态</h2>
+                <div class="water-level-display">
+                    <div class="water-level" style="height: {{waterLevel}}%">
+                        <div class="water-waves"></div>
+                    </div>
+                </div>
+                <div class="status-indicator">
+                    <div class="status-dot {{waterStatusClass}}"></div>
+                    <span>当前水分：{{waterLevel}}%</span>
+                </div>
+                <div class="status-indicator">
+                    <div class="status-dot {{soilStatusClass}}"></div>
+                    <span>土壤状态：{{soilStatus}}</span>
+                </div>
+            </div>
+
+            <!-- 灌溉控制 -->
+            <div class="irrigation-controls">
+                <h2>灌溉控制面板</h2>
+                <div class="control-grid">
+                    <div class="control-button" onclick="setWaterAmount('light')">
+                        <div class="control-icon">💧</div>
+                        <div>轻度浇水</div>
+                        <small>+20% 水分</small>
+                    </div>
+                    <div class="control-button" onclick="setWaterAmount('medium')">
+                        <div class="control-icon">💧💧</div>
+                        <div>适中浇水</div>
+                        <small>+50% 水分</small>
+                    </div>
+                    <div class="control-button" onclick="setWaterAmount('heavy')">
+                        <div class="control-icon">💧💧💧</div>
+                        <div>充分浇水</div>
+                        <small>+80% 水分</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 浇水动画 -->
+            <div class="watering-animation" id="wateringAnimation">
+                <!-- 水滴动画将由JS动态生成 -->
+            </div>
+
+            <!-- 智能提示 -->
+            <div class="smart-tips">
+                <h3>🤖 智能灌溉提示</h3>
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <div class="tip-icon">🌡️</div>
+                        <div class="tip-title">天气状况</div>
+                        <div>{{weather}} | 温度: {{temperature}}°C</div>
+                        <div>建议浇水量: {{recommendedWater}}</div>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon">🌱</div>
+                        <div class="tip-title">作物需求</div>
+                        <div>{{cropName}} 最适宜水分: {{optimalWater}}%</div>
+                        <div>生长阶段: {{growthStage}}</div>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon">⏰</div>
+                        <div class="tip-title">浇水时机</div>
+                        <div>上次浇水: {{lastWatered}}</div>
+                        <div>下次建议: {{nextWatering}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 机器人助手 -->
+    <div class="robot-assistant">
+        <div class="shopkeeper-bubble">需要灌溉帮助吗？</div>
+        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='30' r='20' fill='%231E90FF'/><rect x='30' y='50' width='40' height='40' rx='5' fill='%231E90FF'/><circle cx='40' cy='25' r='5' fill='white'/><circle cx='60' cy='25' r='5' fill='white'/><path d='M40 35 Q50 45 60 35' stroke='white' fill='none' stroke-width='2'/></svg>" alt="机器人助手">
+    </div>
+
+    <script>
+        // 生成星空背景
+        function createStarryBackground() {
+            const starryBg = document.getElementById('starryBg');
+            const numberOfStars = 100;
+
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starryBg.appendChild(star);
+            }
+        }
+
+        // 创建浇水动画
+        function createWateringAnimation() {
+            const container = document.getElementById('wateringAnimation');
+            const dropCount = 20;
+
+            for (let i = 0; i < dropCount; i++) {
+                const drop = document.createElement('div');
+                drop.className = 'water-drop';
+                drop.style.left = `${Math.random() * 100}%`;
+                drop.style.animationDelay = `${Math.random() * 2}s`;
+                container.appendChild(drop);
+            }
+        }
+
+        // 设置浇水量
+        function setWaterAmount(level) {
+            document.querySelectorAll('.control-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            // 这里可以添加实际的浇水逻辑
+            createWateringAnimation();
+        }
+
+        // 页面加载时初始化
+        window.addEventListener('load', () => {
+            createStarryBackground();
+            createWateringAnimation();
+        });
+    </script>
+</body>
+</html>

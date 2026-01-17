@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>工作安排</title>
+    <link rel="stylesheet" href="../common/base.css">
+    <style>
+        body {
+            background-color: #fff5f7;
+            font-family: 'HYShiGuangTiW_0', sans-serif;
+        }
+        .container {
+            width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(255,105,180,0.2);
+        }
+        .header {
+            text-align: center;
+            color: #ff69b4;
+            margin-bottom: 20px;
+        }
+        .schedule-card {
+            background-color: #fff0f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .schedule-detail {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+        }
+        .tips {
+            background-color: #fff0f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .cute-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto;
+            display: block;
+        }
+        .bonus-badge {
+            background-color: #ff69b4;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="../img/help/icon.png" class="cute-icon">
+        <div class="header">
+            <h1>📅 工作安排通知</h1>
+        </div>
+        
+        <div class="schedule-card">
+            <div class="schedule-detail">
+                <span><strong>员工姓名：</strong>{{employeeName}}</span>
+            </div>
+            <div class="schedule-detail">
+                <span><strong>班次：</strong>{{shiftName}}</span>
+                {{#bonus}}
+                <span class="bonus-badge">工资倍率: {{bonus}}</span>
+                {{/bonus}}
+            </div>
+            <div class="schedule-detail">
+                <span><strong>工作时间：</strong>{{workHours}}</span>
+            </div>
+        </div>
+        
+        <div class="tips">
+            <h3 style="color: #ff69b4;">💡 工作安排提示</h3>
+            <ul>
+                {{#tips}}
+                <li>{{.}}</li>
+                {{/tips}}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+    <link rel="stylesheet" type="text/css" href="{{cssFile}}common.css"/>
+    <style>
+        .container {
+            background: url('{{cssFile}}chef/rankings_bg.jpg') no-repeat;
+            background-size: cover;
+            width: 800px;
+            color: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #FFD700;
+            text-shadow: 2px 2px 4px #000;
+        }
+        .rankings-list {
+            background: rgba(0,0,0,0.7);
+            padding: 15px;
+            border-radius: 10px;
+        }
+        .ranking-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            border-bottom: 1px dashed #555;
+            align-items: center;
+        }
+        .ranking-item:last-child {
+            border-bottom: none;
+        }
+        .ranking-item.user {
+            background: rgba(255,215,0,0.2);
+            border-radius: 5px;
+        }
+        .rank {
+            width: 40px;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        .rank.top1 {
+            color: #FFD700;
+        }
+        .rank.top2 {
+            color: #C0C0C0;
+        }
+        .rank.top3 {
+            color: #CD7F32;
+        }
+        .chef-info {
+            flex-grow: 1;
+            padding-left: 10px;
+        }
+        .stats {
+            display: flex;
+            gap: 15px;
+        }
+        .stat {
+            text-align: center;
+            min-width: 60px;
+        }
+        .stat-label {
+            font-size: 0.8em;
+            color: #aaa;
+        }
+        .stat-value {
+            font-weight: bold;
+            color: #8BC34A;
+        }
+        .user-ranking {
+            background: rgba(0,0,0,0.7);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .user-rank {
+            background: rgba(255,215,0,0.3);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-style: italic;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏆 厨艺比赛排行榜 🏆</h1>
+        
+        <div class="rankings-list">
+            {{each rankings}}
+            <div class="ranking-item {{$value.isUser ? 'user' : ''}}">
+                <div class="rank {{$value.rank <= 3 ? 'top' + $value.rank : ''}}">
+                    {{$value.rank <= 3 ? ($value.rank === 1 ? '🥇' : $value.rank === 2 ? '🥈' : '🥉') : $value.rank + '.'}}
+                </div>
+                <div class="chef-info">
+                    {{$value.isUser ? '👉 ' : ''}}{{$value.name}}
+                </div>
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-label">胜场</div>
+                        <div class="stat-value">{{$value.wins}}</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">得分</div>
+                        <div class="stat-value">{{$value.points}}</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">参赛</div>
+                        <div class="stat-value">{{$value.contests}}场</div>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+        
+        {{if userRank && userRank > 10}}
+        <div class="user-ranking">
+            <div>
+                <span>你的排名:</span>
+                <span class="user-rank">第{{userRank}}名</span>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-label">胜场</div>
+                    <div class="stat-value">{{userRanking.wins}}</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">得分</div>
+                    <div class="stat-value">{{userRanking.points}}</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">参赛</div>
+                    <div class="stat-value">{{userRanking.contests}}场</div>
+                </div>
+            </div>
+        </div>
+        {{/if}}
+        
+        <div class="footer">
+            参加比赛可以获得经验、金币和声望奖励！<br>
+            使用 #发起厨艺比赛 创建比赛，或 #查看活跃比赛 寻找比赛加入！
+        </div>
+    </div>
+</body>
+</html> 

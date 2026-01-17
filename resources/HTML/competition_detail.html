@@ -1,0 +1,384 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>比赛详情</title>
+    <style>
+        :root {
+            --primary-color: #ff9ecd;
+            --secondary-color: #7b88ff;
+            --accent-color: #ffd6e7;
+            --bg-color: #fef6f9;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --border-color: rgba(255, 158, 205, 0.3);
+            --shadow-color: rgba(123, 136, 255, 0.2);
+            --success-color: #4cd964;
+            --warning-color: #ffcc00;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 158, 205, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(123, 136, 255, 0.15) 0%, transparent 50%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .competition-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px var(--shadow-color);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .competition-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .competition-title {
+            font-size: 2rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px var(--shadow-color);
+        }
+
+        .competition-status {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .status-active {
+            background: rgba(76, 217, 100, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-ending {
+            background: rgba(255, 204, 0, 0.1);
+            color: var(--warning-color);
+        }
+
+        .competition-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .info-item {
+            background: rgba(255, 255, 255, 0.5);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .info-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-label {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-value {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+        }
+
+        .section-title {
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .requirements-list {
+            list-style: none;
+        }
+
+        .requirements-list li {
+            margin-bottom: 0.8rem;
+            padding-left: 1.5rem;
+            position: relative;
+            color: #666;
+        }
+
+        .requirements-list li::before {
+            content: '✨';
+            position: absolute;
+            left: 0;
+        }
+
+        .entries-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .entry-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 1rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .entry-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px var(--shadow-color);
+        }
+
+        .entry-chef {
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .entry-dish {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .entry-score {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .join-btn {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, var(--success-color), var(--secondary-color));
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--shadow-color);
+        }
+
+        .action-btn:active {
+            transform: translateY(0);
+        }
+
+        .action-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        .countdown {
+            text-align: center;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: rgba(123, 136, 255, 0.1);
+            border-radius: 15px;
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .decoration {
+            position: fixed;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .decoration-1 {
+            top: 20px;
+            right: 20px;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%);
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .decoration-2 {
+            bottom: 20px;
+            left: 20px;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, var(--secondary-color) 0%, transparent 70%);
+            opacity: 0.1;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @media (max-width: 768px) {
+            .competition-info {
+                grid-template-columns: 1fr;
+            }
+
+            .entries-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="decoration decoration-1"></div>
+    <div class="decoration decoration-2"></div>
+    <div class="container">
+        <div class="competition-card">
+            <div class="competition-header">
+                <h1 class="competition-title">✨ {{competition.name}} ✨</h1>
+                <div class="competition-status {{competition.isEnding ? 'status-ending' : 'status-active'}}">
+                    {{competition.isEnding ? '即将结束' : '进行中'}}
+                </div>
+                <div class="countdown">
+                    剩余时间：{{competition.timeLeft}}
+                </div>
+            </div>
+
+            <div class="competition-info">
+                <div class="info-item">
+                    <div class="info-icon">🏆</div>
+                    <div class="info-label">奖金池</div>
+                    <div class="info-value">{{competition.prize}}金币</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon">👨‍🍳</div>
+                    <div class="info-label">参与人数</div>
+                    <div class="info-value">{{competition.participants}}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon">🌟</div>
+                    <div class="info-label">最高分</div>
+                    <div class="info-value">{{competition.highestScore || '暂无'}}</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">📋 比赛规则</h2>
+                <ul class="requirements-list">
+                    {{each competition.rules rule}}
+                    <li>{{rule}}</li>
+                    {{/each}}
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">🎯 参赛要求</h2>
+                <ul class="requirements-list">
+                    {{each competition.requirements req}}
+                    <li>{{req}}</li>
+                    {{/each}}
+                </ul>
+            </div>
+
+            {{if competition.entries && competition.entries.length > 0}}
+            <div class="section">
+                <h2 class="section-title">🍳 参赛作品</h2>
+                <div class="entries-grid">
+                    {{each competition.entries entry}}
+                    <div class="entry-card">
+                        <div class="entry-chef">{{entry.chefName}}</div>
+                        <div class="entry-dish">{{entry.dishName}}</div>
+                        {{if entry.score !== undefined}}
+                        <div class="entry-score">{{entry.score}}分</div>
+                        {{/if}}
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+            {{/if}}
+
+            <div class="action-buttons">
+                {{if !competition.hasJoined}}
+                <button class="action-btn join-btn">参加比赛</button>
+                {{else if !competition.hasSubmitted}}
+                <button class="action-btn submit-btn">提交作品</button>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

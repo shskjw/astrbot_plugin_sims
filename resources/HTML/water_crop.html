@@ -1,0 +1,307 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨浇水系统✨</title>
+    <style>
+        :root {
+            --primary: #00BFFF;
+            --secondary: #00F5FF;
+            --accent: #0066CC;
+            --dark: #0A1A2E;
+            --light: rgba(255,255,255,0.9);
+            --warning: #FF9F43;
+        }
+        
+        @font-face {
+            font-family: 'SciFi';
+            src: url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+        }
+        
+        body {
+            font-family: 'SciFi', 'Arial Rounded MT Bold', sans-serif;
+            background: linear-gradient(135deg, var(--dark) 0%, #003366 100%);
+            color: var(--light);
+            padding: 0;
+            margin: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .water-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 30px;
+            position: relative;
+        }
+        
+        .water-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%2300BFFF10" d="M0,0 L100,0 L100,100 L0,100 Z M20,20 L80,20 L80,80 L20,80 Z" stroke="%2300BFFF30" stroke-width="0.5"/></svg>');
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: var(--secondary);
+            text-shadow: 0 0 15px var(--secondary), 0 0 30px var(--primary);
+            position: relative;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 10px var(--secondary); }
+            to { text-shadow: 0 0 20px var(--secondary), 0 0 30px var(--primary); }
+        }
+        
+        .plot-card {
+            background: rgba(0,0,0,0.3);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 20px var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .plot-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .plot-icon {
+            font-size: 2.5rem;
+            margin-right: 20px;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .plot-name {
+            font-size: 1.5rem;
+            color: var(--secondary);
+        }
+        
+        .empty-plot {
+            color: var(--warning);
+            font-style: italic;
+        }
+        
+        .water-progress {
+            height: 30px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            margin: 20px 0;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .water-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            width: {{waterLevel || 0}}%;
+            border-radius: 15px;
+            transition: width 0.5s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .water-fill::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to bottom right, transparent 45%, rgba(255,255,255,0.5) 50%, transparent 55%);
+            opacity: 0.5;
+            transform: rotate(30deg);
+            animation: shine 3s infinite linear;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateY(-100%) rotate(30deg); }
+            100% { transform: translateY(100%) rotate(30deg); }
+        }
+        
+        .water-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .water-value {
+            font-size: 1.2rem;
+            color: var(--secondary);
+        }
+        
+        .water-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .water-btn {
+            background: var(--primary);
+            color: var(--dark);
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-family: 'SciFi', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .water-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px var(--primary);
+        }
+        
+        .water-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        .water-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to bottom right, transparent 45%, rgba(255,255,255,0.5) 50%, transparent 55%);
+            opacity: 0.3;
+            transform: rotate(30deg);
+            animation: shine 3s infinite linear;
+        }
+        
+        .water-effect {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .water-drops {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+        
+        .drop {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--secondary);
+            border-radius: 50%;
+            opacity: 0;
+            animation: drop 1s linear forwards;
+        }
+        
+        @keyframes drop {
+            0% { transform: translateY(-100px); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(100px); opacity: 0; }
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="water-container">
+        <h1>✨{{farmName || '农场'}}浇水系统✨</h1>
+        
+        <div class="plot-card">
+            <div class="plot-header">
+                <div class="plot-icon">{{cropName ? '🌱' : '🟫'}}</div>
+                <div class="plot-name">
+                    地块 #{{plotId || '1'}} - {{cropName || '<span class="empty-plot">未种植</span>'}}
+                </div>
+            </div>
+            
+            <div class="water-info">
+                <div>当前水分:</div>
+                <div class="water-value">{{waterLevel || 0}}%</div>
+            </div>
+            
+            <div class="water-progress">
+                <div class="water-fill"></div>
+            </div>
+            
+            <div class="water-buttons">
+                <button class="water-btn" data-amount="10" {{cropName ? '' : 'disabled'}}>少量浇水</button>
+                <button class="water-btn" data-amount="30" {{cropName ? '' : 'disabled'}}>适量浇水</button>
+                <button class="water-btn" data-amount="50" {{cropName ? '' : 'disabled'}}>大量浇水</button>
+            </div>
+            
+            <div class="water-effect">
+                <div class="water-drops" id="waterDrops"></div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>⚡ 测试 ⚡</p>
+            
+        </div>
+    </div>
+    
+    <script>
+        // 浇水动画效果
+        document.querySelectorAll('.water-btn:not(:disabled)').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const dropsContainer = document.getElementById('waterDrops');
+                dropsContainer.innerHTML = '';
+                
+                // 创建水滴动画
+                for(let i = 0; i < 20; i++) {
+                    const drop = document.createElement('div');
+                    drop.classList.add('drop');
+                    drop.style.left = `${Math.random() * 100}%`;
+                    drop.style.animationDelay = `${Math.random() * 0.5}s`;
+                    dropsContainer.appendChild(drop);
+                }
+                
+                // 显示动画
+                document.querySelector('.water-effect').style.opacity = '1';
+                setTimeout(() => {
+                    document.querySelector('.water-effect').style.opacity = '0';
+                }, 1000);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>酒馆员工管理</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: url('https://s1.ax1x.com/2023/02/14/pSTUVmQ.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #e8e8e8;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 90%;
+            margin: 0 auto;
+            background-color: rgba(40, 40, 40, 0.85);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 36px;
+            color: #ffd700;
+            margin: 0;
+            padding: 10px;
+            text-shadow: 2px 2px 4px #000;
+        }
+        
+        .header .subtitle {
+            font-size: 18px;
+            color: #bbb;
+            margin-top: 5px;
+        }
+        
+        .divider {
+            border-bottom: 2px solid #555;
+            margin: 20px 0;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+        }
+        
+        .section-title {
+            font-size: 22px;
+            color: #ff9d00;
+            margin-bottom: 10px;
+            border-left: 4px solid #ff9d00;
+            padding-left: 10px;
+        }
+        
+        .tavern-name {
+            font-size: 28px;
+            color: #ffd700;
+            margin-bottom: 15px;
+            text-align: center;
+            text-shadow: 2px 2px 4px #000;
+        }
+        
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            background-color: rgba(60, 60, 60, 0.7);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .stat-value.highlight {
+            color: #ffd700;
+        }
+        
+        .stat-value.warning {
+            color: #f44336;
+        }
+        
+        .current-staff {
+            background-color: rgba(60, 60, 60, 0.7);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .current-staff::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://s1.ax1x.com/2023/02/14/pSTUEa8.jpg') no-repeat center center;
+            background-size: cover;
+            opacity: 0.1;
+            z-index: -1;
+        }
+        
+        .staff-title {
+            font-size: 20px;
+            color: #ff9d00;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #555;
+            padding-bottom: 5px;
+        }
+        
+        .staff-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+        }
+        
+        .staff-card {
+            background-color: rgba(80, 80, 80, 0.7);
+            border-radius: 8px;
+            padding: 15px;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        
+        .staff-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .staff-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #555;
+            padding-bottom: 8px;
+        }
+        
+        .staff-name {
+            font-size: 18px;
+            color: #ffd700;
+            font-weight: bold;
+        }
+        
+        .staff-type {
+            display: inline-block;
+            padding: 3px 8px;
+            font-size: 12px;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ddd;
+        }
+        
+        .staff-stats {
+            margin-bottom: 15px;
+        }
+        
+        .staff-stat {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .stat-name {
+            font-size: 14px;
+            color: #aaa;
+        }
+        
+        .stat-bar {
+            width: 100%;
+            height: 6px;
+            background-color: #444;
+            border-radius: 3px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+        
+        .stat-bar-fill {
+            height: 100%;
+            background-color: #4caf50;
+        }
+        
+        .staff-desc {
+            font-size: 14px;
+            color: #ddd;
+            margin-bottom: 15px;
+        }
+        
+        .staff-benefits {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .benefit-tag {
+            font-size: 12px;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 2px 8px;
+            border-radius: 10px;
+            color: #4caf50;
+        }
+        
+        .staff-salary {
+            font-size: 16px;
+            color: #f44336;
+            text-align: right;
+            font-weight: bold;
+        }
+        
+        .staff-action {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+        
+        .staff-action-btn {
+            background-color: rgba(60, 60, 60, 0.7);
+            color: #f44336;
+            border: 1px solid #f44336;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 12px;
+        }
+        
+        .staff-action-btn:hover {
+            background-color: #f44336;
+            color: #fff;
+        }
+        
+        .no-staff {
+            text-align: center;
+            padding: 40px 0;
+            color: #aaa;
+            font-style: italic;
+        }
+        
+        .available-staff {
+            background-color: rgba(60, 60, 60, 0.7);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .staff-types-title {
+            font-size: 20px;
+            color: #ff9d00;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #555;
+            padding-bottom: 5px;
+        }
+        
+        .types-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+        }
+        
+        .type-card {
+            background-color: rgba(80, 80, 80, 0.7);
+            border-radius: 8px;
+            padding: 15px;
+            transition: transform 0.3s ease;
+        }
+        
+        .type-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .type-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #555;
+            padding-bottom: 8px;
+        }
+        
+        .type-name {
+            font-size: 18px;
+            color: #ffd700;
+            font-weight: bold;
+        }
+        
+        .type-level {
+            font-size: 14px;
+            color: #aaa;
+        }
+        
+        .type-desc {
+            font-size: 14px;
+            color: #ddd;
+            margin-bottom: 10px;
+        }
+        
+        .type-benefits {
+            margin-bottom: 10px;
+        }
+        
+        .type-benefit {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            font-size: 13px;
+            color: #4caf50;
+        }
+        
+        .benefit-icon {
+            margin-right: 5px;
+        }
+        
+        .type-salary {
+            font-size: 16px;
+            color: #f44336;
+            text-align: right;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .type-action {
+            text-align: center;
+        }
+        
+        .hire-btn {
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .hire-btn:hover {
+            background-color: #45a049;
+        }
+        
+        .hire-btn.disabled {
+            background-color: #aaa;
+            cursor: not-allowed;
+        }
+        
+        .staff-tips {
+            background-color: rgba(60, 60, 60, 0.7);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        .tips-title {
+            font-size: 16px;
+            color: #ff9d00;
+            margin-bottom: 10px;
+        }
+        
+        .tips-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .tip-item {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .tip-icon {
+            color: #ff9d00;
+            margin-right: 8px;
+            font-size: 16px;
+        }
+        
+        .tip-content {
+            color: #ddd;
+            font-size: 14px;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>酒馆员工管理</h1>
+            <div class="subtitle">雇佣员工，提高酒馆运营效率</div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="section">
+            <div class="tavern-name">{{tavern.name}}</div>
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-label">当前员工数</div>
+                    <div class="stat-value">{{staffCount}}/{{staffLimit}}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">酒馆等级</div>
+                    <div class="stat-value highlight">{{tavern.level}}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">资金</div>
+                    <div class="stat-value {{userData.money < 500 ? 'warning' : ''}}">{{userData.money}}元</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">每日薪资支出</div>
+                    <div class="stat-value warning">{{dailySalary}}元</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">当前员工</div>
+            <div class="current-staff">
+                <div class="staff-title">已雇佣员工</div>
+                {{if tavern.staff && tavern.staff.length > 0}}
+                <div class="staff-grid">
+                    {{each tavern.staff staff}}
+                    <div class="staff-card">
+                        <div class="staff-header">
+                            <div class="staff-name">{{staff.name}}</div>
+                            <div class="staff-type">{{staff.type}}</div>
+                        </div>
+                        <div class="staff-stats">
+                            <div class="staff-stat">
+                                <div class="stat-name">效率</div>
+                                <div>{{staff.efficiency}}/100</div>
+                            </div>
+                            <div class="stat-bar">
+                                <div class="stat-bar-fill" style="width: {{staff.efficiency}}%;"></div>
+                            </div>
+                            <div class="staff-stat">
+                                <div class="stat-name">忠诚度</div>
+                                <div>{{staff.loyalty}}/100</div>
+                            </div>
+                            <div class="stat-bar">
+                                <div class="stat-bar-fill" style="width: {{staff.loyalty}}%;"></div>
+                            </div>
+                            <div class="staff-stat">
+                                <div class="stat-name">工作经验</div>
+                                <div>{{staff.experience || 0}}/100</div>
+                            </div>
+                            <div class="stat-bar">
+                                <div class="stat-bar-fill" style="width: {{staff.experience || 0}}%;"></div>
+                            </div>
+                        </div>
+                        <div class="staff-benefits">
+                            {{each staff.benefits benefit}}
+                            <div class="benefit-tag">{{benefit}}</div>
+                            {{/each}}
+                        </div>
+                        <div class="staff-salary">{{staff.salary}}元/天</div>
+                        <div class="staff-action">
+                            <div class="staff-action-btn" onclick="alert('使用命令: #解雇员工 {{staff.id}}')">解雇员工</div>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+                {{else}}
+                <div class="no-staff">
+                    <p>你的酒馆目前没有雇佣任何员工！</p>
+                    <p>使用下方的雇佣功能招募员工来提高酒馆运营效率。</p>
+                </div>
+                {{/if}}
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">可雇佣员工类型</div>
+            <div class="available-staff">
+                <div class="staff-types-title">可用员工类型</div>
+                <div class="types-grid">
+                    {{each availableTypes type}}
+                    <div class="type-card">
+                        <div class="type-header">
+                            <div class="type-name">{{type.name}}</div>
+                            <div class="type-level">要求等级: {{type.minLevel}}</div>
+                        </div>
+                        <div class="type-desc">{{type.description}}</div>
+                        <div class="type-benefits">
+                            {{each type.benefits benefit}}
+                            <div class="type-benefit">
+                                <span class="benefit-icon">✓</span>
+                                <span>{{benefit}}</span>
+                            </div>
+                            {{/each}}
+                        </div>
+                        <div class="type-salary">基础薪资: {{type.baseSalary}}元/天</div>
+                        <div class="type-action">
+                            <div class="hire-btn {{tavern.level < type.minLevel || staffCount >= staffLimit ? 'disabled' : ''}}" onclick="alert('使用命令: #雇佣员工 {{type.id}}')">
+                                {{tavern.level < type.minLevel ? '等级不足' : staffCount >= staffLimit ? '员工已满' : '雇佣'}}
+                            </div>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+                
+                <div class="staff-tips">
+                    <div class="tips-title">员工管理提示</div>
+                    <ul class="tips-list">
+                        <li class="tip-item">
+                            <span class="tip-icon">💡</span>
+                            <span class="tip-content">酒保可以减少原料消耗并提高饮品品质，是最基础的员工。</span>
+                        </li>
+                        <li class="tip-item">
+                            <span class="tip-icon">💡</span>
+                            <span class="tip-content">服务员能提高顾客满意度和消费意愿，适合增加收入。</span>
+                        </li>
+                        <li class="tip-item">
+                            <span class="tip-icon">💡</span>
+                            <span class="tip-content">清洁工维持酒馆清洁度，避免客人不满和卫生检查罚款。</span>
+                        </li>
+                        <li class="tip-item">
+                            <span class="tip-icon">💡</span>
+                            <span class="tip-content">保安能减少酒馆内的不良事件，保护酒馆声誉。</span>
+                        </li>
+                        <li class="tip-item">
+                            <span class="tip-icon">💡</span>
+                            <span class="tip-content">驻唱歌手大幅提升酒馆氛围和人气，是高级酒馆的必备员工。</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            模拟人生插件 - 酒馆系统 v1.0
+        </div>
+    </div>
+</body>
+</html> 

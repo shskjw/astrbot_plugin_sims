@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        color: #333;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 10px;
+        color: #2c3e50;
+      }
+      .doctor-info {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .doctor-img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-right: 20px;
+        border: 3px solid #3498db;
+      }
+      .doctor-details {
+        flex: 1;
+      }
+      .progress-bar {
+        height: 20px;
+        background-color: #e0e0e0;
+        border-radius: 10px;
+        margin: 10px 0;
+        overflow: hidden;
+      }
+      .progress {
+        height: 100%;
+        background-color: #3498db;
+        width: {{exp_percentage}}%;
+      }
+      .skills {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin: 20px 0;
+      }
+      .skill {
+        background-color: #f8f9fa;
+        padding: 10px;
+        border-radius: 5px;
+        border-left: 3px solid #3498db;
+      }
+      .skill-bar {
+        height: 8px;
+        background-color: #e0e0e0;
+        border-radius: 4px;
+        margin-top: 5px;
+        overflow: hidden;
+      }
+      .skill-progress {
+        height: 100%;
+        background-color: #3498db;
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 10px;
+        margin: 20px 0;
+      }
+      .stat {
+        text-align: center;
+        background-color: #f8f9fa;
+        padding: 10px;
+        border-radius: 5px;
+      }
+      .stat-value {
+        font-size: 20px;
+        font-weight: bold;
+        color: #3498db;
+      }
+      .footer {
+        text-align: center;
+        font-size: 14px;
+        color: #7f8c8d;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🏥 医生信息 🏥</h1>
+      </div>
+      
+      <div class="doctor-info">
+        <img src="https://img.icons8.com/color/96/000000/doctor-male--v1.png" class="doctor-img">
+        <div class="doctor-details">
+          <h2>{{user_name}}</h2>
+          <p><b>职称：</b>{{doctor_rank}} ({{doctor_level}}级)</p>
+          <p><b>专科：</b>{{doctor_specialty}}</p>
+          <p><b>经验：</b>{{doctor_experience}}/{{doctor_experience_needed}}</p>
+          <div class="progress-bar">
+            <div class="progress"></div>
+          </div>
+        </div>
+      </div>
+      
+      <h3>🧠 专业技能</h3>
+      <div class="skills">
+        <div class="skill">
+          <div>诊断能力：{{diagnosis_skill}} ({{diagnosis_rating}})</div>
+          <div class="skill-bar">
+            <div class="skill-progress" style="width: {{diagnosis_skill}}%;"></div>
+          </div>
+        </div>
+        <div class="skill">
+          <div>手术能力：{{surgery_skill}} ({{surgery_rating}})</div>
+          <div class="skill-bar">
+            <div class="skill-progress" style="width: {{surgery_skill}}%;"></div>
+          </div>
+        </div>
+        <div class="skill">
+          <div>开药能力：{{prescription_skill}} ({{prescription_rating}})</div>
+          <div class="skill-bar">
+            <div class="skill-progress" style="width: {{prescription_skill}}%;"></div>
+          </div>
+        </div>
+        <div class="skill">
+          <div>沟通能力：{{communication_skill}} ({{communication_rating}})</div>
+          <div class="skill-bar">
+            <div class="skill-progress" style="width: {{communication_skill}}%;"></div>
+          </div>
+        </div>
+        <div class="skill">
+          <div>研究能力：{{research_skill}} ({{research_rating}})</div>
+          <div class="skill-bar">
+            <div class="skill-progress" style="width: {{research_skill}}%;"></div>
+          </div>
+        </div>
+      </div>
+      
+      <h3>📊 医疗统计</h3>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-value">{{patients_treated}}</div>
+          <div>治疗患者</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">{{surgeries_performed}}</div>
+          <div>手术次数</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">{{research_completed}}</div>
+          <div>研究成果</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">{{lives_saved}}</div>
+          <div>救治生命</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">{{mistakes_made}}</div>
+          <div>医疗错误</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">{{publications}}</div>
+          <div>发表论文</div>
+        </div>
+      </div>
+      
+      <div class="footer">
+        <p>模拟人生 - 医生模拟系统</p>
+      </div>
+    </div>
+  </body>
+</html> 

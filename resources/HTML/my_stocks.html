@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a2a3d, #2d1a3a);
+            color: #ffffff;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 15px;
+        }
+        .header h1 {
+            margin: 0;
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        .portfolio-summary {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .holdings-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        .holding-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            align-items: center;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .holding-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        .stock-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .stock-name {
+            font-size: 1.2em;
+            color: #7df9ff;
+        }
+        .stock-id {
+            color: #a0a0a0;
+            font-size: 0.9em;
+        }
+        .holding-details {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .price-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            text-align: right;
+        }
+        .profit {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .profit.positive {
+            color: #00ff00;
+        }
+        .profit.negative {
+            color: #ff4444;
+        }
+        .cute-icon {
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #a0a0a0;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎮 我的股票持仓 🎮</h1>
+        </div>
+        <div class="holdings-grid">
+            {{each userStocks stock}}
+            <div class="holding-card">
+                <div class="stock-info">
+                    <div class="stock-name">
+                        <span class="cute-icon">🎯</span>{{stock.name}}
+                    </div>
+                    <div class="stock-id">{{stock.id}}</div>
+                </div>
+                <div class="holding-details">
+                    <div>
+                        <span class="cute-icon">📈</span>持有数量: {{stock.amount}}
+                    </div>
+                    <div>
+                        <span class="cute-icon">💰</span>买入价: {{stock.buyPrice}}
+                    </div>
+                </div>
+                <div class="price-info">
+                    <div>
+                        <span class="cute-icon">📊</span>当前价: {{stock.currentPrice}}
+                    </div>
+                    <div>
+                        <span class="cute-icon">💎</span>市值: {{stock.currentValue}}
+                    </div>
+                    <div class="profit {{stock.profit >= 0 ? 'positive' : 'negative'}}">
+                        <span class="cute-icon">{{stock.profit >= 0 ? '📈' : '📉'}}</span>
+                        盈亏: {{stock.profit >= 0 ? '+' : ''}}{{stock.profit}}
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+        <div class="footer">
+            <p>💫 使用 #股市 查看最新行情 | #买入股票/#卖出股票 进行交易 💫</p>
+        </div>
+    </div>
+</body>
+</html>

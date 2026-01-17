@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>酒馆详情</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: url('https://s1.ax1x.com/2023/02/14/pSTUVmQ.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #e8e8e8;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 90%;
+            margin: 0 auto;
+            background-color: rgba(40, 40, 40, 0.85);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 36px;
+            color: #ffd700;
+            margin: 0;
+            padding: 10px;
+            text-shadow: 2px 2px 4px #000;
+        }
+        
+        .header .subtitle {
+            font-size: 18px;
+            color: #bbb;
+            margin-top: 5px;
+        }
+        
+        .divider {
+            border-bottom: 2px solid #555;
+            margin: 20px 0;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+        }
+        
+        .section-title {
+            font-size: 22px;
+            color: #ff9d00;
+            margin-bottom: 10px;
+            border-left: 4px solid #ff9d00;
+            padding-left: 10px;
+        }
+        
+        .tavern-header {
+            background-color: rgba(60, 60, 60, 0.7);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .tavern-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://s1.ax1x.com/2023/02/14/pSTUEa8.jpg') no-repeat center center;
+            background-size: cover;
+            opacity: 0.2;
+            z-index: -1;
+        }
+        
+        .tavern-name-section {
+            flex: 1;
+        }
+        
+        .tavern-name {
+            font-size: 32px;
+            color: #ffd700;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px #000;
+        }
+        
+        .tavern-owned-by {
+            font-size: 14px;
+            color: #bbb;
+        }
+        
+        .tavern-level-section {
+            background-color: rgba(255, 157, 0, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .tavern-level-label {
+            font-size: 12px;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+        
+        .tavern-level {
+            font-size: 36px;
+            color: #ff9d00;
+            font-weight: bold;
+        }
+        
+        .tavern-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background-color: rgba(60, 60, 60, 0.7);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 22px;
+            font-weight: bold;
+        }
+        
+        .stat-value.good {
+            color: #4caf50;
+        }
+        
+        .stat-value.medium {
+            color: #ffc107;
+        }
+        
+        .stat-value.poor {
+            color: #f44336;
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background-color: #444;
+            border-radius: 3px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+        }
+        
+        .progress-bar.good {
+            background-color: #4caf50;
+        }
+        
+        .progress-bar.medium {
+            background-color: #ffc107;
+        }
+        
+        .progress-bar.poor {
+            background-color: #f44336;
+        }
+        
+        .inventory-section {
+            background-color: rgba(60, 60, 60, 0.7);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .inventory-title {
+            font-size: 18px;
+            color: #ff9d00;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #555;
+            padding-bottom: 5px;
+        }
+        
+        .supplies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+        }
+        
+        .supply-item {
+            background-color: rgba(80, 80, 80, 0.7);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .supply-name {
+            font-size: 14px;
+            color: #ddd;
+            margin-bottom: 5px;
+        }
+        
+        .supply-value {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .supply-value.high {
+            color: #4caf50;
+        }
+        
+        .supply-value.medium {
+            color: #ffc107;
+        }
+        
+        .supply-value.low {
+            color: #f44336;
+        }
+        
+        .staff-section {
+            background-color: rgba(60, 60, 60, 0.7);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .staff-title {
+            font-size: 18px;
+            color: #ff9d00;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #555;
+            padding-bottom: 5px;
+        }
+        
+        .staff-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .staff-card {
+            background-color: rgba(80, 80, 80, 0.7);
+            border-radius: 8px;
+            padding: 15px;
+            position: relative;
+        }
+        
+        .staff-role {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ddd;
+        }
+        
+        .staff-name {
+            font-size: 16px;
+            color: #ff9d00;
+            margin-bottom: 8px;
+        }
+        
+        .staff-stat {
+            font-size: 12px;
+            color: #ddd;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .staff-salary {
+            color: #f44336;
+        }
+        
+        .no-staff {
+            text-align: center;
+            padding: 20px;
+            color: #aaa;
+            font-style: italic;
+        }
+        
+        .income-section {
+            background-color: rgba(60, 60, 60, 0.7);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .income-title {
+            font-size: 18px;
+            color: #ff9d00;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #555;
+            padding-bottom: 5px;
+        }
+        
+        .income-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .income-stat {
+            text-align: center;
+            padding: 10px;
+        }
+        
+        .income-label {
+            font-size: 14px;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+        
+        .income-value {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .income-value.positive {
+            color: #4caf50;
+        }
+        
+        .income-value.negative {
+            color: #f44336;
+        }
+        
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .action-btn {
+            background-color: rgba(60, 60, 60, 0.7);
+            border: 1px solid #ff9d00;
+            color: #ff9d00;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .action-btn:hover {
+            background-color: #ff9d00;
+            color: #333;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>酒馆详情</h1>
+            <div class="subtitle">查看和管理你的酒馆</div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="section">
+            <div class="tavern-header">
+                <div class="tavern-name-section">
+                    <div class="tavern-name">{{tavern.name}}</div>
+                    <div class="tavern-owned-by">经营者: {{userData.name}}</div>
+                </div>
+                <div class="tavern-level-section">
+                    <div class="tavern-level-label">酒馆等级</div>
+                    <div class="tavern-level">{{tavern.level}}</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">酒馆状态</div>
+            <div class="tavern-stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">人气</div>
+                    <div class="stat-value {{tavern.popularity >= 70 ? 'good' : tavern.popularity >= 40 ? 'medium' : 'poor'}}">{{tavern.popularity}}</div>
+                    <div class="progress-container">
+                        <div class="progress-bar {{tavern.popularity >= 70 ? 'good' : tavern.popularity >= 40 ? 'medium' : 'poor'}}" style="width: {{tavern.popularity}}%;"></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">容量</div>
+                    <div class="stat-value medium">{{tavern.capacity}}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">清洁度</div>
+                    <div class="stat-value {{tavern.cleanliness >= 70 ? 'good' : tavern.cleanliness >= 40 ? 'medium' : 'poor'}}">{{tavern.cleanliness}}</div>
+                    <div class="progress-container">
+                        <div class="progress-bar {{tavern.cleanliness >= 70 ? 'good' : tavern.cleanliness >= 40 ? 'medium' : 'poor'}}" style="width: {{tavern.cleanliness}}%;"></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">氛围</div>
+                    <div class="stat-value {{tavern.atmosphere >= 70 ? 'good' : tavern.atmosphere >= 40 ? 'medium' : 'poor'}}">{{tavern.atmosphere}}</div>
+                    <div class="progress-container">
+                        <div class="progress-bar {{tavern.atmosphere >= 70 ? 'good' : tavern.atmosphere >= 40 ? 'medium' : 'poor'}}" style="width: {{tavern.atmosphere}}%;"></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">声誉</div>
+                    <div class="stat-value {{tavern.reputation >= 4 ? 'good' : tavern.reputation >= 2 ? 'medium' : 'poor'}}">{{tavern.reputation}}/5</div>
+                    <div class="progress-container">
+                        <div class="progress-bar {{tavern.reputation >= 4 ? 'good' : tavern.reputation >= 2 ? 'medium' : 'poor'}}" style="width: {{tavern.reputation * 20}}%;"></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">顾客满意度</div>
+                    <div class="stat-value {{tavern.customerSatisfaction >= 70 ? 'good' : tavern.customerSatisfaction >= 40 ? 'medium' : 'poor'}}">{{tavern.customerSatisfaction}}</div>
+                    <div class="progress-container">
+                        <div class="progress-bar {{tavern.customerSatisfaction >= 70 ? 'good' : tavern.customerSatisfaction >= 40 ? 'medium' : 'poor'}}" style="width: {{tavern.customerSatisfaction}}%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">库存物资</div>
+            <div class="inventory-section">
+                <div class="inventory-title">当前库存</div>
+                <div class="supplies-grid">
+                    <div class="supply-item">
+                        <div class="supply-name">啤酒</div>
+                        <div class="supply-value {{tavern.supplies.beer >= 20 ? 'high' : tavern.supplies.beer >= 5 ? 'medium' : 'low'}}">{{tavern.supplies.beer}}</div>
+                    </div>
+                    <div class="supply-item">
+                        <div class="supply-name">葡萄酒</div>
+                        <div class="supply-value {{tavern.supplies.wine >= 10 ? 'high' : tavern.supplies.wine >= 3 ? 'medium' : 'low'}}">{{tavern.supplies.wine}}</div>
+                    </div>
+                    <div class="supply-item">
+                        <div class="supply-name">烈酒</div>
+                        <div class="supply-value {{tavern.supplies.spirits >= 5 ? 'high' : tavern.supplies.spirits >= 2 ? 'medium' : 'low'}}">{{tavern.supplies.spirits}}</div>
+                    </div>
+                    <div class="supply-item">
+                        <div class="supply-name">食物</div>
+                        <div class="supply-value {{tavern.supplies.food >= 15 ? 'high' : tavern.supplies.food >= 5 ? 'medium' : 'low'}}">{{tavern.supplies.food}}</div>
+                    </div>
+                    <div class="supply-item">
+                        <div class="supply-name">装饰</div>
+                        <div class="supply-value {{tavern.supplies.decorations >= 5 ? 'high' : tavern.supplies.decorations >= 2 ? 'medium' : 'low'}}">{{tavern.supplies.decorations}}</div>
+                    </div>
+                    
+                    {{each tavern.supplies supply key}}
+                    {{if key !== 'beer' && key !== 'wine' && key !== 'spirits' && key !== 'food' && key !== 'decorations'}}
+                    <div class="supply-item">
+                        <div class="supply-name">{{key}}</div>
+                        <div class="supply-value medium">{{supply}}</div>
+                    </div>
+                    {{/if}}
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">员工管理</div>
+            <div class="staff-section">
+                <div class="staff-title">当前员工</div>
+                <div class="staff-grid">
+                    {{if tavern.staff && tavern.staff.length > 0}}
+                        {{each tavern.staff staff}}
+                        <div class="staff-card">
+                            <div class="staff-role">{{staff.type}}</div>
+                            <div class="staff-name">{{staff.name}}</div>
+                            <div class="staff-stat">
+                                <span>效率:</span>
+                                <span>{{staff.efficiency}}</span>
+                            </div>
+                            <div class="staff-stat">
+                                <span>忠诚度:</span>
+                                <span>{{staff.loyalty}}</span>
+                            </div>
+                            <div class="staff-stat">
+                                <span>薪资:</span>
+                                <span class="staff-salary">{{staff.salary}}元/天</span>
+                            </div>
+                        </div>
+                        {{/each}}
+                    {{else}}
+                        <div class="no-staff">
+                            <p>你的酒馆目前没有雇佣任何员工！</p>
+                            <p>使用 #雇佣员工 命令来招募员工</p>
+                        </div>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">收益情况</div>
+            <div class="income-section">
+                <div class="income-title">收入和支出</div>
+                <div class="income-stats">
+                    <div class="income-stat">
+                        <div class="income-label">日收入</div>
+                        <div class="income-value positive">{{tavern.dailyIncome}}元</div>
+                    </div>
+                    <div class="income-stat">
+                        <div class="income-label">总收入</div>
+                        <div class="income-value positive">{{tavern.totalIncome}}元</div>
+                    </div>
+                    <div class="income-stat">
+                        <div class="income-label">员工薪资</div>
+                        <div class="income-value negative">-{{staffSalary || 0}}元/天</div>
+                    </div>
+                    <div class="income-stat">
+                        <div class="income-label">净利润</div>
+                        <div class="income-value {{tavern.dailyIncome - (staffSalary || 0) > 0 ? 'positive' : 'negative'}}">{{tavern.dailyIncome - (staffSalary || 0)}}元/天</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <div class="action-btn" onclick="alert('使用 #酒馆菜单 查看你的酒馆菜单')">查看菜单</div>
+            <div class="action-btn" onclick="alert('使用 #酒馆市场 查看可购买的物资')">购买物资</div>
+            <div class="action-btn" onclick="alert('使用 #营业酒馆 开始今日营业')">营业酒馆</div>
+            <div class="action-btn" onclick="alert('使用 #升级酒馆 提升酒馆等级')">升级酒馆</div>
+            <div class="action-btn" onclick="alert('使用 #雇佣员工+类型 增加新员工')">雇佣员工</div>
+        </div>
+        
+        <div class="footer">
+            模拟人生插件 - 酒馆系统 v1.0
+        </div>
+    </div>
+</body>
+</html> 

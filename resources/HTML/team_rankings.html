@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>厨师团队排行榜</title>
+    <style>
+        :root {
+            --primary-color: #ff9ecd;
+            --secondary-color: #7b88ff;
+            --accent-color: #ffd6e7;
+            --bg-color: #fef6f9;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --border-color: rgba(255, 158, 205, 0.3);
+            --shadow-color: rgba(123, 136, 255, 0.2);
+            --gold: #ffd700;
+            --silver: #c0c0c0;
+            --bronze: #cd7f32;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 158, 205, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(123, 136, 255, 0.15) 0%, transparent 50%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .rankings-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px var(--shadow-color);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .rankings-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .rankings-title {
+            font-size: 2rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px var(--shadow-color);
+        }
+
+        .rankings-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .ranking-item {
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            padding: 1.2rem;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 1rem;
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ranking-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px var(--shadow-color);
+        }
+
+        .rank-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .rank-1 {
+            background: var(--gold);
+            color: white;
+        }
+
+        .rank-2 {
+            background: var(--silver);
+            color: white;
+        }
+
+        .rank-3 {
+            background: var(--bronze);
+            color: white;
+        }
+
+        .team-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .team-name {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+
+        .team-stats {
+            font-size: 0.9rem;
+            color: #666;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .team-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .team-score {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .user-team {
+            border: 2px solid var(--primary-color);
+            animation: glow 2s infinite;
+        }
+
+        .decoration {
+            position: fixed;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .decoration-1 {
+            top: 20px;
+            right: 20px;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%);
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .decoration-2 {
+            bottom: 20px;
+            left: 20px;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, var(--secondary-color) 0%, transparent 70%);
+            opacity: 0.1;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px var(--primary-color); }
+            50% { box-shadow: 0 0 20px var(--primary-color); }
+        }
+
+        .sparkles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            opacity: 0;
+            animation: sparkle 1.5s infinite;
+        }
+
+        .sparkle:nth-child(1) { top: 20%; left: 20%; animation-delay: 0s; }
+        .sparkle:nth-child(2) { top: 60%; left: 80%; animation-delay: 0.2s; }
+        .sparkle:nth-child(3) { top: 80%; left: 40%; animation-delay: 0.4s; }
+        .sparkle:nth-child(4) { top: 40%; left: 60%; animation-delay: 0.6s; }
+        .sparkle:nth-child(5) { top: 30%; left: 90%; animation-delay: 0.8s; }
+
+        @keyframes sparkle {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .ranking-item {
+                grid-template-columns: auto 1fr;
+            }
+
+            .team-score {
+                grid-column: 1 / -1;
+                text-align: center;
+                margin-top: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="decoration decoration-1"></div>
+    <div class="decoration decoration-2"></div>
+    <div class="container">
+        <div class="rankings-card">
+            <div class="sparkles">
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+            </div>
+            <div class="rankings-header">
+                <h1 class="rankings-title">✨ 厨师团队排行榜 ✨</h1>
+            </div>
+
+            <div class="rankings-list">
+                {{each teams team index}}
+                <div class="ranking-item {{team.isUserTeam ? 'user-team' : ''}}">
+                    <div class="rank-number {{index < 3 ? 'rank-' + (index + 1) : ''}}">
+                        {{index + 1}}
+                    </div>
+                    <div class="team-info">
+                        <div class="team-name">{{team.name}}</div>
+                        <div class="team-stats">
+                            <div class="team-stat">
+                                <span>👑</span>
+                                <span>Lv.{{team.level}}</span>
+                            </div>
+                            <div class="team-stat">
+                                <span>👨‍🍳</span>
+                                <span>{{team.memberCount}}/5</span>
+                            </div>
+                            <div class="team-stat">
+                                <span>⭐</span>
+                                <span>{{team.avgLevel}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team-score">
+                        {{team.reputation}}
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

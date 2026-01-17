@@ -1,0 +1,159 @@
+<html>
+  <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        color: #333;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 10px;
+        color: #2c3e50;
+      }
+      .equipment-tabs {
+        display: flex;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #ddd;
+      }
+      .tab {
+        padding: 10px 20px;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        font-weight: bold;
+      }
+      .tab.active {
+        border-bottom: 2px solid #3498db;
+        color: #3498db;
+      }
+      .equipment-list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        margin-top: 20px;
+      }
+      .equipment-card {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 5px;
+        border-left: 3px solid #3498db;
+        position: relative;
+      }
+      .equipment-owned {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-weight: bold;
+        font-size: 12px;
+        color: white;
+      }
+      .equipment-type {
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 10px;
+        font-size: 12px;
+        background-color: #e8f4fc;
+        margin-bottom: 10px;
+      }
+      .equipment-effectiveness {
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 10px;
+        font-size: 12px;
+        color: white;
+        margin-left: 5px;
+      }
+      .equipment-price {
+        margin-top: 10px;
+        font-weight: bold;
+        color: #e74c3c;
+      }
+      .equipment-eligible {
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 10px;
+        margin-top: 10px;
+        font-weight: bold;
+      }
+      .footer {
+        text-align: center;
+        font-size: 14px;
+        color: #7f8c8d;
+        margin-top: 20px;
+      }
+      .usage-info {
+        background-color: #e8f4fc;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 15px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🔧 医疗设备 🔧</h1>
+        <p>你的医院拥有 {{ownedCount}} 件设备，最大容量 {{maxCapacity}} 件</p>
+      </div>
+      
+      <div class="usage-info">
+        <h3>📋 使用说明</h3>
+        <p>你可以使用命令 <b>#购买设备 [设备ID]</b> 为医院购买新设备。</p>
+        <p>拥有适当的设备可以提高手术成功率和治疗效果。</p>
+        <p>你的当前资金：{{userMoney}} 元</p>
+      </div>
+      
+      <div class="equipment-list">
+        {{each equipmentList equipment}}
+          <div class="equipment-card">
+            <div class="equipment-owned" style="{{equipment.ownedStyle}}">
+              {{equipment.ownedText}}
+            </div>
+            
+            <h3>{{equipment.name}} (ID: {{equipment.id}})</h3>
+            <div>
+              <span class="equipment-type">{{equipment.type}}</span>
+              <span class="equipment-effectiveness" style="background-color: {{equipment.effectivenessColor}};">
+                效力: {{equipment.effectiveness}}%
+              </span>
+            </div>
+            
+            <p>{{equipment.description}}</p>
+            <p><b>使用场景：</b>{{equipment.usage}}</p>
+            <p><b>需求等级：</b>{{equipment.required_level}}</p>
+            <p><b>维护成本：</b>{{equipment.maintenance_cost_formatted}}/年</p>
+            <p><b>使用寿命：</b>{{equipment.lifespan}} 年</p>
+            <p><b>需要专业培训：</b>{{equipment.training_required ? "是" : "否"}}</p>
+            
+            <div class="equipment-price">价格: {{equipment.price_formatted}} 元</div>
+            
+            {{if !equipment.isOwned}}
+              <div class="equipment-eligible" style="background-color: {{equipment.eligibleBgColor}}; 
+                                                  color: {{equipment.eligibleColor}};">
+                {{equipment.eligibleText}}
+              </div>
+            {{/if}}
+          </div>
+        {{/each}}
+      </div>
+      
+      <div class="footer">
+        <p>模拟人生 - 医生模拟系统</p>
+      </div>
+    </div>
+  </body>
+</html> 

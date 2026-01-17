@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人信息</title>
+    <style>
+        @font-face {
+            font-family: "miao";
+            src: url(./也字工厂喵喵体.ttf);
+        }
+
+        @keyframes neonGlow {
+            0% { text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #0ff, 0 0 20px #0ff, 0 0 25px #0ff; }
+            100% { text-shadow: 0 0 2px #fff, 0 0 5px #fff, 0 0 10px #0ff, 0 0 15px #0ff, 0 0 20px #0ff; }
+        }
+
+        @keyframes hologramEffect {
+            0% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.02); }
+            100% { opacity: 0.8; transform: scale(1); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-10px) rotate(2deg); }
+            75% { transform: translateY(10px) rotate(-2deg); }
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        body {
+            font-family: "miao", sans-serif;
+            background: linear-gradient(135deg, #0a192f, #112240);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            color: #e6f1ff;
+        }
+
+        .user-info {
+            background: rgba(16, 32, 64, 0.95);
+            border-radius: 30px;
+            box-shadow: 0 8px 32px rgba(10, 25, 47, 0.7);
+            backdrop-filter: blur(10px);
+            width: 400px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(100, 255, 255, 0.2);
+        }
+
+        .user-info::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00f7ff, #64ffda, #00f7ff);
+            animation: hologramEffect 2s infinite;
+        }
+
+        .scanline {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(to bottom,
+                rgba(100, 255, 255, 0),
+                rgba(100, 255, 255, 0.1),
+                rgba(100, 255, 255, 0));
+            animation: scanline 4s linear infinite;
+            pointer-events: none;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .profile-container {
+            position: relative;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .profile-icon {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid #64ffda;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background: linear-gradient(45deg, #112240, #1a365d);
+            box-shadow: 0 0 20px rgba(100, 255, 218, 0.5);
+        }
+
+        .profile-icon::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(100, 255, 218, 0.1),
+                transparent
+            );
+            transform: rotate(45deg);
+            animation: hologramEffect 3s linear infinite;
+        }
+
+        .profile-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .level-badge {
+            position: absolute;
+            bottom: -10px;
+            right: -10px;
+            background: linear-gradient(135deg, #64ffda, #00f7ff);
+            color: #0a192f;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            border: 2px solid #0a192f;
+            box-shadow: 0 0 15px rgba(100, 255, 218, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        .user-title {
+            text-align: left;
+            margin-left: 20px;
+            position: relative;
+        }
+
+        .user-title h2 {
+            margin: 0;
+            color: #64ffda;
+            font-size: 24px;
+            animation: neonGlow 2s infinite alternate;
+        }
+
+        .user-title p {
+            margin: 5px 0;
+            color: #8892b0;
+            font-size: 16px;
+        }
+
+        .stats-container {
+            background: rgba(16, 32, 64, 0.6);
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid rgba(100, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category {
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .category h3 {
+            color: #64ffda;
+            margin-bottom: 15px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
+        }
+
+        .category h3::before {
+            content: '⚡';
+            color: #00f7ff;
+            animation: pulse 2s infinite;
+        }
+
+        .stat-bar {
+            background: rgba(16, 32, 64, 0.8);
+            height: 8px;
+            border-radius: 4px;
+            margin: 8px 0;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(100, 255, 255, 0.2);
+        }
+
+        .stat-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #64ffda, #00f7ff);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            animation: hologramEffect 2s infinite;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            font-size: 15px;
+            color: #8892b0;
+        }
+
+        .stat-value {
+            color: #64ffda;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(100, 255, 218, 0.5);
+        }
+
+        .weather-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            background: rgba(16, 32, 64, 0.8);
+            border-radius: 15px;
+            margin: 10px 0;
+            border: 1px solid rgba(100, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .weather-info::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(100, 255, 218, 0.1),
+                transparent
+            );
+            transform: rotate(45deg);
+            animation: hologramEffect 3s linear infinite;
+        }
+
+        .weather-icon {
+            font-size: 28px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #64ffda;
+            font-size: 14px;
+            text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
+            animation: neonGlow 2s infinite alternate;
+        }
+
+        .cute-decoration {
+            position: absolute;
+            font-size: 24px;
+            opacity: 0.7;
+            animation: float 4s ease-in-out infinite;
+            color: #64ffda;
+            text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
+        }
+
+        .cute-decoration:nth-child(1) { top: 20px; right: 20px; animation-delay: 0s; }
+        .cute-decoration:nth-child(2) { bottom: 20px; left: 20px; animation-delay: 1s; }
+        .cute-decoration:nth-child(3) { top: 50%; right: 30px; animation-delay: 2s; }
+        .cute-decoration:nth-child(4) { bottom: 40%; left: 30px; animation-delay: 3s; }
+
+        .hologram-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(100, 255, 218, 0.05) 0px,
+                rgba(100, 255, 218, 0.05) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="user-info">
+        <div class="scanline"></div>
+        <div class="hologram-effect"></div>
+        
+        <span class="cute-decoration">✧</span>
+        <span class="cute-decoration">⚡</span>
+        <span class="cute-decoration">✦</span>
+        <span class="cute-decoration">⭐</span>
+        
+        <div class="header">
+            <div class="profile-container">
+                <div class="profile-icon">
+                    <img src="{{cssFile}}tx/{{ua}}" alt="User Avatar">
+                    <div class="level-badge">{{ulv}}</div>
+                </div>
+            </div>
+            <div class="user-title">
+                <h2>{{un}}</h2>
+                <p>{{ug}} · {{uj}}</p>
+            </div>
+        </div>
+
+        <div class="stats-container">
+            <div class="category">
+                <h3>生命状态</h3>
+                <div class="stat-item">
+                    <span>生命值</span>
+                    <div style="flex: 1; margin: 0 10px;">
+                        <div class="stat-bar">
+                            <div class="stat-fill" style="width: {{ul}}%;"></div>
+                        </div>
+                    </div>
+                    <span class="stat-value">{{ul}}%</span>
+                </div>
+                <div class="stat-item">
+                    <span>饱食度</span>
+                    <div style="flex: 1; margin: 0 10px;">
+                        <div class="stat-bar">
+                            <div class="stat-fill" style="width: {{uh}}%;"></div>
+                        </div>
+                    </div>
+                    <span class="stat-value">{{uh}}%</span>
+                </div>
+                <div class="stat-item">
+                    <span>口渴度</span>
+                    <div style="flex: 1; margin: 0 10px;">
+                        <div class="stat-bar">
+                            <div class="stat-fill" style="width: {{ut}}%;"></div>
+                        </div>
+                    </div>
+                    <span class="stat-value">{{ut}}%</span>
+                </div>
+            </div>
+
+            <div class="category">
+                <h3>个人属性</h3>
+                <div class="stat-item">
+                    <span>魅力值</span>
+                    <div style="flex: 1; margin: 0 10px;">
+                        <div class="stat-bar">
+                            <div class="stat-fill" style="width: {{uc}}%;"></div>
+                        </div>
+                    </div>
+                    <span class="stat-value">{{uc}}</span>
+                </div>
+                <div class="stat-item">
+                    <span>心情</span>
+                    <div style="flex: 1; margin: 0 10px;">
+                        <div class="stat-bar">
+                            <div class="stat-fill" style="width: {{umd}}%;"></div>
+                        </div>
+                    </div>
+                    <span class="stat-value">{{umd}}%</span>
+                </div>
+                <div class="stat-item">
+                    <span>体力</span>
+                    <div style="flex: 1; margin: 0 10px;">
+                        <div class="stat-bar">
+                            <div class="stat-fill" style="width: {{ust}}%;"></div>
+                        </div>
+                    </div>
+                    <span class="stat-value">{{ust}}%</span>
+                </div>
+            </div>
+
+            <div class="category">
+                <h3>社交状态</h3>
+                <div class="stat-item">
+                    <span>家庭幸福度</span>
+                    <div style="flex: 1; margin: 0 10px;">
+                        <div class="stat-bar">
+                            <div class="stat-fill" style="width: {{ufh}}%;"></div>
+                        </div>
+                    </div>
+                    <span class="stat-value">{{ufh}}%</span>
+                </div>
+                <div class="stat-item">
+                    <span>恋爱状态</span>
+                    <span class="stat-value">{{urs}}</span>
+                </div>
+                <div class="stat-item">
+                    <span>好感度</span>
+                    <span class="stat-value">{{up}}</span>
+                </div>
+            </div>
+
+            <div class="category">
+                <h3>资产信息</h3>
+                <div class="stat-item">
+                    <span>金钱</span>
+                    <span class="stat-value">{{um}}</span>
+                </div>
+                <div class="stat-item">
+                    <span>背包容量</span>
+                    <span class="stat-value">{{ubl}}/{{ublc}}</span>
+                </div>
+            </div>
+
+            <div class="category">
+                <h3>世界状态</h3>
+                <div class="weather-info">
+                    <span class="weather-icon">🌤️</span>
+                    <div>
+                        <div style="color: #64ffda;">天气: {{uw}}</div>
+                        <div style="color: #64ffda;">温度: {{utt}}°C</div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <span>待办任务</span>
+                    <span class="stat-value">{{uot}}</span>
+                </div>
+                <div class="stat-item">
+                    <span>健康状态</span>
+                    <span class="stat-value">{{ud}}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            ⚡ SIMS-PLUGIN v2.0 ⚡
+        </div>
+    </div>
+</body>
+</html>

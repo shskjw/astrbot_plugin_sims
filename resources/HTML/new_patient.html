@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        color: #333;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 10px;
+        color: #2c3e50;
+      }
+      .patient-info {
+        display: flex;
+        margin-bottom: 20px;
+      }
+      .patient-img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-right: 20px;
+        border: 3px solid #3498db;
+        background-color: #e8f4fc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 36px;
+      }
+      .patient-details {
+        flex: 1;
+      }
+      .symptoms {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 15px 0;
+        border-left: 4px solid #e74c3c;
+      }
+      .condition {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-weight: bold;
+        color: white;
+        background-color: {{condition_color}};
+      }
+      .next-steps {
+        background-color: #e8f4fc;
+        padding: 15px;
+        border-radius: 5px;
+        margin-top: 20px;
+      }
+      .footer {
+        text-align: center;
+        font-size: 14px;
+        color: #7f8c8d;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>👨‍⚕️ 新患者接诊 👨‍⚕️</h1>
+      </div>
+      
+      <div class="patient-info">
+        <div class="patient-img">
+          {{patient_gender_emoji}}
+        </div>
+        <div class="patient-details">
+          <h2>{{patient_name}}</h2>
+          <p><b>性别：</b>{{patient_gender}}</p>
+          <p><b>年龄：</b>{{patient_age}}岁</p>
+          <p><b>状况：</b><span class="condition">{{patient_condition}}</span></p>
+          <p><b>患者ID：</b>{{patient_id}}</p>
+        </div>
+      </div>
+      
+      <div class="symptoms">
+        <h3>🤒 症状描述</h3>
+        <p>{{patient_symptoms}}</p>
+      </div>
+      
+      <div class="next-steps">
+        <h3>⚕️ 下一步</h3>
+        <p>你需要为患者进行诊断和治疗：</p>
+        <ul>
+          <li>使用 <b>#诊断 {{patient_id}}</b> 对患者进行诊断</li>
+          <li>诊断后，你可以：</li>
+          <li>- 使用 <b>#开药 {{patient_id}} [药品ID]</b> 开具药物</li>
+          <li>- 使用 <b>#进行手术 {{patient_id}} [手术ID]</b> 进行手术治疗</li>
+        </ul>
+        <p>你可以使用 <b>#查看患者</b> 命令查看你当前接诊的所有患者。</p>
+      </div>
+      
+      <div class="footer">
+        <p>模拟人生 - 医生模拟系统</p>
+      </div>
+    </div>
+  </body>
+</html> 

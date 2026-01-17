@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        /* 全局样式 */
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a1b2e, #2d2b55);
+            font-family: 'Arial', sans-serif;
+            color: #fff;
+        }
+
+        /* 霓虹灯文字效果 */
+        .neon-text {
+            text-shadow: 0 0 5px #fff,
+                        0 0 10px #fff,
+                        0 0 15px #ff69b4,
+                        0 0 20px #ff69b4;
+        }
+
+        /* 主容器 */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(25, 26, 45, 0.8);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(255, 105, 180, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        /* 标题区域 */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(45deg, rgba(41, 41, 77, 0.8), rgba(65, 41, 90, 0.8));
+            border-radius: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            color: #fff;
+        }
+
+        /* 数据网格 */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        /* 数据卡片 */
+        .card {
+            background: rgba(41, 41, 77, 0.6);
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(255, 105, 180, 0.2);
+        }
+
+        /* 进度条样式 */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin-top: 5px;
+        }
+
+        .progress {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #ff69b4, #ff1493);
+            transition: width 0.3s ease;
+        }
+
+        /* 可爱图标 */
+        .icon {
+            font-size: 20px;
+            margin-right: 8px;
+            color: #ff69b4;
+        }
+
+        /* 员工列表 */
+        .staff-list {
+            margin-top: 20px;
+        }
+
+        .staff-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        /* 全息投影效果 */
+        .hologram {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hologram::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255, 105, 180, 0.1), transparent);
+            animation: hologram 2s linear infinite;
+        }
+
+        @keyframes hologram {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        /* 可爱装饰元素 */
+        .decoration {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 105, 180, 0.2);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 装饰元素 -->
+        <div class="decoration" style="top: 20px; right: 20px;"></div>
+        <div class="decoration" style="bottom: 20px; left: 20px;"></div>
+
+        <!-- 标题区域 -->
+        <div class="header hologram">
+            <h1 class="neon-text">{{name}}</h1>
+            <div>Level {{level}} | 声誉 {{reputation}}</div>
+        </div>
+
+        <!-- 主要数据网格 -->
+        <div class="grid">
+            <!-- 收入信息 -->
+            <div class="card hologram">
+                <div class="icon">💰</div>
+                <h3>营收状况</h3>
+                <div>日收入: {{dailyIncome}}元</div>
+            </div>
+
+            <!-- 会员信息 -->
+            <div class="card hologram">
+                <div class="icon">👥</div>
+                <h3>会员状态</h3>
+                <div>会员数: {{memberCount}}</div>
+                <div>当前客户: {{currentCustomers}}</div>
+                <div>评分: {{rating}}⭐</div>
+            </div>
+
+            <!-- 设备状态 -->
+            <div class="card hologram">
+                <div class="icon">💻</div>
+                <h3>设备信息</h3>
+                <div>基础电脑: {{computers.basic}}台</div>
+                <div class="progress-bar">
+                    <div class="progress" style="width: {{computers.basicUsage}}%;"></div>
+                </div>
+                <div>标准电脑: {{computers.standard}}台</div>
+                <div class="progress-bar">
+                    <div class="progress" style="width: {{computers.standardUsage}}%;"></div>
+                </div>
+                <div>高端电脑: {{computers.premium}}台</div>
+                <div class="progress-bar">
+                    <div class="progress" style="width: {{computers.premiumUsage}}%;"></div>
+                </div>
+            </div>
+
+            <!-- 维护状态 -->
+            <div class="card hologram">
+                <div class="icon">🔧</div>
+                <h3>维护状态</h3>
+                <div>维护度: {{maintenance}}%</div>
+                <div class="progress-bar">
+                    <div class="progress" style="width: {{maintenance}}%;"></div>
+                </div>
+                <div>清洁度: {{cleanliness}}%</div>
+                <div class="progress-bar">
+                    <div class="progress" style="width: {{cleanliness}}%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 环境指标 -->
+        <div class="card hologram">
+            <div class="icon">🌟</div>
+            <h3>环境指标</h3>
+            <div class="grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div>
+                    <div>环境评分</div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: {{environment}}%;"></div>
+                    </div>
+                </div>
+                <div>
+                    <div>会员满意度</div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: {{memberSatisfaction}}%;"></div>
+                    </div>
+                </div>
+                <div>
+                    <div>服务质量</div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: {{serviceQuality}}%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 员工列表 -->
+        <div class="card hologram">
+            <div class="icon">👨‍💼</div>
+            <h3>员工信息</h3>
+            <div class="staff-list">
+                {{each staff}}
+                <div class="staff-item">
+                    <div style="flex: 1;">{{$value.name}}</div>
+                    <div style="flex: 1;">{{$value.position}}</div>
+                    <div style="flex: 1;">
+                        满意度: {{$value.satisfaction}}%
+                        <div class="progress-bar">
+                            <div class="progress" style="width: {{$value.satisfaction}}%;"></div>
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

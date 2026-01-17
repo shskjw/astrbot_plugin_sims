@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+    <link rel="stylesheet" type="text/css" href="{{cssFile}}common.css"/>
+    <style>
+        .container {
+            background: url('{{cssFile}}chef/my_coop_bg.jpg') no-repeat;
+            background-size: cover;
+            width: 800px;
+            color: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #FFD700;
+            text-shadow: 2px 2px 4px #000;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        h2 {
+            margin: 20px 0 15px;
+            font-size: 1.3em;
+        }
+        .coops-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        .coop-card {
+            background: rgba(0,0,0,0.7);
+            padding: 15px;
+            border-radius: 10px;
+            position: relative;
+        }
+        .coop-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #555;
+        }
+        .coop-name {
+            font-weight: bold;
+            color: #8BC34A;
+        }
+        .coop-status {
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 0.8em;
+        }
+        .preparing {
+            background: rgba(255,165,0,0.5);
+        }
+        .ready {
+            background: rgba(0,150,0,0.5);
+        }
+        .completed {
+            background: rgba(0,150,255,0.5);
+        }
+        .failed {
+            background: rgba(255,0,0,0.5);
+        }
+        .coop-details {
+            margin-bottom: 10px;
+        }
+        .coop-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+        .coop-label {
+            color: #aaa;
+        }
+        .coop-value {
+            color: #fff;
+        }
+        .participants-count {
+            display: inline-block;
+            background: rgba(0,0,0,0.5);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+        .coop-id {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0,0,0,0.5);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            color: #aaa;
+        }
+        .quality-bar {
+            height: 10px;
+            background: #333;
+            border-radius: 5px;
+            margin: 5px 0;
+            overflow: hidden;
+        }
+        .quality-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            border-radius: 5px;
+        }
+        .action-hint {
+            text-align: center;
+            margin-top: 5px;
+            font-size: 0.9em;
+            color: #FFD700;
+        }
+        .empty-message {
+            background: rgba(0,0,0,0.7);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .completed-list {
+            background: rgba(0,0,0,0.7);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .completed-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            border-bottom: 1px dashed #555;
+        }
+        .completed-item:last-child {
+            border-bottom: none;
+        }
+        .result-quality {
+            color: #FFD700;
+            font-weight: bold;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-style: italic;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>👨‍🍳 我的合作料理 👨‍🍳</h1>
+        
+        <h2>🍳 进行中的合作料理</h2>
+        {{if activeCoopDishes && activeCoopDishes.length > 0}}
+        <div class="coops-grid">
+            {{each activeCoopDishes}}
+            <div class="coop-card">
+                <div class="coop-id">ID: {{$value.id}}</div>
+                <div class="coop-header">
+                    <div class="coop-name">{{$value.recipe_name}}</div>
+                    <div class="coop-status {{$value.status}}">{{$value.statusText}}</div>
+                </div>
+                
+                <div class="coop-details">
+                    <div class="coop-info">
+                        <span class="coop-label">发起者:</span>
+                        <span class="coop-value">{{$value.initiatorName}}</span>
+                    </div>
+                    
+                    <div class="coop-info">
+                        <span class="coop-label">创建时间:</span>
+                        <span class="coop-value">{{$value.createTime}}</span>
+                    </div>
+                    
+                    <div class="coop-info">
+                        <span class="coop-label">品质加成:</span>
+                        <span class="coop-value">{{$value.quality_bonus}}</span>
+                    </div>
+                    
+                    <div class="quality-bar">
+                        <div class="quality-fill" style="width: {{$value.qualityPercentage}}%"></div>
+                    </div>
+                </div>
+                
+                <div class="participants-count">
+                    参与者: {{$value.participants.length}}人 
+                    ({{$value.contributedCount}}/{{$value.participants.length}}人已贡献)
+                </div>
+                
+                <div class="action-hint">
+                    {{if $value.userAction}}
+                    {{$value.userAction}}
+                    {{/if}}
+                </div>
+            </div>
+            {{/each}}
+        </div>
+        {{else}}
+        <div class="empty-message">
+            你目前没有正在进行的合作料理
+        </div>
+        {{/if}}
+        
+        {{if completedCoopDishes && completedCoopDishes.length > 0}}
+        <h2>✅ 已完成的合作料理</h2>
+        <div class="completed-list">
+            {{each completedCoopDishes}}
+            <div class="completed-item">
+                <div>
+                    <span>{{$value.recipe_name}}</span>
+                    <span> - {{$value.createTime}}</span>
+                </div>
+                <div>
+                    {{if $value.result_dish}}
+                    <span>结果: {{$value.result_dish.name}}</span>
+                    <span class="result-quality"> (品质: {{$value.result_dish.quality}})</span>
+                    {{else}}
+                    <span class="result-quality">{{$value.status === 'failed' ? '制作失败' : '成功完成'}}</span>
+                    {{/if}}
+                </div>
+            </div>
+            {{/each}}
+        </div>
+        {{/if}}
+        
+        <div class="footer">
+            使用 #发起合作料理 [食谱名称] @其他厨师 创建新的合作料理<br>
+            使用 #查看合作料理 [ID] 查看详细信息
+        </div>
+    </div>
+</body>
+</html> 

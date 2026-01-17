@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+    <link rel="shortcut icon" href="#"/>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a237e, #0d47a1);
+            color: white;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 2.5em;
+            margin: 0;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .badge {
+            width: 150px;
+            height: 150px;
+            margin: 20px auto;
+            background: url('police_badge.png') center/contain no-repeat;
+            animation: shine 2s infinite;
+        }
+        .welcome-text {
+            font-size: 1.2em;
+            line-height: 1.6;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .info-box {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .info-item {
+            margin: 10px 0;
+            font-size: 1.1em;
+        }
+        .highlight {
+            color: #ffd700;
+            font-weight: bold;
+        }
+        @keyframes shine {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.9em;
+            color: #bbdefb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">欢迎加入警察部门</h1>
+            <div class="badge"></div>
+        </div>
+        <div class="welcome-text">
+            恭喜 <span class="highlight">{{name}}</span> 成为一名光荣的警察！
+            你将开启一段保护市民、维护正义的崇高职业生涯。
+        </div>
+        <div class="info-box">
+            <div class="info-item">
+                当前职级：<span class="highlight">{{rank}}</span>
+            </div>
+            <div class="info-item">
+                基础薪资：<span class="highlight">{{salary}}</span> 元/月
+            </div>
+        </div>
+        <div class="footer">
+            "忠诚、为民、公正、廉洁"
+        </div>
+    </div>
+</body>
+</html>

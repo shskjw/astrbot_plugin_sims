@@ -1,0 +1,258 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的市场挂单</title>
+    <style>
+        :root {
+            --primary-color: #ff9ecd;
+            --secondary-color: #7b88ff;
+            --accent-color: #ffd6e7;
+            --bg-color: #fef6f9;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --border-color: rgba(255, 158, 205, 0.3);
+            --shadow-color: rgba(123, 136, 255, 0.2);
+            --warning-color: #ff9500;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 158, 205, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(123, 136, 255, 0.15) 0%, transparent 50%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .orders-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px var(--shadow-color);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .orders-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .orders-title {
+            font-size: 2rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px var(--shadow-color);
+        }
+
+        .orders-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .order-card {
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .order-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px var(--shadow-color);
+        }
+
+        .order-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .order-name {
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .order-info {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .order-price {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .order-quantity {
+            color: #666;
+        }
+
+        .order-time {
+            font-size: 0.8rem;
+            color: #999;
+            margin-bottom: 1rem;
+        }
+
+        .cancel-btn {
+            width: 100%;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(45deg, var(--warning-color), #ff6b35);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cancel-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow-color);
+        }
+
+        .cancel-btn:active {
+            transform: translateY(0);
+        }
+
+        .no-orders {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .decoration {
+            position: fixed;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .decoration-1 {
+            top: 20px;
+            right: 20px;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%);
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .decoration-2 {
+            bottom: 20px;
+            left: 20px;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, var(--secondary-color) 0%, transparent 70%);
+            opacity: 0.1;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .sparkles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            opacity: 0;
+            animation: sparkle 1.5s infinite;
+        }
+
+        .sparkle:nth-child(1) { top: 20%; left: 20%; animation-delay: 0s; }
+        .sparkle:nth-child(2) { top: 60%; left: 80%; animation-delay: 0.2s; }
+        .sparkle:nth-child(3) { top: 80%; left: 40%; animation-delay: 0.4s; }
+        .sparkle:nth-child(4) { top: 40%; left: 60%; animation-delay: 0.6s; }
+        .sparkle:nth-child(5) { top: 30%; left: 90%; animation-delay: 0.8s; }
+
+        @keyframes sparkle {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .orders-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+
+            .orders-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="decoration decoration-1"></div>
+    <div class="decoration decoration-2"></div>
+    <div class="container">
+        <div class="orders-card">
+            <div class="sparkles">
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+            </div>
+            <div class="orders-header">
+                <h1 class="orders-title">✨ 我的市场挂单 ✨</h1>
+            </div>
+
+            {{if orders && orders.length > 0}}
+            <div class="orders-grid">
+                {{each orders order}}
+                <div class="order-card">
+                    <div class="order-icon">{{order.icon}}</div>
+                    <div class="order-name">{{order.name}}</div>
+                    <div class="order-info">
+                        <span class="order-price">💰 {{order.price}}金币/个</span>
+                        <span class="order-quantity"> × {{order.quantity}}个</span>
+                    </div>
+                    <div class="order-time">挂单时间: {{order.time}}</div>
+                    <button class="cancel-btn" data-order-id="{{order.id}}">取消挂单</button>
+                </div>
+                {{/each}}
+            </div>
+            {{else}}
+            <div class="no-orders">
+                当前没有挂单，快去市场出售食材吧！
+            </div>
+            {{/if}}
+        </div>
+    </div>
+</body>
+</html>

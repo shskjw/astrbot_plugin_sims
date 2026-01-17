@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        color: #333;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 10px;
+        color: #2c3e50;
+      }
+      .content {
+        line-height: 1.6;
+      }
+      .hospital-info {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 15px 0;
+        border-left: 4px solid #3498db;
+      }
+      .skills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 15px 0;
+      }
+      .skill {
+        background-color: #e8f4fc;
+        padding: 8px 12px;
+        border-radius: 15px;
+        font-size: 14px;
+      }
+      .footer {
+        text-align: center;
+        font-size: 14px;
+        color: #7f8c8d;
+        margin-top: 20px;
+      }
+      .doctor-img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        margin: 0 auto;
+        display: block;
+        border: 3px solid #3498db;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🏥 医生就职成功 🏥</h1>
+        <img src="https://img.icons8.com/color/96/000000/doctor-male--v1.png" class="doctor-img">
+      </div>
+      <div class="content">
+        <p>恭喜你开始了医生职业生涯！你现在是一名<b>实习医生</b>，正在社区卫生服务中心工作。</p>
+        
+        <div class="hospital-info">
+          <h3>🏥 工作医院：{{hospital_name}}</h3>
+          <p>医院等级：{{hospital_level}} 级</p>
+          <p>医院声誉：{{hospital_reputation}}</p>
+          <p>科室：{{hospital_departments}}</p>
+        </div>
+        
+        <h3>📊 初始能力：</h3>
+        <div class="skills">
+          <div class="skill">诊断能力：{{diagnosis_skill}} ({{diagnosis_rating}})</div>
+          <div class="skill">手术能力：{{surgery_skill}} ({{surgery_rating}})</div>
+          <div class="skill">开药能力：{{prescription_skill}} ({{prescription_rating}})</div>
+          <div class="skill">沟通能力：{{communication_skill}} ({{communication_rating}})</div>
+          <div class="skill">研究能力：{{research_skill}} ({{research_rating}})</div>
+        </div>
+        
+        <p>你的职业生涯刚刚开始，通过不断学习和积累经验，你将成为一名出色的医生！</p>
+        <p>可以使用 <b>#医生帮助</b> 查看医生职业的所有功能和命令。</p>
+      </div>
+      <div class="footer">
+        <p>模拟人生 - 医生模拟系统</p>
+      </div>
+    </div>
+  </body>
+</html> 

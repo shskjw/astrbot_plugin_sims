@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+    <link rel="stylesheet" type="text/css" href="{{cssFile}}common.css"/>
+    <style>
+        .container {
+            background: url('{{cssFile}}chef/coop_bg.jpg') no-repeat;
+            background-size: cover;
+            width: 800px;
+            color: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #FFD700;
+            text-shadow: 2px 2px 4px #000;
+        }
+        .coop-header {
+            background: rgba(0,0,0,0.7);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .recipe-info {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+        }
+        .recipe-details {
+            flex: 2;
+        }
+        .recipe-image {
+            flex: 1;
+            text-align: center;
+            background: rgba(0,0,0,0.5);
+            border-radius: 10px;
+            padding: 10px;
+            margin-left: 15px;
+        }
+        .food-icon {
+            font-size: 3em;
+        }
+        .participants {
+            background: rgba(0,0,0,0.7);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .participant {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            border-bottom: 1px dashed #555;
+            align-items: center;
+        }
+        .participant:last-child {
+            border-bottom: none;
+        }
+        .participant-status {
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 0.8em;
+        }
+        .joined {
+            background: rgba(0,150,0,0.5);
+        }
+        .pending {
+            background: rgba(255,165,0,0.5);
+        }
+        .contributed {
+            background: rgba(0,150,255,0.5);
+        }
+        .ingredients {
+            background: rgba(0,0,0,0.7);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .ingredient-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+        }
+        .quality-meter {
+            background: rgba(0,0,0,0.7);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .quality-bar {
+            height: 30px;
+            background: #333;
+            border-radius: 15px;
+            margin: 10px 0;
+            overflow: hidden;
+            position: relative;
+        }
+        .quality-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            border-radius: 15px;
+            transition: width 0.5s ease;
+        }
+        .quality-text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px #000;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        .preparing {
+            background: rgba(255,165,0,0.5);
+        }
+        .ready {
+            background: rgba(0,150,0,0.5);
+        }
+        .completed {
+            background: rgba(0,150,255,0.5);
+        }
+        .failed {
+            background: rgba(255,0,0,0.5);
+        }
+        .action {
+            background: rgba(0,0,0,0.7);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .key {
+            color: #aaa;
+        }
+        .value {
+            color: #8BC34A;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>👨‍🍳 合作料理详情 👨‍🍳</h1>
+        
+        <div class="coop-header">
+            <div class="status-badge {{coopDish.status}}">
+                状态: {{statusText}}
+            </div>
+            <p><span class="key">合作料理ID:</span> <span class="value">{{coopDish.id}}</span></p>
+            <p><span class="key">发起者:</span> <span class="value">{{initiatorName}}</span></p>
+            
+            <div class="recipe-info">
+                <div class="recipe-details">
+                    <p><span class="key">食谱名称:</span> <span class="value">{{recipeName}}</span></p>
+                    <p><span class="key">难度:</span> <span class="value">{{recipe.difficulty}}</span></p>
+                    <p><span class="key">描述:</span> <span class="value">{{recipe.description}}</span></p>
+                </div>
+                <div class="recipe-image">
+                    <div class="food-icon">🍲</div>
+                    <p>{{recipeName}}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="participants">
+            <h3>👨‍🍳 参与者 ({{coopDish.participants.length}}人)</h3>
+            {{each participantsList}}
+            <div class="participant">
+                <div>{{$value.name}}{{$value.isInitiator ? ' (发起者)' : ''}}</div>
+                <div class="participant-status {{$value.statusClass}}">{{$value.statusText}}</div>
+            </div>
+            {{/each}}
+        </div>
+        
+        {{if ingredients && ingredients.length > 0}}
+        <div class="ingredients">
+            <h3>🥕 已贡献食材</h3>
+            {{each ingredients}}
+            <div class="ingredient-item">
+                <div>{{$value.contributor_name}}: {{$value.ingredient_name}}</div>
+                <div>品质加成: +{{$value.quality_bonus}}</div>
+            </div>
+            {{/each}}
+        </div>
+        {{/if}}
+        
+        <div class="quality-meter">
+            <h3>✨ 当前品质加成: {{coopDish.quality_bonus}}</h3>
+            <div class="quality-bar">
+                <div class="quality-fill" style="width: {{qualityPercentage}}%"></div>
+                <div class="quality-text">{{coopDish.quality_bonus}} / {{maxQuality}}</div>
+            </div>
+            <p>食材品质加成越高，成品料理品质越高！</p>
+        </div>
+        
+        {{if coopDish.status === 'preparing' || coopDish.status === 'ready'}}
+        <div class="action">
+            {{if userStatus === 'not-joined'}}
+            使用 <b>#参与合作料理 {{coopDish.id}}</b> 加入此合作料理
+            {{else if userStatus === 'joined' && !userContributed}}
+            使用 <b>#贡献食材 {{coopDish.id}} [食材名称] [数量]</b> 贡献你的食材
+            {{else if coopDish.status === 'ready' && isInitiator}}
+            使用 <b>#完成合作料理 {{coopDish.id}}</b> 完成制作
+            {{else}}
+            等待其他参与者贡献食材或等待发起者完成料理
+            {{/if}}
+        </div>
+        {{else if coopDish.result_dish}}
+        <div class="action">
+            <h3>🎉 料理结果</h3>
+            <p><span class="key">料理名称:</span> <span class="value">{{coopDish.result_dish.name}}</span></p>
+            <p><span class="key">品质:</span> <span class="value">{{coopDish.result_dish.quality}}</span></p>
+        </div>
+        {{/if}}
+    </div>
+</body>
+</html> 

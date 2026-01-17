@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #2196f3;
+            padding-bottom: 15px;
+            position: relative;
+        }
+        .header h1 {
+            margin: 0;
+            color: #2196f3;
+            font-size: 2em;
+        }
+        .shop-level {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #2196f3;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #90caf9;
+        }
+        .stat-value {
+            font-size: 1.5em;
+            color: #2196f3;
+            margin: 5px 0;
+        }
+        .inventory-section {
+            margin-top: 30px;
+        }
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .inventory-item {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid #90caf9;
+            transition: transform 0.3s ease;
+        }
+        .inventory-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.2);
+        }
+        .decoration-section {
+            margin-top: 30px;
+        }
+        .decoration-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .decoration-tag {
+            background: #e3f2fd;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            color: #1976d2;
+        }
+        .cute-icon {
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏪 我的玩具店 🎪</h1>
+            <div class="shop-level">Level {{shop.level}}</div>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="cute-icon">💰</div>
+                <div>今日收入</div>
+                <div class="stat-value">{{shop.dailyIncome}}元</div>
+            </div>
+            <div class="stat-card">
+                <div class="cute-icon">📈</div>
+                <div>总收入</div>
+                <div class="stat-value">{{shop.totalIncome}}元</div>
+            </div>
+            <div class="stat-card">
+                <div class="cute-icon">⭐</div>
+                <div>店铺声望</div>
+                <div class="stat-value">{{shop.reputation}}</div>
+            </div>
+        </div>
+
+        <div class="inventory-section">
+            <h2>📦 库存商品</h2>
+            <div class="inventory-grid">
+                {{each shop.inventory item}}
+                <div class="inventory-item">
+                    <div class="toy-name">{{getToyName(item.id)}}</div>
+                    <div>库存: {{item.stock}}个</div>
+                    <div>售价: {{item.price}}元</div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+
+        <div class="decoration-section">
+            <h2>🎨 店铺装饰</h2>
+            <div class="decoration-list">
+                {{each shop.decorations deco}}
+                <div class="decoration-tag">
+                    <span class="cute-icon">✨</span>{{getDecoName(deco)}}
+                </div>
+                {{/each}}
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>💫 使用 #营业 开始营业 | #装修 装饰ID 添加装饰 | #升级店铺 提升等级 💫</p>
+        </div>
+    </div>
+</body>
+</html>

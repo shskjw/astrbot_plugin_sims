@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+  <link rel="stylesheet" type="text/css" href="{{cssFile}}common.css"/>
+  <style>
+    body {
+      background: linear-gradient(135deg, #1a1f3c 0%, #2a3166 100%);
+      color: #e0e0ff;
+      font-family: "Microsoft YaHei", sans-serif;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      position: relative;
+    }
+
+    .header h1 {
+      color: #fff;
+      font-size: 24px;
+      margin: 0;
+      padding: 10px;
+      text-shadow: 0 0 10px rgba(82, 190, 255, 0.5);
+    }
+
+    .header::after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #52beff, transparent);
+    }
+
+    .patients-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .patient-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 15px;
+      padding: 20px;
+      position: relative;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .patient-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(82, 190, 255, 0.2);
+    }
+
+    .patient-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 10px;
+    }
+
+    .patient-avatar {
+      width: 50px;
+      height: 50px;
+      background: rgba(82, 190, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      font-size: 24px;
+    }
+
+    .patient-info {
+      flex-grow: 1;
+    }
+
+    .patient-name {
+      font-size: 18px;
+      font-weight: bold;
+      color: #fff;
+      margin: 0;
+    }
+
+    .patient-basic {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
+      margin-top: 5px;
+    }
+
+    .status-tag {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .diagnosis-section {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .treatment-section {
+      margin-top: 15px;
+    }
+
+    .medicine-list {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0;
+    }
+
+    .medicine-item {
+      background: rgba(82, 190, 255, 0.1);
+      padding: 8px 12px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+    }
+
+    .medicine-icon {
+      margin-right: 8px;
+      color: #52beff;
+    }
+
+    .surgery-info {
+      background: rgba(255, 105, 180, 0.1);
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+    .notes-section {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .note-item {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 8px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    .satisfaction-meter {
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+
+    .satisfaction-value {
+      height: 100%;
+      background: linear-gradient(90deg, #52beff, #ff69b4);
+      transition: width 0.3s ease;
+    }
+
+    .cyber-decoration {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border: 2px solid rgba(82, 190, 255, 0.3);
+      border-radius: 5px;
+    }
+
+    .cyber-decoration.top-left {
+      top: -5px;
+      left: -5px;
+      border-right: none;
+      border-bottom: none;
+    }
+
+    .cyber-decoration.bottom-right {
+      bottom: -5px;
+      right: -5px;
+      border-left: none;
+      border-top: none;
+    }
+
+    .section-title {
+      font-size: 14px;
+      color: #52beff;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+    }
+
+    .section-title::before {
+      content: "⚕";
+      margin-right: 5px;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .emergency-status {
+      animation: pulse 2s infinite;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>当前患者列表 ({{patients_count}})</h1>
+    </div>
+    
+    <div class="patients-grid">
+      {{each patients patient}}
+      <div class="patient-card">
+        <div class="cyber-decoration top-left"></div>
+        <div class="cyber-decoration bottom-right"></div>
+        
+        <div class="patient-header">
+          <div class="patient-avatar">
+            {{if patient.gender === "男"}}👨{{else}}👩{{/if}}
+          </div>
+          <div class="patient-info">
+            <h3 class="patient-name">{{patient.name}}</h3>
+            <div class="patient-basic">
+              {{patient.gender}} · {{patient.age}}岁
+            </div>
+            <div class="status-tag" style="background-color: {{patient.condition_color}}">
+              {{patient.condition}}
+            </div>
+          </div>
+        </div>
+
+        <div class="diagnosis-section" style="background-color: {{patient.diagnosis_bg_color}}">
+          <div class="section-title">诊断状态</div>
+          <div style="color: {{patient.diagnosis_text_color}}">
+            {{patient.diagnosis_status}} - {{patient.diagnosis_name}}
+          </div>
+        </div>
+
+        <div class="treatment-section">
+          {{if patient.has_medicines}}
+          <div class="section-title">处方用药</div>
+          <ul class="medicine-list">
+            {{each patient.medicines med}}
+            <li class="medicine-item">
+              <span class="medicine-icon">💊</span>
+              {{med.name}}
+            </li>
+            {{/each}}
+          </ul>
+          {{/if}}
+
+          {{if patient.has_surgery}}
+          <div class="section-title">手术信息</div>
+          <div class="surgery-info">
+            <div>{{patient.surgery_name}}</div>
+            <div style="font-size: 12px; margin-top: 5px;">
+              状态: {{patient.surgery_result}}
+            </div>
+          </div>
+          {{/if}}
+        </div>
+
+        {{if patient.has_notes}}
+        <div class="notes-section">
+          <div class="section-title">医疗记录</div>
+          {{each patient.notes note}}
+          <div class="note-item">{{note.content}}</div>
+          {{/each}}
+        </div>
+        {{/if}}
+
+        <div class="satisfaction-meter">
+          <div class="satisfaction-value" style="width: {{patient.satisfaction}}%"></div>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+  </div>
+</body>
+</html>

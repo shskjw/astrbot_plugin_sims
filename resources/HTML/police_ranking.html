@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        /* 全局样式 */
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a1b2e, #2d2b55);
+            font-family: 'Arial', sans-serif;
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        /* 主容器 */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(25, 26, 45, 0.8);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 0 30px rgba(255, 182, 193, 0.3);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 装饰元素 */
+        .decoration {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(45deg, rgba(255, 182, 193, 0.2), rgba(255, 105, 180, 0.2));
+            border-radius: 50%;
+            filter: blur(3px);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .decoration:nth-child(1) { top: -30px; right: -30px; }
+        .decoration:nth-child(2) { bottom: -30px; left: -30px; }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(10px, -10px) rotate(5deg); }
+        }
+
+        /* 标题样式 */
+        .title {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .title h1 {
+            font-size: 32px;
+            margin: 0;
+            background: linear-gradient(45deg, #ff69b4, #87ceeb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(255, 105, 180, 0.3);
+        }
+
+        /* 排行榜容器 */
+        .rankings {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        /* 排行榜卡片 */
+        .ranking-card {
+            background: rgba(41, 41, 77, 0.6);
+            border-radius: 15px;
+            padding: 15px;
+            border: 1px solid rgba(255, 182, 193, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ranking-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255, 182, 193, 0.1), transparent);
+            animation: shine 2s linear infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .ranking-card h2 {
+            margin: 0 0 15px 0;
+            font-size: 20px;
+            color: #ff69b4;
+            text-align: center;
+        }
+
+        /* 排行榜列表 */
+        .ranking-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            margin-bottom: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .ranking-item:hover {
+            transform: translateX(5px);
+            background: rgba(255, 182, 193, 0.1);
+        }
+
+        /* 排名数字 */
+        .rank-number {
+            width: 24px;
+            height: 24px;
+            background: rgba(255, 105, 180, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* 前三名特殊样式 */
+        .ranking-item:nth-child(1) .rank-number {
+            background: linear-gradient(45deg, #ffd700, #ffa500);
+            color: #1a1b2e;
+        }
+
+        .ranking-item:nth-child(2) .rank-number {
+            background: linear-gradient(45deg, #c0c0c0, #a9a9a9);
+            color: #1a1b2e;
+        }
+
+        .ranking-item:nth-child(3) .rank-number {
+            background: linear-gradient(45deg, #cd7f32, #8b4513);
+            color: #1a1b2e;
+        }
+
+        /* 玩家信息 */
+        .player-info {
+            flex: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .player-name {
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .player-score {
+            color: #ff69b4;
+            font-weight: bold;
+        }
+
+        /* 统计信息 */
+        .stats {
+            background: rgba(41, 41, 77, 0.6);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid rgba(255, 182, 193, 0.3);
+            margin-top: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #ff69b4;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        /* 可爱图标 */
+        .icon {
+            font-size: 16px;
+            margin-right: 5px;
+        }
+
+        /* 全息投影效果 */
+        .hologram {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hologram::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                transparent,
+                rgba(255, 182, 193, 0.1),
+                transparent
+            );
+            animation: scan 2s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 装饰元素 -->
+        <div class="decoration"></div>
+        <div class="decoration"></div>
+
+        <!-- 标题 -->
+        <div class="title hologram">
+            <h1>🌟 警察排行榜 🌟</h1>
+        </div>
+
+        <!-- 排行榜区域 -->
+        <div class="rankings">
+            <!-- 经验值排行 -->
+            <div class="ranking-card hologram">
+                <h2>👑 经验值排行</h2>
+                <ul class="ranking-list">
+                    {{each expRanking}}
+                    <li class="ranking-item">
+                        <div class="rank-number">{{$index + 1}}</div>
+                        <div class="player-info">
+                            <span class="player-name">{{$value.name}}</span>
+                            <span class="player-score">{{$value.exp}}经验</span>
+                        </div>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+
+            <!-- 破案数排行 -->
+            <div class="ranking-card hologram">
+                <h2>🔍 破案数排行</h2>
+                <ul class="ranking-list">
+                    {{each caseRanking}}
+                    <li class="ranking-item">
+                        <div class="rank-number">{{$index + 1}}</div>
+                        <div class="player-info">
+                            <span class="player-name">{{$value.name}}</span>
+                            <span class="player-score">{{$value.solvedCases}}起</span>
+                        </div>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+
+            <!-- 声望排行 -->
+            <div class="ranking-card hologram">
+                <h2>⭐ 声望排行</h2>
+                <ul class="ranking-list">
+                    {{each reputationRanking}}
+                    <li class="ranking-item">
+                        <div class="rank-number">{{$index + 1}}</div>
+                        <div class="player-info">
+                            <span class="player-name">{{$value.name}}</span>
+                            <span class="player-score">{{$value.reputation}}声望</span>
+                        </div>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+        </div>
+
+        <!-- 统计信息 -->
+        <div class="stats hologram">
+            <h2>📊 统计数据</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-label">总警察数</div>
+                    <div class="stat-value">{{totalPolice}}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">经验值排名</div>
+                    <div class="stat-value">{{userRanking.exp}}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">破案数排名</div>
+                    <div class="stat-value">{{userRanking.case}}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">声望排名</div>
+                    <div class="stat-value">{{userRanking.reputation}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

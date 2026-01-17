@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #2e7d32;
+            margin: 0;
+            font-size: 2em;
+        }
+        .section-title {
+            color: #1b5e20;
+            margin: 30px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #a5d6a7;
+            display: flex;
+            align-items: center;
+        }
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .item-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            border: 2px solid #81c784;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        .item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(46, 125, 50, 0.2);
+        }
+        .item-level {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #4caf50;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+        }
+        .item-name {
+            font-size: 1.2em;
+            color: #2e7d32;
+            margin: 10px 0;
+        }
+        .item-stats {
+            margin: 10px 0;
+            display: grid;
+            gap: 5px;
+        }
+        .stat-tag {
+            background: #f1f8e9;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            color: #33691e;
+        }
+        .item-description {
+            font-style: italic;
+            color: #666;
+            margin: 10px 0;
+            font-size: 0.9em;
+        }
+        .item-price {
+            text-align: right;
+            color: #2e7d32;
+            font-size: 1.1em;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .item-id {
+            color: #666;
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .cute-icon {
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+        .upgrade-info {
+            color: #1b5e20;
+            font-size: 0.9em;
+            margin-top: 5px;
+            padding-top: 5px;
+            border-top: 1px dashed #a5d6a7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎣 钓鱼装备商店 🎣</h1>
+        </div>
+
+        <div class="section-title">
+            <span class="cute-icon">🎏</span>鱼竿专区
+        </div>
+        <div class="items-grid">
+            {{each equipment.rods rod}}
+            <div class="item-card">
+                <div class="item-level">{{rod.level}}级</div>
+                <div class="item-name">
+                    <span class="cute-icon">🎣</span>{{rod.name}}
+                </div>
+                <div class="item-stats">
+                    <div class="stat-tag">
+                        <span class="cute-icon">🎯</span>成功率：{{rod.success_rate}}%
+                    </div>
+                    <div class="stat-tag">
+                        <span class="cute-icon">⚡</span>耐久度：{{rod.durability}}
+                    </div>
+                </div>
+                <div class="item-description">{{rod.description}}</div>
+                <div class="item-price">
+                    <span class="cute-icon">💰</span>{{rod.price}}金币
+                </div>
+                {{if rod.upgrade_cost > 0}}
+                <div class="upgrade-info">
+                    <span class="cute-icon">⬆️</span>升级费用：{{rod.upgrade_cost}}金币
+                </div>
+                {{/if}}
+                <div class="item-id">装备ID: {{rod.id}}</div>
+            </div>
+            {{/each}}
+        </div>
+
+        <div class="section-title">
+            <span class="cute-icon">🪱</span>鱼饵专区
+        </div>
+        <div class="items-grid">
+            {{each equipment.baits bait}}
+            <div class="item-card">
+                <div class="item-level">{{bait.level}}级</div>
+                <div class="item-name">
+                    <span class="cute-icon">🪱</span>{{bait.name}}
+                </div>
+                <div class="item-stats">
+                    <div class="stat-tag">
+                        <span class="cute-icon">🎯</span>吸引率：{{bait.attract_rate}}%
+                    </div>
+                </div>
+                <div class="item-description">{{bait.description}}</div>
+                <div class="item-price">
+                    <span class="cute-icon">💰</span>{{bait.price}}金币
+                </div>
+                {{if bait.upgrade_cost > 0}}
+                <div class="upgrade-info">
+                    <span class="cute-icon">⬆️</span>升级费用：{{bait.upgrade_cost}}金币
+                </div>
+                {{/if}}
+                <div class="item-id">装备ID: {{bait.id}}</div>
+            </div>
+            {{/each}}
+        </div>
+
+        <div class="section-title">
+            <span class="cute-icon">🗑️</span>鱼篓专区
+        </div>
+        <div class="items-grid">
+            {{each equipment.baskets basket}}
+            <div class="item-card">
+                <div class="item-name">
+                    <span class="cute-icon">🗑️</span>{{basket.name}}
+                </div>
+                <div class="item-stats">
+                    <div class="stat-tag">
+                        <span class="cute-icon">📦</span>容量：{{basket.capacity}}条
+                    </div>
+                    <div class="stat-tag">
+                        <span class="cute-icon">⏰</span>保鲜加成：{{basket.freshness_bonus/3600}}小时
+                    </div>
+                </div>
+                <div class="item-description">{{basket.description}}</div>
+                <div class="item-price">
+                    <span class="cute-icon">💰</span>{{basket.price}}金币
+                </div>
+                <div class="item-id">装备ID: {{basket.id}}</div>
+            </div>
+            {{/each}}
+        </div>
+
+        <div class="footer">
+            <p>💫 使用 #购买装备 装备ID 购买装备</p>
+            <p>💫 使用 #升级鱼竿 或 #升级鱼饵 进行升级</p>
+            <p>⚠️ 购买前请确保余额充足，并选择适合的装备等级</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #e65100;
+            margin: 0;
+            font-size: 2em;
+        }
+        .recipes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .recipe-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            border: 2px solid #ffcc80;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+        .recipe-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(230, 81, 0, 0.2);
+        }
+        .recipe-locked {
+            filter: grayscale(100%);
+            opacity: 0.7;
+        }
+        .recipe-name {
+            font-size: 1.5em;
+            color: #e65100;
+            margin-bottom: 10px;
+        }
+        .recipe-category {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff9800;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+        }
+        .recipe-info {
+            margin: 15px 0;
+            color: #666;
+        }
+        .recipe-ingredients {
+            margin: 15px 0;
+        }
+        .ingredient-item {
+            background: #fff3e0;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin: 3px;
+            display: inline-block;
+            font-size: 0.9em;
+        }
+        .recipe-steps {
+            font-size: 0.9em;
+            color: #666;
+            margin: 15px 0;
+        }
+        .recipe-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #ffe0b2;
+        }
+        .recipe-stats {
+            font-size: 0.9em;
+            color: #666;
+        }
+        .unlock-info {
+            color: #e65100;
+            font-size: 0.9em;
+        }
+        .cute-icon {
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🍳 美味食谱大全 📖</h1>
+        </div>
+        <div class="recipes-grid">
+            {{each recipes recipe}}
+            <div class="recipe-card {{unlockedRecipes.includes(recipe.id) ? '' : 'recipe-locked'}}">
+                <div class="recipe-category">{{recipe.category}}</div>
+                <div class="recipe-name">
+                    <span class="cute-icon">🍽️</span>{{recipe.name}}
+                </div>
+                <div class="recipe-info">
+                    <span class="cute-icon">⭐</span>难度：{{recipe.difficulty}}级
+                    <br>
+                    <span class="cute-icon">⏰</span>制作时间：{{recipe.time}}分钟
+                </div>
+                <div class="recipe-ingredients">
+                    {{each recipe.ingredients ing}}
+                    <span class="ingredient-item">
+                        {{ing.name}} x{{ing.amount}}
+                    </span>
+                    {{/each}}
+                </div>
+                <div class="recipe-footer">
+                    <div class="recipe-stats">
+                        <span class="cute-icon">📈</span>成功率：{{recipe.successRate}}%
+                        <br>
+                        <span class="cute-icon">💰</span>基础售价：{{recipe.basePrice}}金币
+                    </div>
+                    {{if !unlockedRecipes.includes(recipe.id)}}
+                    <div class="unlock-info">
+                        需要等级：{{recipe.unlockLevel}}级
+                    </div>
+                    {{/if}}
+                </div>
+            </div>
+            {{/each}}
+        </div>
+        <div class="footer">
+            <p>💫 使用 #学习食谱 食谱ID 来解锁新食谱 | #制作料理 食谱ID 开始烹饪 💫</p>
+        </div>
+    </div>
+</body>
+</html>

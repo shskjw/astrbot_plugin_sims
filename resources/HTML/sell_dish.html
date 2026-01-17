@@ -1,0 +1,278 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>出售料理</title>
+    <style>
+        :root {
+            --primary-color: #ff9ecd;
+            --secondary-color: #7b88ff;
+            --success-color: #4cd964;
+            --bg-color: #fef6f9;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --border-color: rgba(255, 158, 205, 0.3);
+            --shadow-color: rgba(123, 136, 255, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 158, 205, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(123, 136, 255, 0.15) 0%, transparent 50%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .result-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px var(--shadow-color);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .result-title {
+            font-size: 2rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px var(--shadow-color);
+        }
+
+        .dish-info {
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .dish-name {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .dish-quality {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            background: rgba(123, 136, 255, 0.1);
+            color: var(--secondary-color);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+        }
+
+        .price-section {
+            text-align: center;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: rgba(76, 217, 100, 0.1);
+            border-radius: 15px;
+            animation: glow 2s infinite;
+        }
+
+        .price-label {
+            font-size: 1.2rem;
+            color: var(--success-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .price-amount {
+            font-size: 2rem;
+            color: var(--success-color);
+            font-weight: bold;
+        }
+
+        .chef-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.5);
+            padding: 1rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-label {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .decoration {
+            position: fixed;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .decoration-1 {
+            top: 20px;
+            right: 20px;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%);
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .decoration-2 {
+            bottom: 20px;
+            left: 20px;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, var(--secondary-color) 0%, transparent 70%);
+            opacity: 0.1;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        .coins {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .coin {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, #ffd700 0%, #ffa500 100%);
+            border-radius: 50%;
+            opacity: 0;
+            animation: coinFall 2s ease-out forwards;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px var(--success-color); }
+            50% { box-shadow: 0 0 20px var(--success-color); }
+        }
+
+        @keyframes coinFall {
+            0% {
+                transform: translateY(-50px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(123, 136, 255, 0.1);
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .chef-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .result-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="decoration decoration-1"></div>
+    <div class="decoration decoration-2"></div>
+    <div class="container">
+        <div class="result-card">
+            <div class="coins">
+                <div class="coin" style="left: 20%; animation-delay: 0.2s;"></div>
+                <div class="coin" style="left: 40%; animation-delay: 0.4s;"></div>
+                <div class="coin" style="left: 60%; animation-delay: 0.6s;"></div>
+                <div class="coin" style="left: 80%; animation-delay: 0.8s;"></div>
+            </div>
+            <div class="result-header">
+                <h1 class="result-title">✨ 料理出售成功 ✨</h1>
+            </div>
+
+            <div class="dish-info">
+                <h2 class="dish-name">{{dish.name}}</h2>
+                <div class="dish-quality">品质：{{dish.quality}}</div>
+            </div>
+
+            <div class="price-section">
+                <div class="price-label">获得金币</div>
+                <div class="price-amount">💰 {{price}}</div>
+            </div>
+
+            <div class="chef-stats">
+                <div class="stat-item">
+                    <div class="stat-label">厨师等级</div>
+                    <div class="stat-value">Lv.{{chef.level}}</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: {{(chef.exp / (chef.level * 100)) * 100}}%"></div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">声望</div>
+                    <div class="stat-value">{{chef.reputation}}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">成功率</div>
+                    <div class="stat-value">{{(chef.successDishes / chef.totalDishes * 100).toFixed(1)}}%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

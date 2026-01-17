@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>模拟人生 - 设置中心</title>
+  <link rel="stylesheet" type="text/css" href="{{pluResPath}}HTML/styles.css" />
+  <link rel="stylesheet" type="text/css" href="{{pluResPath}}HTML/114514.css" />
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4ecfa 100%);
+      font-family: "Microsoft YaHei", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "PingFang SC", "Hiragino Sans GB", "Heiti SC", "WenQuanYi Micro Hei", sans-serif;
+      color: #333;
+    }
+    .container {
+      max-width: 980px;
+      margin: 40px auto;
+      padding: 24px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+    .header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid #eef2f7;
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+    .title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #2b3a67;
+      letter-spacing: .5px;
+    }
+    .subtitle {
+      font-size: 12px;
+      color: #8190b0;
+    }
+    .section {
+      margin-top: 16px;
+    }
+    .section h2 {
+      margin: 0 0 10px;
+      font-size: 16px;
+      color: #344767;
+    }
+    .card {
+      background: #fafbff;
+      border: 1px solid #eef2f7;
+      border-radius: 12px;
+      padding: 14px;
+    }
+    .config-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 10px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .config-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      background: #fff;
+      border: 1px solid #e9eef5;
+      border-radius: 10px;
+      color: #2f3b57;
+      box-shadow: 0 4px 10px rgba(43,58,103,0.05);
+    }
+    .config-item .dot {
+      width: 8px;
+      height: 8px;
+      background: #6c8ef5;
+      border-radius: 50%;
+      box-shadow: 0 0 0 3px rgba(108,142,245,0.18);
+    }
+    .empty {
+      padding: 18px;
+      text-align: center;
+      color: #8a94ab;
+      border: 1px dashed #d8e1f0;
+      border-radius: 12px;
+      background: #fff;
+    }
+    .tips {
+      margin-top: 14px;
+      font-size: 12px;
+      color: #7a879f;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="title">模拟人生 · 设置中心</div>
+      <div class="subtitle">渲染时间：{{data.time}}</div>
+    </div>
+
+    <div class="section">
+      <h2>可用配置文件</h2>
+      <div class="card">
+        {{if configFiles && configFiles.length}}
+          <ul class="config-list">
+            {{each configFiles file}}
+              <li class="config-item">
+                <span class="dot"></span>
+                <span>{{file}}</span>
+              </li>
+            {{/each}}
+          </ul>
+        {{else}}
+          <div class="empty">未在 plugins/sims-plugin/config/ 下发现配置文件</div>
+        {{/if}}
+        <div class="tips">
+          提示：此界面仅用于查看当前可用配置文件列表。若需查看或修改具体配置，请使用相应指令或在服务器上编辑对应 YAML 文件。
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

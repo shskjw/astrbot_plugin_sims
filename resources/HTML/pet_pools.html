@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #ff9800;
+            margin: 0;
+            font-size: 2em;
+        }
+        .pool-section {
+            margin: 30px 0;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            border: 2px solid #ffe0b2;
+        }
+        .pool-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #fff3e0;
+        }
+        .pool-name {
+            font-size: 1.5em;
+            color: #f57c00;
+        }
+        .pool-price {
+            background: #ff9800;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        .pool-description {
+            color: #666;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+        .pets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        .pet-card {
+            background: #fff8e1;
+            border-radius: 10px;
+            padding: 15px;
+            transition: transform 0.3s ease;
+        }
+        .pet-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(255, 152, 0, 0.2);
+        }
+        .pet-name {
+            font-size: 1.2em;
+            color: #e65100;
+            margin-bottom: 5px;
+        }
+        .pet-rarity {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            margin: 5px 0;
+        }
+        .rarity-R {
+            background: #90caf9;
+            color: white;
+        }
+        .rarity-SR {
+            background: #ce93d8;
+            color: white;
+        }
+        .rarity-SSR {
+            background: linear-gradient(45deg, #ffd700, #ff9800);
+            color: white;
+        }
+        .pet-rate {
+            color: #fb8c00;
+            font-size: 0.9em;
+            margin: 5px 0;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .cute-icon {
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎲 宠物抽卡池 🎲</h1>
+        </div>
+        {{each pools pool}}
+        <div class="pool-section">
+            <div class="pool-header">
+                <div class="pool-name">
+                    <span class="cute-icon">🎯</span>{{pool.name}}
+                </div>
+                <div class="pool-price">
+                    <span class="cute-icon">💰</span>{{pool.price}}金币
+                </div>
+            </div>
+            <div class="pool-description">
+                <span class="cute-icon">📝</span>{{pool.description}}
+            </div>
+            <div class="pets-grid">
+                {{each pool.pets pet}}
+                <div class="pet-card">
+                    <div class="pet-name">{{pet.name}}</div>
+                    <div class="pet-rarity rarity-{{pet.rarity}}">{{pet.rarity}}</div>
+                    <div class="pet-rate">
+                        <span class="cute-icon">📊</span>出率: {{pet.rate}}%
+                    </div>
+                    <div style="color: #666; font-size: 0.9em;">
+                        <span class="cute-icon">🏷️</span>{{pet.type}}
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+        {{/each}}
+        <div class="footer">
+            <p>💫 使用 #宠物抽卡 来获得可爱的宠物伙伴 💫</p>
+        </div>
+    </div>
+</body>
+</html>

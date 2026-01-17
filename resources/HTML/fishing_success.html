@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .header {
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #1976d2;
+            margin: 0;
+            font-size: 2em;
+        }
+        .fish-info {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #90caf9;
+        }
+        .fish-name {
+            font-size: 1.8em;
+            color: #1976d2;
+            margin: 10px 0;
+        }
+        .fish-rarity {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            background: #2196f3;
+            color: white;
+            margin: 10px 0;
+        }
+        .fish-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat-item {
+            background: #e3f2fd;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        .fish-description {
+            font-style: italic;
+            color: #666;
+            margin: 15px 0;
+        }
+        .footer {
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .cute-icon {
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+        .fish-image {
+            font-size: 4em;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎣 钓鱼成功！ 🎣</h1>
+        </div>
+        <div class="fish-info">
+            <div class="fish-image">🐟</div>
+            <div class="fish-name">
+                <span class="cute-icon">✨</span>{{fish.name}}
+            </div>
+            <div class="fish-rarity">{{fish.rarity}}</div>
+            <div class="fish-stats">
+                <div class="stat-item">
+                    <span class="cute-icon">⚖️</span>重量：{{weight}}kg
+                </div>
+                <div class="stat-item">
+                    <span class="cute-icon">💰</span>基础价值：{{fish.basePrice}}金币
+                </div>
+                <div class="stat-item">
+                    <span class="cute-icon">📈</span>经验：+{{fish.exp}}
+                </div>
+                <div class="stat-item">
+                    <span class="cute-icon">⏰</span>保鲜时间：{{fish.freshness/3600}}小时
+                </div>
+            </div>
+            <div class="fish-description">
+                <span class="cute-icon">📝</span>{{fish.description}}
+            </div>
+        </div>
+        <div class="footer">
+            <p>💫 记得及时查看鱼篓，避免鱼获变质！ 💫</p>
+        </div>
+    </div>
+</body>
+</html>

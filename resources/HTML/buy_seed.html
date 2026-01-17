@@ -1,0 +1,253 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨购买种子✨</title>
+    <style>
+        :root {
+            --primary: #00F5FF;
+            --secondary: #FF2D75;
+            --accent: #00FF9D;
+            --dark: #1A1A2E;
+            --light: rgba(255,255,255,0.9);
+        }
+        
+        @font-face {
+            font-family: 'SciFi';
+            src: url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+        }
+        
+        body {
+            font-family: 'SciFi', 'Arial Rounded MT Bold', sans-serif;
+            background: linear-gradient(135deg, var(--dark) 0%, #16213E 100%);
+            color: var(--light);
+            padding: 0;
+            margin: 0;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%2300F5FF10" d="M0,0 L100,0 L100,100 L0,100 Z M20,20 L80,20 L80,80 L20,80 Z" stroke="%2300F5FF30" stroke-width="0.5"/></svg>');
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: var(--primary);
+            text-shadow: 0 0 15px var(--primary), 0 0 30px var(--secondary);
+            position: relative;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 10px var(--primary); }
+            to { text-shadow: 0 0 20px var(--primary), 0 0 30px var(--secondary); }
+        }
+        
+        .seed-card {
+            background: rgba(0,0,0,0.5);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 20px var(--primary);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .seed-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px var(--primary);
+        }
+        
+        .seed-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to bottom right, transparent 45%, var(--primary) 50%, transparent 55%);
+            opacity: 0.3;
+            transform: rotate(30deg);
+            animation: shine 3s infinite linear;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateY(-100%) rotate(30deg); }
+            100% { transform: translateY(100%) rotate(30deg); }
+        }
+        
+        .seed-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .seed-icon {
+            width: 80px;
+            height: 80px;
+            margin-right: 20px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 10px var(--accent));
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .seed-name {
+            font-size: 1.8rem;
+            color: var(--accent);
+            margin-bottom: 5px;
+        }
+        
+        .seed-price {
+            font-size: 1.5rem;
+            color: var(--secondary);
+        }
+        
+        .seed-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .detail-item {
+            background: rgba(0,245,255,0.1);
+            padding: 10px;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent);
+        }
+        
+        .detail-label {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 5px;
+        }
+        
+        .detail-value {
+            font-size: 1.1rem;
+            color: var(--light);
+        }
+        
+        .season-tag {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--secondary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            box-shadow: 0 0 10px var(--secondary);
+        }
+        
+        .purchase-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+        
+        .user-balance {
+            font-size: 1.2rem;
+            color: var(--accent);
+        }
+        
+        .buy-button {
+            background: var(--primary);
+            color: var(--dark);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-family: 'SciFi', sans-serif;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,245,255,0.3);
+        }
+        
+        .buy-button:hover {
+            background: var(--accent);
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0,255,157,0.4);
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✨购买种子✨</h1>
+        
+        <div class="seed-card">
+            <div class="seed-header">
+                <img src="{{seedIcon}}" class="seed-icon">
+                <div>
+                    <div class="seed-name">{{seedName}}</div>
+                    <div class="seed-price">💰 {{seedPrice}} 金币/个</div>
+                </div>
+            </div>
+            
+            <div class="season-tag">季节: {{seedSeason}}</div>
+            
+            <div class="seed-details">
+                <div class="detail-item">
+                    <div class="detail-label">生长周期</div>
+                    <div class="detail-value">{{seedGrowthDays}} 天</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">当前季节</div>
+                    <div class="detail-value">{{currentSeason}}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">购买数量</div>
+                    <div class="detail-value">{{seedQuantity}} 个</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">总价格</div>
+                    <div class="detail-value">{{totalPrice}} 金币</div>
+                </div>
+            </div>
+            
+            <div class="purchase-section">
+                <div class="user-balance">你的金币: {{userMoney}}</div>
+                <button class="buy-button">购买成功</button>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>⚡ 测试 ⚡</p>
+        </div>
+    </div>
+</body>
+</html>

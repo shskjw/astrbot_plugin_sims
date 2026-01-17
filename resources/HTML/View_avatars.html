@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>头像馆</title>
+    <style>
+        @font-face {
+            font-family: "miao";
+            src: url(./也字工厂喵喵体.ttf);
+        }
+
+        @keyframes neonGlow {
+            0% { text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #0ff, 0 0 20px #0ff, 0 0 25px #0ff; }
+            100% { text-shadow: 0 0 2px #fff, 0 0 5px #fff, 0 0 10px #0ff, 0 0 15px #0ff, 0 0 20px #0ff; }
+        }
+
+        @keyframes hologramEffect {
+            0% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.02); }
+            100% { opacity: 0.8; transform: scale(1); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-10px) rotate(2deg); }
+            75% { transform: translateY(10px) rotate(-2deg); }
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        body {
+            font-family: "miao", sans-serif;
+            background: linear-gradient(135deg, #0a192f, #112240);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            color: #e6f1ff;
+        }
+
+        .gallery-container {
+            background: rgba(16, 32, 64, 0.95);
+            border-radius: 30px;
+            box-shadow: 0 8px 32px rgba(10, 25, 47, 0.7);
+            backdrop-filter: blur(10px);
+            width: 800px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(100, 255, 255, 0.2);
+        }
+
+        .gallery-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00f7ff, #64ffda, #00f7ff);
+            animation: hologramEffect 2s infinite;
+        }
+
+        .scanline {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(to bottom,
+                rgba(100, 255, 255, 0),
+                rgba(100, 255, 255, 0.1),
+                rgba(100, 255, 255, 0));
+            animation: scanline 4s linear infinite;
+            pointer-events: none;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .title {
+            color: #64ffda;
+            font-size: 32px;
+            margin: 0;
+            animation: neonGlow 2s infinite alternate;
+        }
+
+        .subtitle {
+            color: #8892b0;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        .current-avatar {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 20px;
+            background: rgba(16, 32, 64, 0.8);
+            border-radius: 20px;
+            border: 1px solid rgba(100, 255, 255, 0.2);
+        }
+
+        .current-avatar-title {
+            color: #64ffda;
+            font-size: 18px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
+        }
+
+        .current-avatar-frame {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+            border-radius: 50%;
+            padding: 5px;
+            background: linear-gradient(45deg, #64ffda, #00f7ff);
+            animation: pulse 3s infinite;
+        }
+
+        .current-avatar-image {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #0a192f;
+        }
+
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            background: rgba(16, 32, 64, 0.6);
+            border-radius: 20px;
+            border: 1px solid rgba(100, 255, 255, 0.1);
+        }
+
+        .avatar-item {
+            position: relative;
+            width: 100%;
+            padding-bottom: 100%;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .avatar-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(100, 255, 218, 0.3);
+        }
+
+        .avatar-item img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+            border: 2px solid rgba(100, 255, 255, 0.2);
+        }
+
+        .avatar-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(100, 255, 218, 0.1),
+                transparent
+            );
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .avatar-item:hover::before {
+            opacity: 1;
+        }
+
+        .avatar-name {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 5px;
+            background: rgba(16, 32, 64, 0.8);
+            color: #64ffda;
+            font-size: 12px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .avatar-item:hover .avatar-name {
+            opacity: 1;
+        }
+
+        .cute-decoration {
+            position: absolute;
+            font-size: 24px;
+            opacity: 0.7;
+            animation: float 4s ease-in-out infinite;
+            color: #64ffda;
+            text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
+        }
+
+        .cute-decoration:nth-child(1) { top: 20px; right: 20px; animation-delay: 0s; }
+        .cute-decoration:nth-child(2) { bottom: 20px; left: 20px; animation-delay: 1s; }
+        .cute-decoration:nth-child(3) { top: 50%; right: 30px; animation-delay: 2s; }
+        .cute-decoration:nth-child(4) { bottom: 40%; left: 30px; animation-delay: 3s; }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #64ffda;
+            font-size: 14px;
+            text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
+            animation: neonGlow 2s infinite alternate;
+        }
+
+        .usage-tip {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(16, 32, 64, 0.8);
+            border-radius: 15px;
+            border: 1px solid rgba(100, 255, 255, 0.2);
+            color: #8892b0;
+            font-size: 14px;
+        }
+
+        .usage-tip span {
+            color: #64ffda;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="gallery-container">
+        <div class="scanline"></div>
+        
+        <span class="cute-decoration">✧</span>
+        <span class="cute-decoration">⚡</span>
+        <span class="cute-decoration">✦</span>
+        <span class="cute-decoration">⭐</span>
+
+        <div class="header">
+            <h1 class="title">头像馆</h1>
+            <p class="subtitle">选择你喜欢的头像展现自我</p>
+        </div>
+
+        <div class="current-avatar">
+            <div class="current-avatar-title">当前头像</div>
+            <div class="current-avatar-frame">
+                <img class="current-avatar-image" src="{{cssFile}}/tx/{{currentAvatar}}" alt="当前头像">
+            </div>
+        </div>
+
+        <div class="avatar-grid">
+            {{each avatars avatar}}
+            <div class="avatar-item">
+                <img src="{{cssFile}}/tx/{{avatar}}" alt="{{avatar}}">
+                <div class="avatar-name">{{avatar}}</div>
+            </div>
+            {{/each}}
+        </div>
+
+        <div class="usage-tip">
+            使用方法：发送 <span>#设置模拟人生头像 头像名称</span> 即可更换头像
+        </div>
+
+        <div class="footer">
+            ⚡ SIMS-PLUGIN v2.0 ⚡
+        </div>
+    </div>
+</body>
+</html>

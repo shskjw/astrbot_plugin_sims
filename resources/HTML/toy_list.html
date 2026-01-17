@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #fce4ec, #f3e5f5);
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e91e63;
+            padding-bottom: 15px;
+        }
+        .header h1 {
+            margin: 0;
+            color: #e91e63;
+            font-size: 2em;
+        }
+        .toy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .toy-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            transition: transform 0.3s ease;
+            border: 1px solid #f8bbd0;
+            position: relative;
+            overflow: hidden;
+        }
+        .toy-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.2);
+        }
+        .toy-name {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: #e91e63;
+        }
+        .toy-category {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #f8bbd0;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            color: #c2185b;
+        }
+        .toy-price {
+            font-size: 1.5em;
+            margin: 10px 0;
+            color: #2196f3;
+        }
+        .toy-popularity {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #ff9800;
+        }
+        .toy-description {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        .cute-icon {
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧸 兔叽玩具商店 🎮</h1>
+        </div>
+        <div class="toy-grid">
+            {{each toys toy}}
+            <div class="toy-card">
+                <div class="toy-category">{{toy.category}}</div>
+                <div class="toy-name">
+                    <span class="cute-icon">🎯</span>{{toy.name}}
+                </div>
+                <div class="toy-price">
+                    <span class="cute-icon">💰</span>{{toy.basePrice}}元
+                </div>
+                <div class="toy-popularity">
+                    <span class="cute-icon">⭐</span>
+                    热度: {{toy.popularity}}%
+                </div>
+                <div class="toy-description">
+                    <span class="cute-icon">📝</span>
+                    {{toy.description}}
+                </div>
+                <div style="margin-top: 10px; color: #666;">
+                    <span class="cute-icon">🏷️</span>
+                    商品ID: {{toy.id}}
+                </div>
+            </div>
+            {{/each}}
+        </div>
+        <div class="footer">
+            <p>💫 使用 #进货 商品ID 数量 来进货 | #定价 商品ID 价格 来设置售价 💫</p>
+        </div>
+    </div>
+</body>
+</html>

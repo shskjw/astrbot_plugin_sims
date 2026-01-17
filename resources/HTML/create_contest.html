@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+    <link rel="stylesheet" type="text/css" href="{{cssFile}}common.css"/>
+    <style>
+        .container {
+            background: url('{{cssFile}}chef/contest_bg.jpg') no-repeat;
+            background-size: cover;
+            width: 800px;
+            color: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #FFD700;
+            text-shadow: 2px 2px 4px #000;
+        }
+        .contest-details {
+            background: rgba(0,0,0,0.7);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .recipe-info {
+            background: rgba(0,0,0,0.7);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .deadline {
+            background: rgba(255,0,0,0.3);
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .action {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0,150,0,0.3);
+            border-radius: 10px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-style: italic;
+            color: #aaa;
+        }
+        .key {
+            color: #FFD700;
+            font-weight: bold;
+        }
+        .value {
+            color: #8BC34A;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏆 厨艺比赛已创建 🏆</h1>
+        
+        <div class="contest-details">
+            <p><span class="key">比赛名称:</span> <span class="value">{{contest.name}}</span></p>
+            <p><span class="key">比赛食谱:</span> <span class="value">{{recipe.name}}</span></p>
+            <p><span class="key">比赛ID:</span> <span class="value">{{contest.id}}</span></p>
+            <p><span class="key">创建者:</span> <span class="value">{{creatorName}}</span></p>
+            
+            <div class="recipe-info">
+                <h3>🍳 比赛食谱信息</h3>
+                <p><span class="key">难度:</span> <span class="value">{{recipe.difficulty}}</span></p>
+                <p><span class="key">食谱描述:</span> <span class="value">{{recipe.description}}</span></p>
+            </div>
+            
+            <div class="deadline">
+                <p>⏱️ 截止时间: {{deadlineStr}}</p>
+            </div>
+        </div>
+        
+        <div class="action">
+            其他厨师可使用 <b>#参加厨艺比赛 {{contest.id}}</b> 参加此比赛！
+        </div>
+        
+        <div class="footer">
+            举办厨艺比赛可以提升你的声望，并获得额外奖励！
+        </div>
+    </div>
+</body>
+</html> 

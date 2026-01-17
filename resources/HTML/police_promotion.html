@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+    <link rel="shortcut icon" href="#"/>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a237e, #0d47a1);
+            color: white;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        .title {
+            font-size: 2em;
+            margin: 0;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .subtitle {
+            color: #bbdefb;
+            margin-top: 5px;
+        }
+        .result-section {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .result-icon {
+            font-size: 4em;
+            margin-bottom: 10px;
+        }
+        .result-message {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #ffd700;
+        }
+        .success {
+            color: #4caf50;
+        }
+        .failure {
+            color: #f44336;
+        }
+        .rank-change {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        .rank {
+            text-align: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            width: 40%;
+        }
+        .rank-label {
+            color: #bbdefb;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+        .rank-name {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 5px;
+        }
+        .arrow {
+            font-size: 2em;
+            color: #4caf50;
+        }
+        .scores-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .score-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        .score-label {
+            color: #bbdefb;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+        .score-value {
+            font-size: 1.8em;
+            color: #ffd700;
+        }
+        .score-bar {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .score-fill {
+            height: 100%;
+            width: 0%;
+            border-radius: 5px;
+            transition: width 1s ease;
+        }
+        .progress-container {
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .progress-title {
+            color: #bbdefb;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .bonus-section {
+            margin-top: 20px;
+            background: rgba(26, 188, 156, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .bonus-card {
+            text-align: center;
+        }
+        .bonus-label {
+            color: #bbdefb;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+        .bonus-value {
+            font-size: 1.5em;
+            color: #1abc9c;
+        }
+        .tip-section {
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .tip-title {
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+        .tip-content {
+            color: #bbdefb;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">警察升职考核结果</h1>
+            <div class="subtitle">警员：{{name}}</div>
+        </div>
+
+        <div class="result-section">
+            {{#if success}}
+            <div class="result-icon success">🎖️</div>
+            <div class="result-message">升职考核通过！</div>
+            {{else}}
+            <div class="result-icon failure">⚠️</div>
+            <div class="result-message">考核未通过</div>
+            {{/if}}
+        </div>
+
+        {{#if success}}
+        <div class="rank-change">
+            <div class="rank">
+                <div class="rank-label">原职级</div>
+                <div class="rank-name">{{oldRank}}</div>
+            </div>
+            <div class="arrow">→</div>
+            <div class="rank">
+                <div class="rank-label">新职级</div>
+                <div class="rank-name">{{newRank}}</div>
+            </div>
+        </div>
+        {{else}}
+        <div class="rank">
+            <div class="rank-label">当前职级</div>
+            <div class="rank-name">{{currentRank}}</div>
+            <div class="rank-label" style="margin-top: 10px;">目标职级</div>
+            <div class="rank-name">{{targetRank}}</div>
+        </div>
+        {{/if}}
+
+        <div class="scores-grid">
+            <div class="score-card">
+                <div class="score-label">理论考试</div>
+                <div class="score-value">{{theoryScore}}分</div>
+                <div class="score-bar">
+                    <div class="score-fill" id="theoryBar" style="background: linear-gradient(90deg, #3498db, #9b59b6);"></div>
+                </div>
+            </div>
+            <div class="score-card">
+                <div class="score-label">体能测试</div>
+                <div class="score-value">{{physicalScore}}分</div>
+                <div class="score-bar">
+                    <div class="score-fill" id="physicalBar" style="background: linear-gradient(90deg, #2ecc71, #1abc9c);"></div>
+                </div>
+            </div>
+            <div class="score-card">
+                <div class="score-label">实战演练</div>
+                <div class="score-value">{{practicalScore}}分</div>
+                <div class="score-bar">
+                    <div class="score-fill" id="practicalBar" style="background: linear-gradient(90deg, #f1c40f, #e67e22);"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-title">综合评分：{{totalScore}}分 {{#unless success}}（通过分数：{{passScore}}分）{{/unless}}</div>
+            <div class="score-bar">
+                <div class="score-fill" id="totalBar" style="background: linear-gradient(90deg, #3498db, #2ecc71, #f1c40f);"></div>
+            </div>
+        </div>
+
+        {{#if success}}
+        <div class="bonus-section">
+            <div class="bonus-card">
+                <div class="bonus-label">奖励经验</div>
+                <div class="bonus-value">+{{bonusExp}}</div>
+            </div>
+            <div class="bonus-card">
+                <div class="bonus-label">奖励金钱</div>
+                <div class="bonus-value">+{{bonusMoney}}元</div>
+            </div>
+        </div>
+        {{/if}}
+
+        <div class="tip-section">
+            <div class="tip-title">考核小贴士</div>
+            <div class="tip-content">
+                {{#if success}}
+                恭喜晋升！更高的职级将带来更好的薪资待遇和装备选择，但也会面临更复杂的案件和更大的责任。保持努力！
+                {{else}}
+                这次考核虽然未通过，但这也是成长的一部分。继续积累经验，提升技能，下次一定能成功！
+                {{/if}}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            // 设置分数条动画
+            setTimeout(function() {
+                document.getElementById('theoryBar').style.width = '{{theoryScore}}%';
+                document.getElementById('physicalBar').style.width = '{{physicalScore}}%';
+                document.getElementById('practicalBar').style.width = '{{practicalScore}}%';
+                document.getElementById('totalBar').style.width = '{{totalScore}}%';
+            }, 300);
+        };
+    </script>
+</body>
+</html> 

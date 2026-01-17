@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>酒馆营业结果</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: url('https://s1.ax1x.com/2023/02/14/pSTUVmQ.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #e8e8e8;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 90%;
+            margin: 0 auto;
+            background-color: rgba(40, 40, 40, 0.85);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 36px;
+            color: #ffd700;
+            margin: 0;
+            padding: 10px;
+            text-shadow: 2px 2px 4px #000;
+        }
+        
+        .header .subtitle {
+            font-size: 18px;
+            color: #bbb;
+            margin-top: 5px;
+        }
+        
+        .divider {
+            border-bottom: 2px solid #555;
+            margin: 20px 0;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+        }
+        
+        .section-title {
+            font-size: 22px;
+            color: #ff9d00;
+            margin-bottom: 10px;
+            border-left: 4px solid #ff9d00;
+            padding-left: 10px;
+        }
+        
+        .tavern-name {
+            font-size: 28px;
+            color: #ffd700;
+            margin-bottom: 15px;
+            text-align: center;
+            text-shadow: 2px 2px 4px #000;
+        }
+        
+        .operation-summary {
+            background-color: rgba(60, 60, 60, 0.7);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        
+        .operation-summary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://s1.ax1x.com/2023/02/14/pSTUEa8.jpg') no-repeat center center;
+            background-size: cover;
+            opacity: 0.2;
+            z-index: -1;
+        }
+        
+        .summary-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        .summary-title {
+            font-size: 24px;
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+        
+        .summary-desc {
+            font-size: 16px;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .income-highlight {
+            font-size: 32px;
+            color: #4caf50;
+            font-weight: bold;
+            margin: 20px 0;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .result-card {
+            background-color: rgba(60, 60, 60, 0.7);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .result-label {
+            font-size: 14px;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+        
+        .result-value {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .result-value.positive {
+            color: #4caf50;
+        }
+        
+        .result-value.negative {
+            color: #f44336;
+        }
+        
+        .result-value.neutral {
+            color: #ffc107;
+        }
+        
+        .event-section {
+            background-color: rgba(60, 60, 60, 0.7);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .event-title {
+            font-size: 20px;
+            color: #ff9d00;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #555;
+            padding-bottom: 5px;
+        }
+        
+        .event-card {
+            background-color: rgba(80, 80, 80, 0.7);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        .event-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #555;
+            padding-bottom: 8px;
+        }
+        
+        .event-name {
+            font-size: 18px;
+            color: #ffd700;
+            font-weight: bold;
+        }
+        
+        .event-type {
+            display: inline-block;
+            padding: 3px 8px;
+            font-size: 12px;
+            border-radius: 10px;
+        }
+        
+        .event-type.positive {
+            background-color: #4caf50;
+            color: #fff;
+        }
+        
+        .event-type.negative {
+            background-color: #f44336;
+            color: #fff;
+        }
+        
+        .event-type.neutral {
+            background-color: #2196f3;
+            color: #fff;
+        }
+        
+        .event-desc {
+            font-size: 14px;
+            color: #ddd;
+            margin-bottom: 10px;
+        }
+        
+        .event-outcome {
+            font-size: 14px;
+            color: #ffc107;
+            font-style: italic;
+        }
+        
+        .no-events {
+            text-align: center;
+            padding: 20px;
+            color: #aaa;
+            font-style: italic;
+        }
+        
+        .sales-section {
+            background-color: rgba(60, 60, 60, 0.7);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .sales-title {
+            font-size: 20px;
+            color: #ff9d00;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #555;
+            padding-bottom: 5px;
+        }
+        
+        .sales-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .drink-card {
+            background-color: rgba(80, 80, 80, 0.7);
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .drink-info {
+            flex: 1;
+        }
+        
+        .drink-name {
+            font-size: 16px;
+            color: #ffd700;
+            margin-bottom: 5px;
+        }
+        
+        .drink-type {
+            font-size: 12px;
+            color: #aaa;
+        }
+        
+        .drink-sales {
+            text-align: right;
+        }
+        
+        .sales-count {
+            font-size: 18px;
+            color: #4caf50;
+            font-weight: bold;
+        }
+        
+        .sales-revenue {
+            font-size: 14px;
+            color: #ffc107;
+        }
+        
+        .status-changes {
+            background-color: rgba(60, 60, 60, 0.7);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .changes-title {
+            font-size: 20px;
+            color: #ff9d00;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #555;
+            padding-bottom: 5px;
+        }
+        
+        .changes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .change-item {
+            background-color: rgba(80, 80, 80, 0.7);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .change-label {
+            font-size: 14px;
+            color: #ddd;
+            margin-bottom: 5px;
+        }
+        
+        .change-value {
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .change-value.increased {
+            color: #4caf50;
+        }
+        
+        .change-value.decreased {
+            color: #f44336;
+        }
+        
+        .change-value.unchanged {
+            color: #ffc107;
+        }
+        
+        .change-arrow {
+            margin-right: 5px;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>酒馆营业结果</h1>
+            <div class="subtitle">今日酒馆的经营情况</div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="section">
+            <div class="tavern-name">{{tavern.name}}</div>
+            <div class="operation-summary">
+                <div class="summary-icon">🍻</div>
+                <div class="summary-title">营业结束</div>
+                <div class="summary-desc">
+                    {{if result.success}}
+                    今天你的酒馆生意兴隆，客人络绎不绝！
+                    {{else}}
+                    今天你的酒馆生意一般，还有提升空间。
+                    {{/if}}
+                </div>
+                <div class="income-highlight">+ {{result.income}}元</div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">营业数据</div>
+            <div class="results-grid">
+                <div class="result-card">
+                    <div class="result-label">顾客数量</div>
+                    <div class="result-value neutral">{{result.customers}}</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-label">饮品销量</div>
+                    <div class="result-value neutral">{{result.totalSales}}</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-label">总收入</div>
+                    <div class="result-value positive">{{result.income}}元</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-label">物资消耗</div>
+                    <div class="result-value negative">{{result.suppliesUsed}}</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-label">员工薪资</div>
+                    <div class="result-value negative">{{result.staffSalary}}元</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-label">净利润</div>
+                    <div class="result-value {{result.netProfit > 0 ? 'positive' : 'negative'}}">{{result.netProfit}}元</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">特殊事件</div>
+            <div class="event-section">
+                {{if result.events && result.events.length > 0}}
+                <div class="event-title">今日发生的事件</div>
+                {{each result.events event}}
+                <div class="event-card">
+                    <div class="event-header">
+                        <div class="event-name">{{event.title}}</div>
+                        <div class="event-type {{event.type}}">{{event.type === 'positive' ? '好事' : event.type === 'negative' ? '坏事' : '中性'}}</div>
+                    </div>
+                    <div class="event-desc">{{event.description}}</div>
+                    <div class="event-outcome">{{event.outcome}}</div>
+                </div>
+                {{/each}}
+                {{else}}
+                <div class="no-events">
+                    <p>今天酒馆营业很平静，没有发生特殊事件。</p>
+                </div>
+                {{/if}}
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">饮品销售情况</div>
+            <div class="sales-section">
+                <div class="sales-title">热销饮品</div>
+                <div class="sales-grid">
+                    {{each result.drinkSales drink}}
+                    <div class="drink-card">
+                        <div class="drink-info">
+                            <div class="drink-name">{{drink.name}}</div>
+                            <div class="drink-type">{{drink.type === 'beer' ? '啤酒' : drink.type === 'wine' ? '葡萄酒' : drink.type === 'spirits' ? '烈酒' : drink.type === 'mixed' ? '混合酒' : drink.type === 'special' ? '特色酒' : '无酒精饮料'}}</div>
+                        </div>
+                        <div class="drink-sales">
+                            <div class="sales-count">{{drink.quantity}}杯</div>
+                            <div class="sales-revenue">{{drink.revenue}}元</div>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">酒馆状态变化</div>
+            <div class="status-changes">
+                <div class="changes-title">营业后的变化</div>
+                <div class="changes-grid">
+                    <div class="change-item">
+                        <div class="change-label">人气</div>
+                        <div class="change-value {{result.changes.popularity > 0 ? 'increased' : result.changes.popularity < 0 ? 'decreased' : 'unchanged'}}">
+                            <span class="change-arrow">{{result.changes.popularity > 0 ? '↑' : result.changes.popularity < 0 ? '↓' : '='}}</span>
+                            <span>{{result.changes.popularity > 0 ? '+' : ''}}{{result.changes.popularity}}</span>
+                        </div>
+                    </div>
+                    <div class="change-item">
+                        <div class="change-label">清洁度</div>
+                        <div class="change-value {{result.changes.cleanliness > 0 ? 'increased' : result.changes.cleanliness < 0 ? 'decreased' : 'unchanged'}}">
+                            <span class="change-arrow">{{result.changes.cleanliness > 0 ? '↑' : result.changes.cleanliness < 0 ? '↓' : '='}}</span>
+                            <span>{{result.changes.cleanliness > 0 ? '+' : ''}}{{result.changes.cleanliness}}</span>
+                        </div>
+                    </div>
+                    <div class="change-item">
+                        <div class="change-label">声誉</div>
+                        <div class="change-value {{result.changes.reputation > 0 ? 'increased' : result.changes.reputation < 0 ? 'decreased' : 'unchanged'}}">
+                            <span class="change-arrow">{{result.changes.reputation > 0 ? '↑' : result.changes.reputation < 0 ? '↓' : '='}}</span>
+                            <span>{{result.changes.reputation > 0 ? '+' : ''}}{{result.changes.reputation}}</span>
+                        </div>
+                    </div>
+                    <div class="change-item">
+                        <div class="change-label">顾客满意度</div>
+                        <div class="change-value {{result.changes.customerSatisfaction > 0 ? 'increased' : result.changes.customerSatisfaction < 0 ? 'decreased' : 'unchanged'}}">
+                            <span class="change-arrow">{{result.changes.customerSatisfaction > 0 ? '↑' : result.changes.customerSatisfaction < 0 ? '↓' : '='}}</span>
+                            <span>{{result.changes.customerSatisfaction > 0 ? '+' : ''}}{{result.changes.customerSatisfaction}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            模拟人生插件 - 酒馆系统 v1.0
+        </div>
+    </div>
+</body>
+</html>

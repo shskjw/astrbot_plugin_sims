@@ -1,0 +1,87 @@
+{
+  "initial_coins": {
+    "type": "int",
+    "description": "新玩家初始金币",
+    "default": 1000
+  },
+  "daily_sign_reward": {
+    "type": "int",
+    "description": "每日签到奖励金币",
+    "default": 100
+  },
+  "sign_cooldown": {
+    "type": "int",
+    "description": "签到冷却时间(秒)",
+    "default": 86400
+  },
+  "farm_enabled": {
+    "type": "bool",
+    "description": "启用农场系统",
+    "default": true
+  },
+  "farm_create_cost": {
+    "type": "int",
+    "description": "创建农场费用",
+    "default": 500
+  },
+  "police_enabled": {
+    "type": "bool",
+    "description": "启用警察系统",
+    "default": true
+  },
+  "doctor_enabled": {
+    "type": "bool",
+    "description": "启用医生系统",
+    "default": true
+  },
+  "firefighter_enabled": {
+    "type": "bool",
+    "description": "启用消防员系统",
+    "default": true
+  },
+  "fishing_enabled": {
+    "type": "bool",
+    "description": "启用钓鱼系统",
+    "default": true
+  },
+  "netbar_enabled": {
+    "type": "bool",
+    "description": "启用网吧系统",
+    "default": true
+  },
+  "cinema_enabled": {
+    "type": "bool",
+    "description": "启用电影院系统",
+    "default": true
+  },
+  "chef_enabled": {
+    "type": "bool",
+    "description": "启用厨师系统",
+    "default": true
+  },
+  "tavern_enabled": {
+    "type": "bool",
+    "description": "启用酒馆系统",
+    "default": true
+  },
+  "stock_enabled": {
+    "type": "bool",
+    "description": "启用股票系统",
+    "default": true
+  },
+  "anti_cheat_enabled": {
+    "type": "bool",
+    "description": "启用反作弊系统",
+    "default": true
+  },
+  "max_daily_transactions": {
+    "type": "int",
+    "description": "每日最大交易次数",
+    "default": 100
+  },
+  "admins_id": {
+    "type": "list",
+    "description": "管理员列表",
+    "default": []
+  }
+}

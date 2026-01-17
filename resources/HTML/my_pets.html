@@ -1,0 +1,362 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <link rel="shortcut icon" href="#"/>
+    <style>
+        body {
+            font-family: 'PingFang SC', '微软雅黑', sans-serif;
+            background: linear-gradient(135deg, #ffd1dc 0%, #e6e6fa 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            perspective: 1000px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: container-float 6s ease-in-out infinite;
+        }
+
+        .content-wrapper {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 
+                0 10px 30px rgba(255, 182, 193, 0.3),
+                inset 0 0 20px rgba(255, 255, 255, 0.5);
+            position: relative;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .magical-border {
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(45deg, 
+                #ff9a9e, #fad0c4, #ffd1ff, #ff9a9e);
+            border-radius: 32px;
+            z-index: -1;
+            background-size: 200% 200%;
+            animation: border-shine 3s linear infinite;
+            opacity: 0.8;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .title {
+            font-size: 36px;
+            color: #6a4873;
+            margin: 0;
+            padding: 20px 0;
+            text-shadow: 2px 2px 4px rgba(255, 182, 193, 0.3);
+            position: relative;
+            display: inline-block;
+        }
+
+        .title::before, .title::after {
+            content: '🌸';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 28px;
+            animation: flower-spin 3s infinite linear;
+        }
+
+        .title::before { left: -50px; }
+        .title::after { right: -50px; }
+
+        .pet-card {
+            background: rgb(187, 238, 252);
+            border-radius: 25px;
+            padding: 30px;
+            margin-bottom: 30px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: all 0.5s ease;
+            border: 1px solid rgba(255, 192, 203, 0.3);
+        }
+
+        .pet-card:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 
+                0 15px 35px rgba(255, 182, 193, 0.4),
+                0 5px 15px rgba(255, 182, 193, 0.2);
+        }
+
+        .pet-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, 
+                rgba(255, 182, 193, 0.2),
+                rgba(255, 255, 255, 0.4),
+                rgba(255, 182, 193, 0.2));
+            border-radius: 25px;
+            z-index: -1;
+            transform: translateZ(-10px);
+            filter: blur(10px);
+        }
+
+        .pet-name {
+            font-size: 28px;
+            color: #6a4873;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .pet-emoji {
+            font-size: 40px;
+            animation: bounce 2s infinite;
+            filter: drop-shadow(0 0 5px rgba(255, 182, 193, 0.5));
+        }
+
+        .info-item {
+            background: linear-gradient(135deg,
+            rgb(187, 238, 252);
+                rgba(255, 255, 255, 0.7));
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(255, 182, 193, 0.2);
+            border: 1px solid rgba(255, 192, 203, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .info-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(255, 182, 193, 0.3);
+        }
+
+        .info-label {
+            color: #8e6b8e;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .info-value {
+            color: #6a4873;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: rgba(255, 192, 203, 0.2);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-top: 10px;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.8s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.4) 50%,
+                rgba(255, 255, 255, 0) 100%);
+            animation: shine 2s infinite;
+        }
+
+        .mood-fill {
+            background: linear-gradient(90deg, #ff9a9e, #fad0c4);
+        }
+
+        .exp-fill {
+            background: linear-gradient(90deg, #a1c4fd, #c2e9fb);
+        }
+
+        .health-fill {
+            background: linear-gradient(90deg, #84fab0, #8fd3f4);
+        }
+
+        .quality-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            color: rgb(187, 238, 252);
+            box-shadow: 0 5px 15px rgba(255, 182, 193, 0.3);
+            animation: badge-pulse 2s infinite;
+        }
+
+        .decorative-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .decorative-element {
+            position: absolute;
+            animation: float 3s infinite ease-in-out;
+            opacity: 0.6;
+            font-size: 24px;
+            filter: drop-shadow(0 0 5px rgba(255, 182, 193, 0.3));
+        }
+
+        @keyframes container-float {
+            0%, 100% { transform: translateY(0) rotateX(0); }
+            50% { transform: translateY(-10px) rotateX(2deg); }
+        }
+
+        @keyframes flower-spin {
+            0% { transform: translateY(-50%) rotate(0deg); }
+            100% { transform: translateY(-50%) rotate(360deg); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-10px) scale(1.1); }
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        @keyframes badge-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes border-shine {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        .sparkles {
+            position: absolute;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .sparkle {
+            position: absolute;
+            background: #ffd1ff;
+            border-radius: 50%;
+            animation: sparkle-fade 2s infinite;
+        }
+
+        @keyframes sparkle-fade {
+            0%, 100% { transform: scale(0) rotate(0deg); opacity: 0; }
+            50% { transform: scale(1) rotate(180deg); opacity: 0.8; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="magical-border"></div>
+        <div class="content-wrapper">
+            <div class="header">
+                <h1 class="title">✨ 宠物资料卡 ✨</h1>
+            </div>
+
+            <div class="decorative-elements">
+                <div class="decorative-element" style="top: 10%; left: 5%">🎀</div>
+                <div class="decorative-element" style="top: 30%; right: 10%">🌸</div>
+                <div class="decorative-element" style="bottom: 20%; left: 15%">💖</div>
+                <div class="decorative-element" style="bottom: 40%; right: 5%">✨</div>
+                <div class="decorative-element" style="top: 50%; left: 50%">🦋</div>
+            </div>
+
+            {{if !pets || pets.length === 0}}
+            <div class="no-pets">
+                <span style="font-size: 72px; display: block; margin-bottom: 20px; animation: bounce 2s infinite;">🏰</span>
+                <p style="color: #6a4873; font-size: 18px;">还没有可爱的小伙伴呢~快去领养一个吧！</p>
+            </div>
+            {{else}}
+            {{each pets pet}}
+            <div class="pet-card">
+                <div class="quality-badge">{{pet.quality}}</div>
+                <div class="pet-name">
+                    <span class="pet-emoji">{{pet.type === '猫咪' ? '🐱' : '🐶'}}</span>
+                    <span>{{pet.name}}</span>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">等级</div>
+                    <div class="info-value">Lv.{{pet.level}}</div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">心情值</div>
+                    <div class="info-value">{{pet.currentStats.mood}}%</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill mood-fill" style="width: {{pet.mood}}%"></div>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">经验值</div>
+                    <div class="info-value">{{pet.exp}}</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill exp-fill" style="width: {{(pet.exp)*100}}%"></div>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">健康值</div>
+                    <div class="info-value">{{pet.currentStats.health}}%</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill health-fill" style="width: {{pet.health}}%"></div>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+            {{/if}}
+        </div>
+    </div>
+
+    <script>
+        function createSparkles() {
+            const container = document.querySelector('.container');
+            setInterval(() => {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.width = Math.random() * 4 + 'px';
+                sparkle.style.height = sparkle.style.width;
+                container.appendChild(sparkle);
+                setTimeout(() => sparkle.remove(), 2000);
+            }, 50);
+        }
+        createSparkles();
+    </script>
+</body>
+</html>

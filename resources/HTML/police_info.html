@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+    <link rel="shortcut icon" href="#"/>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a237e, #0d47a1);
+            color: white;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .header {
+            grid-column: 1 / -1;
+            text-align: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 20px;
+        }
+        .title {
+            font-size: 2em;
+            margin: 0;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .info-section {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .section-title {
+            color: #ffd700;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 5px;
+        }
+        .info-item {
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+        .progress {
+            height: 100%;
+            background: #4caf50;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .equipment-list {
+            display: grid;
+            gap: 10px;
+        }
+        .equipment-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .stat-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 1.5em;
+            color: #ffd700;
+        }
+        .skill-name {
+            color: #bbdefb;
+        }
+        .durability {
+            font-size: 0.9em;
+            color: #ff9800;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">警察档案信息</h1>
+            <div>警员：{{name}} | 职级：{{rank}}</div>
+        </div>
+
+        <div class="info-section">
+            <div class="section-title">基础信息</div>
+            <div class="info-item">
+                <span>经验值</span>
+                <span>{{exp}}</span>
+            </div>
+            <div class="info-item">
+                <span>月薪</span>
+                <span>{{salary}} 元</span>
+            </div>
+            <div class="info-item">
+                <span>声望</span>
+                <span>{{reputation}}</span>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-value">{{solvedCases}}</div>
+                    <div>已破案件</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">{{patrolHours}}</div>
+                    <div>巡逻时长</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <div class="section-title">技能等级</div>
+            <div class="info-item">
+                <span class="skill-name">调查能力</span>
+                <div style="flex-grow: 1; margin-left: 10px;">
+                    <div class="progress-bar">
+                        <div class="progress" style="width: {{skills.investigation}}0%;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="info-item">
+                <span class="skill-name">战斗能力</span>
+                <div style="flex-grow: 1; margin-left: 10px;">
+                    <div class="progress-bar">
+                        <div class="progress" style="width: {{skills.combat}}0%;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="info-item">
+                <span class="skill-name">领导能力</span>
+                <div style="flex-grow: 1; margin-left: 10px;">
+                    <div class="progress-bar">
+                        <div class="progress" style="width: {{skills.leadership}}0%;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="info-item">
+                <span class="skill-name">沟通能力</span>
+                <div style="flex-grow: 1; margin-left: 10px;">
+                    <div class="progress-bar">
+                        <div class="progress" style="width: {{skills.communication}}0%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section" style="grid-column: 1 / -1;">
+            <div class="section-title">装备信息</div>
+            <div class="equipment-list">
+                {{each equipment}}
+                <div class="equipment-item">
+                    <span>{{$value.name}}</span>
+                    {{if $value.durability}}
+                    <span class="durability">耐久度: {{$value.durability}}%</span>
+                    {{/if}}
+                </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

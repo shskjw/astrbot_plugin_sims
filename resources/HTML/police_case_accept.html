@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+    <link rel="shortcut icon" href="#"/>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a237e, #0d47a1);
+            color: white;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        .title {
+            font-size: 2em;
+            margin: 0;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .subtitle {
+            margin-top: 10px;
+            color: #bbdefb;
+        }
+        .case-info {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .case-title {
+            color: #ffd700;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .case-title .icon {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+        .case-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .detail-item {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .detail-label {
+            color: #bbdefb;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+        .detail-value {
+            color: #fff;
+            font-weight: bold;
+        }
+        .case-description {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            line-height: 1.6;
+        }
+        .rewards-section {
+            background: rgba(76, 175, 80, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .rewards-title {
+            color: #4caf50;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .rewards-title .icon {
+            margin-right: 10px;
+        }
+        .rewards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        .reward-item {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .reward-label {
+            color: #bbdefb;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+        .reward-value {
+            color: #4caf50;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .time-limit {
+            background: rgba(244, 67, 54, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .time-limit-text {
+            color: #ff5252;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">新案件接取</h1>
+            <div class="subtitle">警员：{{name}} | 职级：{{rank}}</div>
+        </div>
+
+        <div class="case-info">
+            <div class="case-title">
+                <span class="icon">📋</span>
+                案件详情
+            </div>
+            <div class="case-details">
+                <div class="detail-item">
+                    <div class="detail-label">案件类型</div>
+                    <div class="detail-value">{{caseInfo.type}}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">难度等级</div>
+                    <div class="detail-value">{{caseInfo.difficulty}}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">发生地点</div>
+                    <div class="detail-value">{{caseInfo.location}}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">时间限制</div>
+                    <div class="detail-value">{{caseInfo.timeLimit}}小时</div>
+                </div>
+            </div>
+            <div class="case-description">
+                {{caseInfo.description}}
+            </div>
+        </div>
+
+        <div class="rewards-section">
+            <div class="rewards-title">
+                <span class="icon">💰</span>
+                案件奖励
+            </div>
+            <div class="rewards-grid">
+                <div class="reward-item">
+                    <div class="reward-label">经验值</div>
+                    <div class="reward-value">+{{caseInfo.exp}}</div>
+                </div>
+                <div class="reward-item">
+                    <div class="reward-label">金钱奖励</div>
+                    <div class="reward-value">+{{caseInfo.reward}}</div>
+                </div>
+                <div class="reward-item">
+                    <div class="reward-label">声望</div>
+                    <div class="reward-value">+{{caseInfo.reputation}}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="time-limit">
+            <div class="time-limit-text">
+                请在{{caseInfo.timeLimit}}小时内处理此案件
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

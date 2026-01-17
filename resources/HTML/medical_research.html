@@ -1,0 +1,360 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @font-face {
+            font-family: "MiaoFont";
+            src: url("./也字工厂喵喵体.ttf");
+        }
+
+        body {
+            font-family: "MiaoFont", sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a1f3c 0%, #2a3166 100%);
+            color: #fff;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0, 195, 255, 0.5);
+        }
+
+        .research-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: #4fc3f7;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            color: #4fc3f7;
+            margin: 10px 0;
+            text-shadow: 0 0 10px rgba(79, 195, 247, 0.5);
+        }
+
+        .research-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .research-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .research-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border-color: #4fc3f7;
+        }
+
+        .research-type {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            background: linear-gradient(45deg, #ff4081, #7c4dff);
+        }
+
+        .research-name {
+            font-size: 1.5em;
+            margin: 15px 0;
+            color: #4fc3f7;
+        }
+
+        .research-description {
+            color: #b3e5fc;
+            margin: 10px 0;
+            line-height: 1.5;
+        }
+
+        .research-progress {
+            margin: 15px 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4fc3f7, #2196f3);
+            border-radius: 5px;
+            transition: width 0.3s ease;
+        }
+
+        .research-requirements {
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .requirement-item {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+        }
+
+        .requirement-item i {
+            margin-right: 8px;
+            color: #4fc3f7;
+        }
+
+        .research-team {
+            margin: 15px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .team-member {
+            padding: 5px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .research-benefits {
+            margin: 15px 0;
+        }
+
+        .benefit-tag {
+            display: inline-block;
+            padding: 5px 12px;
+            margin: 5px;
+            border-radius: 15px;
+            background: rgba(79, 195, 247, 0.2);
+            border: 1px solid #4fc3f7;
+        }
+
+        .start-research-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 25px;
+            background: linear-gradient(45deg, #2196f3, #00bcd4);
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: "MiaoFont";
+            margin-top: 15px;
+        }
+
+        .start-research-btn:hover {
+            background: linear-gradient(45deg, #00bcd4, #2196f3);
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(33, 150, 243, 0.5);
+        }
+
+        .start-research-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .research-timeline {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            padding: 5px;
+            border-left: 2px solid #4fc3f7;
+            padding-left: 15px;
+        }
+
+        .timeline-date {
+            font-size: 0.9em;
+            color: #b3e5fc;
+            margin-right: 15px;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* 自适应布局 */
+        @media (max-width: 768px) {
+            .research-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔬 医学研究中心</h1>
+            <p>探索医学前沿，推动医疗创新</p>
+        </div>
+
+        <div class="research-stats">
+            <div class="stat-card">
+                <div class="stat-label">研究能力</div>
+                <div class="stat-value">{{doctor.research_level}}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">进行中研究</div>
+                <div class="stat-value">{{active_research_count}}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">研究点数</div>
+                <div class="stat-value">{{research_points}}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">完成研究数</div>
+                <div class="stat-value">{{completed_research_count}}</div>
+            </div>
+        </div>
+
+        <div class="research-grid">
+            {{each researches research}}
+            <div class="research-card">
+                <div class="research-type">{{research.type}}</div>
+                <div class="research-name">{{research.name}}</div>
+                <div class="research-description">{{research.description}}</div>
+
+                {{if research.in_progress}}
+                <div class="research-progress">
+                    <h4>📊 研究进度</h4>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: {{research.progress}}%"></div>
+                    </div>
+                    <p>{{research.progress}}% 完成</p>
+                </div>
+
+                <div class="research-timeline">
+                    <h4>📅 研究里程碑</h4>
+                    {{each research.milestones milestone}}
+                    <div class="timeline-item">
+                        <span class="timeline-date">{{milestone.date}}</span>
+                        <span>{{milestone.description}}</span>
+                    </div>
+                    {{/each}}
+                </div>
+                {{/if}}
+
+                <div class="research-requirements">
+                    <h4>📋 研究要求</h4>
+                    <div class="requirement-item">
+                        <i>🎓</i> 最低研究能力：{{research.required_level}}
+                    </div>
+                    <div class="requirement-item">
+                        <i>💰</i> 研究费用：{{research.cost}} 金币
+                    </div>
+                    <div class="requirement-item">
+                        <i>⏱️</i> 预计时长：{{research.duration}} 天
+                    </div>
+                </div>
+
+                <div class="research-team">
+                    <h4>👥 研究团队</h4>
+                    {{each research.team member}}
+                    <div class="team-member">
+                        <span>{{member.name}}</span>
+                        <span>{{member.role}}</span>
+                    </div>
+                    {{/each}}
+                </div>
+
+                <div class="research-benefits">
+                    <h4>🎯 预期成果</h4>
+                    {{each research.benefits benefit}}
+                    <span class="benefit-tag">{{benefit}}</span>
+                    {{/each}}
+                </div>
+
+                <button class="start-research-btn {{research.can_start ? '' : 'disabled'}}"
+                        onclick="startResearch('{{research.id}}')"
+                        {{if !research.can_start}}disabled{{/if}}>
+                    {{research.can_start ? '开始研究' : '条件不足'}}
+                </button>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+
+    <script>
+        function startResearch(researchId) {
+            window.location.href = `#医学研究?research_id=${researchId}`;
+        }
+    </script>
+</body>
+</html>

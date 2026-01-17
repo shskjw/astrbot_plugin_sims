@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        .header h1 {
+            color: #6a1b9a;
+            margin: 0;
+            font-size: 2em;
+        }
+        .level-section {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f3e5f5;
+            border-radius: 15px;
+            position: relative;
+        }
+        .level-number {
+            font-size: 4em;
+            color: #6a1b9a;
+            margin: 10px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .exp-bar {
+            width: 80%;
+            height: 20px;
+            background: #e1bee7;
+            border-radius: 10px;
+            margin: 15px auto;
+            overflow: hidden;
+        }
+        .exp-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #8e24aa, #6a1b9a);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            border: 2px solid #ce93d8;
+            transition: transform 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(106, 27, 154, 0.2);
+        }
+        .stat-value {
+            font-size: 1.8em;
+            color: #6a1b9a;
+            margin: 5px 0;
+        }
+        .achievements-section {
+            margin: 30px 0;
+        }
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        .achievement-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #e1bee7;
+        }
+        .achievement-icon {
+            font-size: 2em;
+            margin: 5px 0;
+        }
+        .next-level-info {
+            margin: 20px 0;
+            padding: 15px;
+            background: #fff;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px dashed #ce93d8;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .cute-icon {
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>👨‍🍳 厨师等级详情 👨‍🍳</h1>
+        </div>
+        
+        <div class="level-section">
+            <div class="level-number">Lv.{{chef.level}}</div>
+            <div class="exp-bar">
+                <div class="exp-fill" style="width: {{(chef.exp / (chef.level * 100)) * 100}}%"></div>
+            </div>
+            <div style="color: #666;">
+                经验值：{{chef.exp}} / {{chef.level * 100}}
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="cute-icon">🏆</div>
+                <div>总制作次数</div>
+                <div class="stat-value">{{chef.totalDishes}}</div>
+            </div>
+            <div class="stat-card">
+                <div class="cute-icon">✨</div>
+                <div>成功次数</div>
+                <div class="stat-value">{{chef.successDishes}}</div>
+            </div>
+            <div class="stat-card">
+                <div class="cute-icon">⭐</div>
+                <div>声望等级</div>
+                <div class="stat-value">{{chef.reputation}}</div>
+            </div>
+            <div class="stat-card">
+                <div class="cute-icon">📚</div>
+                <div>已学食谱</div>
+                <div class="stat-value">{{chef.recipes.length}}</div>
+            </div>
+        </div>
+
+        <div class="next-level-info">
+            <h3>🎯 下一级解锁</h3>
+            <p>距离下一级还需要：{{chef.level * 100 - chef.exp}}经验</p>
+            <p>解锁新食谱：宫保鸡丁、糖醋排骨等</p>
+        </div>
+
+        <div class="achievements-section">
+            <h2>🏅 成就记录</h2>
+            <div class="achievement-grid">
+                <div class="achievement-card">
+                    <div class="achievement-icon">🥘</div>
+                    <div>美食达人</div>
+                    <div style="color: #666;">制作{{chef.totalDishes}}道菜</div>
+                </div>
+                <div class="achievement-card">
+                    <div class="achievement-icon">💫</div>
+                    <div>完美大厨</div>
+                    <div style="color: #666;">成功率{{Math.round((chef.successDishes / chef.totalDishes) * 100)}}%</div>
+                </div>
+                <div class="achievement-card">
+                    <div class="achievement-icon">📖</div>
+                    <div>食谱收藏家</div>
+                    <div style="color: #666;">解锁{{chef.recipes.length}}个食谱</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>💫 继续努力，成为星级大厨！使用 #制作料理 来提升等级 💫</p>
+        </div>
+    </div>
+</body>
+</html>
