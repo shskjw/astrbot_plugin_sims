@@ -171,7 +171,8 @@ plugin_data/astrbot_plugin_sims/
 │   └── ...
 └── bans.json       # 封禁数据
 ```
-
+## 鸣谢
+感谢 https://gitcode.com/nahida22/sims-plugin 大佬的搬运准许 此插件搬运yunzai bot模拟人生插件
 ## 📝 版本信息
 
 - **版本**: 2.1.0
