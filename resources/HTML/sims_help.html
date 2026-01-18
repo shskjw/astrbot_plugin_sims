@@ -2,8 +2,6 @@
 
 {{block 'css'}}
 <link rel="stylesheet" type="text/css" href="{{_res_path}}/help/index.css"/>
-<% style = style.replace(/{{_res_path}}/g, _res_path) %>
-{{@style}}
 {{/block}}
 
 {{block 'main'}}
@@ -37,9 +35,6 @@
       {{/if}}
       {{/each}}
     </div>
-    <% for(let i=(len-1)%colCount; i< colCount-1 ; i++){ %>
-    <div class="td"></div>
-    <% } %>
   </div>
   {{/if}}
 </div>
