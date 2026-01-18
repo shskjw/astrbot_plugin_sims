@@ -1,7 +1,8 @@
 """Chef subsystem renderer for displaying game information."""
 
 from typing import Dict, List, Any
-from ..common.image_utils import HTMLRenderer
+from pathlib import Path
+from jinja2 import Environment, FileSystemLoader
 from ..common.screenshot import html_to_image_bytes
 
 
@@ -9,7 +10,31 @@ class ChefRenderer:
     """Renders chef-related information."""
     
     def __init__(self):
-        self.renderer = HTMLRenderer()
+        # Point to the chef-specific templates directory
+        # __file__ is .../core/chef/render.py -> parents[2] is plugin root
+        chef_templates_dir = Path(__file__).resolve().parents[2] / "resources" / "chef"
+        
+        if not chef_templates_dir.exists():
+            # Fallback to HTML directory if chef templates don't exist
+            chef_templates_dir = Path(__file__).resolve().parents[2] / "resources" / "HTML"
+        
+        self.template_dir = chef_templates_dir
+        self._env = Environment(loader=FileSystemLoader(str(self.template_dir)))
+
+    def render_template(self, template_name: str, **context) -> str:
+        # Add resource path for templates to load CSS/fonts
+        context['_res_path'] = '../'
+        context['cssFile'] = '../CSS/'
+        tpl = self._env.get_template(template_name)
+        return tpl.render(**context)
+
+    async def render_image(self, template_name: str, **context) -> bytes:
+        html = self.render_template(template_name, **context)
+        img = await html_to_image_bytes(html, base_path=self.template_dir)
+        if img:
+            return img
+        # Fallback: return HTML encoded as bytes
+        return html.encode('utf-8')
     
     def render_recipes(self, recipes: List[Dict], known: List[str] = None, level: int = 1) -> str:
         """渲染食谱列表"""

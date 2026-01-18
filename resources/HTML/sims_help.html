@@ -44,13 +44,13 @@
         
         .system-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 15px;
         }
 
-        /* Span 2 cols for Admin or full-width items */
+        /* Span 3 cols for Admin or full-width items */
         .system-card.full-width {
-            grid-column: span 2;
+            grid-column: span 3;
         }
         
         .system-card {
@@ -316,9 +316,39 @@
                 </div>
             </div>
 
+            <!-- 宠物系统 -->
+            <div class="system-card">
+                <div class="system-header">
+                    <span class="system-icon">🐾</span>
+                    <span class="system-title">宠物系统</span>
+                </div>
+                <div class="command-list">
+                    <span class="command-tag">#宠物抽卡</span>
+                    <span class="command-tag">#我的宠物</span>
+                    <span class="command-tag">#喂养宠物 [ID]</span>
+                    <span class="command-tag">#宠物图鉴</span>
+                    <span class="command-tag">#宠物排行</span>
+                </div>
+            </div>
+
+            <!-- 关系系统 -->
+            <div class="system-card">
+                <div class="system-header">
+                    <span class="system-icon">💕</span>
+                    <span class="system-title">关系系统</span>
+                </div>
+                <div class="command-list">
+                    <span class="command-tag">#赠送礼物 [QQ] [金额]</span>
+                    <span class="command-tag">#查看关系 [QQ]</span>
+                    <span class="command-tag">#我的关系</span>
+                    <span class="command-tag">#表白 [QQ]</span>
+                    <span class="command-tag">#离婚</span>
+                </div>
+            </div>
+
             {% if is_admin %}
             <!-- 管理员 -->
-            <div class="system-card admin-section">
+            <div class="system-card full-width admin-section">
                 <div class="system-header">
                     <span class="system-icon">🔑</span>
                     <span class="system-title">管理员功能</span>
