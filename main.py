@@ -126,7 +126,7 @@ class SimsPlugin(Star):
         return path
 
     @filter.command("模拟人生")
-    async def sims_help(self, event: AstrMessageEvent):
+    async def sims_help(self, event: AstrMessageEvent, *args, **kwargs):
         """显示模拟人生帮助"""
         user_id = event.get_sender_id()
         is_admin = self.config_manager.is_admin(user_id)
@@ -203,7 +203,7 @@ class SimsPlugin(Star):
                 yield event.plain_result("无法渲染帮助图片，未知错误，请检查后台日志。")
 
     @filter.command("模拟人生版本")
-    async def sims_version(self, event: AstrMessageEvent):
+    async def sims_version(self, event: AstrMessageEvent, *args, **kwargs):
         """显示模拟人生版本信息"""
         yield event.plain_result("模拟人生插件 v2.1.0\nby shskjw")
 
