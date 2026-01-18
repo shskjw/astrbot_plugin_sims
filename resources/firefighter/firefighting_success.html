@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>灭火任务成功</title>
+    <style>
+        @font-face {
+            font-family: "miao";
+            src: url(./也字工厂喵喵体.ttf);
+        }
+        body {
+            font-size: auto;
+            font-family: "miao";
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: auto;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            width: 380px;
+            padding: 30px;
+            position: relative;
+            text-align: center;
+        }
+        .header {
+            background-color: #2ecc71; /* 成功使用绿色 */
+            color: white;
+            padding: 15px;
+            border-radius: 15px 15px 0 0;
+            margin: -30px -30px 20px -30px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .header i {
+            margin-right: 10px;
+            font-size: 24px;
+        }
+        .success-banner {
+            background-color: #e8f8f0;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 2px solid #2ecc71;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.03);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        .success-banner h2 {
+            margin: 0;
+            color: #2ecc71;
+            font-size: 20px;
+        }
+        .success-image {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            background-color: #f9f9f9;
+            border-radius: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border: 3px solid #2ecc71;
+            overflow: hidden;
+        }
+        .success-image img {
+            width: 90%;
+            height: 90%;
+            object-fit: contain;
+        }
+        .info-section {
+            background-color: #f9f9f9;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .info-section h2 {
+            margin-top: 0;
+            color: #2ecc71;
+            font-size: 18px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #2ecc71;
+            padding-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .info-section h2 i {
+            margin-right: 8px;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 8px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .info-label {
+            font-weight: bold;
+            color: #555;
+        }
+        .info-value {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+        .medals-section {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        .medal {
+            text-align: center;
+            background-color: #e8f8f0;
+            padding: 15px;
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .medal-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        .medal-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2ecc71;
+        }
+        .medal-label {
+            font-size: 10px;
+            color: #777;
+            margin-top: 5px;
+        }
+        .rescue-info {
+            background-color: #e8f8f0;
+            border-radius: 15px;
+            padding: 15px;
+            margin: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(46, 204, 113, 0.2);
+        }
+        .rescue-label {
+            font-weight: bold;
+            color: #2ecc71;
+        }
+        .rescue-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2ecc71;
+        }
+        .footer {
+            font-size: 12px;
+            color: #777;
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <i>✅</i><h1>灭火成功</h1>
+        </div>
+        
+        <div class="success-banner">
+            <h2>恭喜！火势已被彻底控制！</h2>
+        </div>
+        
+        <div class="success-image">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iIzJlY2M3MSIgZD0iTTEyLDkuNUNtMi4zMywyMi4xOSAxLjUsMjIgMS41LDEyQzEuNSw2Ljg0IDUuMzQsMyAxMCwzQzEyLjQxLDMgMTQuNTYsNC4wNiAxNiwzLjVDMTYuMTYsNy4zNSAzNy44LDkgMjELDMuNkMyMCw5LjA4IDE1LjQ1LDkuNSAxMiw5LjVNMTIuNzksMTNIMTUuNTdMNy44LDIxLjQ2QzcuNzgsMjEuNDkgLy03LDIxLjUxIDcuNzQsMjEuNTNDNy42NywyMS41NiA3LjYyLDIxLjU5IDcuNTQsMjEuNjJDNy40NywyMS42NSA3LjM5LDIxLjYgNy4yOSwyMS43MUM3LjE5LDIxLjc2IDcuMDgsMjEuNzggNi45NywyMS44QzYuODUsMjEuODEgNi43NCwyMS44MiA2LjYyLDIxLjgzQzYuNSwyMS44NCA2LjM3LDIxLjg0IDYuMjUsMjEuODRDNi4xNCwyMUuODMgNi4wMiwyMS44MSA1LjkxLDIxLjc5QzUuODEsMjEuNzggNS43LDIxLjc1IDUuNjEsMjEuNzNDNS41MSwyMS43IDUuNDIsMjEuNjcgNS4zMywyMS42MkM1LjI0LDIxLjU4IDUxNSwyMS41NCA1LjA3LDIxLjUyQzQuOTksMjEuNDggNC45MiwyMS40NCA0Ljg1LDIxLjRDNC43OSwyMS4zNCA0LjczLDIxLjI5IDQuNjcsMjEuMjNDNC42MiwyMS4xNiA0LjU4LDIxLjEgNC41NCwyMS4wNEM0LjUsMjAuOTcgNC40NywyMC44OSA0LjQ0LDIwLjA4MkM0LjQyLDIwLjc0IDQuNDEsMjAuNjYgNC40LDIwLjU3QzQuNCwyMC40OCA0LjQsMjAuNCw0LjQxLDIwLjMxQzQuNDEsMjAuMiIgNC40MywyMC4xMyA0LjQ1LDIwLjA0QzQuNDgsMTkuOTYgNC41MSwxOS44OCA0LjU0LDE5LjhjQzQuNTgsMTkuNzMgNC42MiwxOS42NyA0LjY3LDE5LjYxQzQuNzIsMTkuNTYgNC43OCxxOS41MSA0LjgzLDE5LjQ2QzQuODksMTkuNDEgNC45NSwxOS4zNyA1LjAxLDE5LjMzQzUuMDgsMTkuMyA1LjE1LDE5LjI3IDUuMjIsMTkuMjRDNS4yOSwxOS4yMSA1LjM3LDE5LjE5IDUuNDUsMTkuMTdDNS41MywxOS4xNSA1LjYyLDE5LjEzIDUuNywxOS4xMkM1Ljc5LDE5LjEgNS44OSwxOS4wOSA1Ljk4LDE5LjA5QzYuMDcsMTkuMDkgNi4xNywxOS4wOSA2LjI2LDE5LjFDNi4zNiwxOS4xMiA2LjQ1LDE5LjEzIDYuNTQsMTkuMTVDNi42MywxOS4xOCA2LjcyLDE5LjIgNi44LDE5LjI0QzYuODgsMTkuMjYgNi45NSwxOS4zIDcuMDMsMTkuMzRDNy4xLDE5LjM4IDcuMTYsMTkuNDMgNy4yMywxOS40OEwxNi43LDkuNDhMMTIuNzksMTNaIi8+PC9zdmc+" alt="Fire Successfully Controlled">
+        </div>
+        
+        <div class="info-section">
+            <h2><i>📍</i> 任务详情</h2>
+            <div class="info-row">
+                <div class="info-label">火灾类型</div>
+                <div class="info-value">{{fireName}}</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">发生地点</div>
+                <div class="info-value">{{fireLocation}}</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">处理方式</div>
+                <div class="info-value">{{method}}</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">成功率</div>
+                <div class="info-value">{{successRate}}%</div>
+            </div>
+        </div>
+        
+        <div class="rescue-info">
+            <div class="rescue-label">被困人数：{{casualties}}人</div>
+            <div class="rescue-value">成功救出：{{rescued}}人</div>
+        </div>
+        
+        <div class="medals-section">
+            <div class="medal">
+                <div class="medal-icon">🏆</div>
+                <div class="medal-value">+{{expGained}}</div>
+                <div class="medal-label">经验</div>
+            </div>
+            <div class="medal">
+                <div class="medal-icon">💰</div>
+                <div class="medal-value">+{{moneyGained}}</div>
+                <div class="medal-label">奖金</div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            英勇无畏，守护生命 | sims-plugin · 消防员模拟
+        </div>
+    </div>
+</body>
+</html> 

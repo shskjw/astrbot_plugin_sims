@@ -1,0 +1,332 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>农场商店</title>
+    <style>
+        :root {
+            --primary: #00F5FF;
+            --secondary: #FF2D75;
+            --accent: #00FF9D;
+            --dark: #1A1A2E;
+            --light: rgba(255,255,255,0.9);
+        }
+        
+        @font-face {
+            font-family: 'SciFi';
+            src: url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+        }
+        
+        body {
+            font-family: 'SciFi', 'Arial Rounded MT Bold', sans-serif;
+            background: linear-gradient(135deg, var(--dark) 0%, #16213E 100%);
+            color: var(--light);
+            padding: 0;
+            margin: 0;
+            min-height: 100vh;
+        }
+        
+        .shop-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .shop-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%2300F5FF10" d="M0,0 L100,0 L100,100 L0,100 Z M20,20 L80,20 L80,80 L20,80 Z" stroke="%2300F5FF30" stroke-width="0.5"/></svg>');
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 30px;
+            color: var(--primary);
+            text-shadow: 0 0 15px var(--primary), 0 0 30px var(--secondary);
+            position: relative;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 10px var(--primary); }
+            to { text-shadow: 0 0 20px var(--primary), 0 0 30px var(--secondary); }
+        }
+        
+        .shop-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid var(--primary);
+            box-shadow: 0 0 20px var(--primary);
+        }
+        
+        .shop-avatar {
+            width: 80px;
+            height: 80px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="40" r="30" fill="%23FF2D75"/><circle cx="50" cy="30" r="20" fill="%231A1A2E"/><circle cx="40" cy="25" r="5" fill="%2300F5FF"/><circle cx="60" cy="25" r="5" fill="%2300F5FF"/><path d="M40,50 Q50,60 60,50" stroke="%2300FF9D" stroke-width="3" fill="none"/></svg>');
+            border-radius: 50%;
+            border: 3px solid var(--accent);
+            box-shadow: 0 0 15px var(--accent);
+        }
+        
+        .user-info {
+            text-align: right;
+        }
+        
+        .user-balance {
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+        
+        .season-info {
+            font-size: 1rem;
+            color: var(--primary);
+            background: rgba(0,0,0,0.3);
+            padding: 8px 12px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+        
+        .shop-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .tab-button {
+            background: rgba(0,0,0,0.3);
+            border: none;
+            color: var(--light);
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'SciFi', sans-serif;
+        }
+        
+        .tab-button.active {
+            background: var(--primary);
+            color: var(--dark);
+        }
+        
+        .tab-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,245,255,0.3);
+        }
+        
+        .tab-content {
+            display: none;
+            background: rgba(0,0,0,0.3);
+            border-radius: 0 8px 8px 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid var(--primary);
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .item-card {
+            background: rgba(0,0,0,0.5);
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid var(--primary);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .item-card:hover {
+            transform: translateY(-10px) rotateZ(2deg);
+            box-shadow: 0 10px 25px var(--primary);
+        }
+        
+        .item-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to bottom right, transparent 45%, var(--primary) 50%, transparent 55%);
+            opacity: 0.3;
+            transform: rotate(30deg);
+            animation: shine 3s infinite linear;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateY(-100%) rotate(30deg); }
+            100% { transform: translateY(100%) rotate(30deg); }
+        }
+        
+        .item-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 10px;
+            display: block;
+            object-fit: contain;
+        }
+        
+        .item-name {
+            font-size: 1.2rem;
+            color: var(--accent);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .item-price {
+            font-size: 1.1rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .item-desc {
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .item-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 10px;
+        }
+        
+        .season-tag {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--secondary);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+        }
+        
+        .buy-button {
+            display: block;
+            width: 100%;
+            background: var(--primary);
+            color: var(--dark);
+            border: none;
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'SciFi', sans-serif;
+            transition: all 0.3s;
+        }
+        
+        .buy-button:hover {
+            background: var(--accent);
+            transform: scale(1.05);
+        }
+        
+        .shop-footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="shop-container">
+        <h1>✨农场商店✨</h1>
+        
+        <div class="shop-header">
+            <div class="shop-avatar"></div>
+            <div class="user-info">
+                <div class="user-balance">💰 金币: {{userMoney}}</div>
+                <div class="season-info">当前季节: {{currentSeason}}</div>
+            </div>
+        </div>
+        
+        <div class="items-grid">
+            <!-- 当季种子 -->
+            {{each seasonalSeeds seed}}
+            <div class="item-card">
+                <img src="{{seed.icon || 'default_seed.png'}}" class="item-icon">
+                <div class="item-name">{{seed.name}}</div>
+                <div class="item-price">💰 {{seed.price}} 金币</div>
+                <div class="item-desc">{{seed.description || '一种神奇的作物种子'}}</div>
+                <div class="item-stats">
+                    <span>⏱️ {{seed.growthDays}}天</span>
+                    <span>🌱 {{seed.yield}}个/次</span>
+                </div>
+                <div class="season-tag">当季</div>
+                <button class="buy-button" data-id="{{seed.id}}" data-type="seed">购买种子</button>
+            </div>
+            {{/each}}
+
+            <!-- 其他种子 -->
+            {{each otherSeeds seed}}
+            <div class="item-card">
+                <img src="{{seed.icon || 'default_seed.png'}}" class="item-icon">
+                <div class="item-name">{{seed.name}}</div>
+                <div class="item-price">💰 {{seed.price}} 金币</div>
+                <div class="item-desc">{{seed.description || '一种神奇的作物种子'}}</div>
+                <div class="item-stats">
+                    <span>⏱️ {{seed.growthDays}}天</span>
+                    <span>🌱 {{seed.yield}}个/次</span>
+                    <span>季节: {{seed.season.join(', ')}}</span>
+                </div>
+                <button class="buy-button" data-id="{{seed.id}}" data-type="seed">购买种子</button>
+            </div>
+            {{/each}}
+
+            <!-- 农具 -->
+            {{each tools tool}}
+            <div class="item-card">
+                <img src="{{tool.icon || 'default_tool.png'}}" class="item-icon">
+                <div class="item-name">{{tool.name}}</div>
+                <div class="item-price">💰 {{tool.price}} 金币</div>
+                <div class="item-desc">{{tool.description || '一件实用的农场工具'}}</div>
+                <div class="item-stats">
+                    <span>⚡ 耐久: {{tool.durability}}</span>
+                    <span>🔧 效率: {{tool.efficiency}}x</span>
+                </div>
+                <button class="buy-button" data-id="{{tool.id}}" data-type="tool">购买工具</button>
+            </div>
+            {{/each}}
+        </div>
+        
+        <div class="shop-footer">
+            <p>⚡ 测试⚡</p>
+        </div>
+    </div>
+
+</body>
+</html>

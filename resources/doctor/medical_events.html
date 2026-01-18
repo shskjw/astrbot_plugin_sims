@@ -1,0 +1,355 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @font-face {
+            font-family: "MiaoFont";
+            src: url("./也字工厂喵喵体.ttf");
+        }
+
+        body {
+            font-family: "MiaoFont", sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a1f3c 0%, #2a3166 100%);
+            color: #fff;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0, 195, 255, 0.5);
+        }
+
+        .event-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: #4fc3f7;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            color: #4fc3f7;
+            margin: 10px 0;
+            text-shadow: 0 0 10px rgba(79, 195, 247, 0.5);
+        }
+
+        .events-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .event-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border-color: #4fc3f7;
+        }
+
+        .event-urgency {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .urgency-high {
+            background: linear-gradient(45deg, #f44336, #ff9800);
+            animation: pulse 1.5s infinite;
+        }
+
+        .urgency-medium {
+            background: linear-gradient(45deg, #ff9800, #ffc107);
+        }
+
+        .urgency-low {
+            background: linear-gradient(45deg, #4caf50, #8bc34a);
+        }
+
+        .event-title {
+            font-size: 1.5em;
+            margin: 15px 0;
+            color: #4fc3f7;
+            padding-right: 100px;
+        }
+
+        .event-description {
+            color: #b3e5fc;
+            margin: 10px 0;
+            line-height: 1.5;
+        }
+
+        .event-details {
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+        }
+
+        .detail-item i {
+            margin-right: 8px;
+            color: #4fc3f7;
+        }
+
+        .required-resources {
+            margin: 15px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .resource-tag {
+            padding: 5px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .resource-available {
+            border: 1px solid #4caf50;
+            color: #4caf50;
+        }
+
+        .resource-unavailable {
+            border: 1px solid #f44336;
+            color: #f44336;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .action-btn {
+            padding: 12px;
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: "MiaoFont";
+        }
+
+        .handle-btn {
+            background: linear-gradient(45deg, #2196f3, #00bcd4);
+        }
+
+        .handle-btn:hover {
+            background: linear-gradient(45deg, #00bcd4, #2196f3);
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(33, 150, 243, 0.5);
+        }
+
+        .delegate-btn {
+            background: linear-gradient(45deg, #7e57c2, #5c6bc0);
+        }
+
+        .delegate-btn:hover {
+            background: linear-gradient(45deg, #5c6bc0, #7e57c2);
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(94, 53, 177, 0.5);
+        }
+
+        .timer {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .timer-icon {
+            color: #f44336;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .countdown {
+            font-size: 1.2em;
+            color: #f44336;
+        }
+
+        /* 自适应布局 */
+        @media (max-width: 768px) {
+            .events-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚨 医疗事件中心</h1>
+            <p>及时处理医疗事件，拯救生命刻不容缓</p>
+        </div>
+
+        <div class="event-stats">
+            <div class="stat-card">
+                <div class="stat-label">待处理事件</div>
+                <div class="stat-value">{{pending_events}}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">紧急事件</div>
+                <div class="stat-value">{{urgent_events}}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">今日已处理</div>
+                <div class="stat-value">{{handled_events}}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">处理成功率</div>
+                <div class="stat-value">{{success_rate}}%</div>
+            </div>
+        </div>
+
+        <div class="events-container">
+            {{each events event}}
+            <div class="event-card">
+                <div class="event-urgency {{event.urgency_class}}">
+                    {{event.urgency_text}}
+                </div>
+
+                <div class="event-title">{{event.title}}</div>
+                <div class="event-description">{{event.description}}</div>
+
+                {{if event.time_limit}}
+                <div class="timer">
+                    <span class="timer-icon">⏰</span>
+                    <span class="countdown">剩余时间：{{event.remaining_time}}</span>
+                </div>
+                {{/if}}
+
+                <div class="event-details">
+                    <div class="detail-item">
+                        <i>👥</i> 患者数量：{{event.patient_count}}
+                    </div>
+                    <div class="detail-item">
+                        <i>🏥</i> 所需病房：{{event.required_ward}}
+                    </div>
+                    <div class="detail-item">
+                        <i>👨‍⚕️</i> 所需医生：{{event.required_doctors}}
+                    </div>
+                    <div class="detail-item">
+                        <i>💊</i> 治疗方案：{{event.treatment_plan}}
+                    </div>
+                </div>
+
+                <div class="required-resources">
+                    <h4>🔧 所需资源</h4>
+                    {{each event.required_resources resource}}
+                    <span class="resource-tag {{resource.available ? 'resource-available' : 'resource-unavailable'}}">
+                        {{resource.name}} {{resource.available ? '✓' : '✗'}}
+                    </span>
+                    {{/each}}
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn handle-btn" 
+                            onclick="handleEvent('{{event.id}}')"
+                            {{if !event.can_handle}}disabled{{/if}}>
+                        立即处理
+                    </button>
+                    <button class="action-btn delegate-btn"
+                            onclick="delegateEvent('{{event.id}}')"
+                            {{if !event.can_delegate}}disabled{{/if}}>
+                        委派处理
+                    </button>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+
+    <script>
+        function handleEvent(eventId) {
+            window.location.href = `#处理医疗事件?event_id=${eventId}&action=handle`;
+        }
+
+        function delegateEvent(eventId) {
+            window.location.href = `#处理医疗事件?event_id=${eventId}&action=delegate`;
+        }
+    </script>
+</body>
+</html>

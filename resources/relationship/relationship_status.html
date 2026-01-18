@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #4caf50;
+            margin: 0;
+            font-size: 2em;
+        }
+        .status-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #a5d6a7;
+        }
+        .relationship-info {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .partner-name {
+            font-size: 1.8em;
+            color: #4caf50;
+            margin: 10px 0;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            background: #81c784;
+            color: white;
+            margin: 10px 0;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat-item {
+            background: #f1f8e9;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 1.5em;
+            color: #2e7d32;
+            margin: 5px 0;
+        }
+        .children-section {
+            margin: 30px 0;
+        }
+        .children-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .child-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid #c8e6c9;
+            text-align: center;
+        }
+        .child-name {
+            font-size: 1.2em;
+            color: #4caf50;
+            margin-bottom: 10px;
+        }
+        .child-stats {
+            font-size: 0.9em;
+            color: #666;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e8f5e9;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 5px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #4caf50;
+            border-radius: 5px;
+            transition: width 0.3s ease;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .cute-icon {
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💑 我的感情状态 💑</h1>
+        </div>
+
+        <div class="status-card">
+            <div class="relationship-info">
+                <div class="partner-name">
+                    <span class="cute-icon">💝</span>{{relationship.targetName}}
+                </div>
+                <div class="status-badge">
+                    {{if relationship.status === "pursuing"}}
+                    💘 正在追求
+                    {{else if relationship.status === "inRelationship"}}
+                    💑 恋爱中
+                    {{else if relationship.status === "engaged"}}
+                    💍 已订婚
+                    {{else if relationship.status === "married"}}
+                    💒 已婚
+                    {{/if}}
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="cute-icon">💕</div>
+                    <div>好感度</div>
+                    <div class="stat-value">{{relationship.affection}}</div>
+                </div>
+                {{if relationship.status === "married"}}
+                <div class="stat-item">
+                    <div class="cute-icon">💖</div>
+                    <div>幸福度</div>
+                    <div class="stat-value">{{relationship.happiness}}</div>
+                </div>
+                {{/if}}
+            </div>
+
+            {{if relationship.children && relationship.children.length > 0}}
+            <div class="children-section">
+                <h2><span class="cute-icon">👶</span>我们的孩子</h2>
+                <div class="children-grid">
+                    {{each relationship.children childId}}
+                    <div class="child-card">
+                        <div class="child-name">{{getChildName(childId)}}</div>
+                        <div class="child-stats">
+                            <div>健康值：{{getChildHealth(childId)}}</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: {{getChildHealth(childId)}}%"></div>
+                            </div>
+                            <div>快乐值：{{getChildHappiness(childId)}}</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: {{getChildHappiness(childId)}}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+            {{/if}}
+        </div>
+
+        <div class="footer">
+            <p>💫 继续努力，创造更多美好回忆！ 💫</p>
+        </div>
+    </div>
+</body>
+</html>

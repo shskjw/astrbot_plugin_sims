@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>酒馆市场</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: url('https://s1.ax1x.com/2023/02/14/pSTUVmQ.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #e8e8e8;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 90%;
+            margin: 0 auto;
+            background-color: rgba(40, 40, 40, 0.85);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 36px;
+            color: #ffd700;
+            margin: 0;
+            padding: 10px;
+            text-shadow: 2px 2px 4px #000;
+        }
+        
+        .header .subtitle {
+            font-size: 18px;
+            color: #bbb;
+            margin-top: 5px;
+        }
+        
+        .divider {
+            border-bottom: 2px solid #555;
+            margin: 20px 0;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+        }
+        
+        .section-title {
+            font-size: 22px;
+            color: #ff9d00;
+            margin-bottom: 10px;
+            border-left: 4px solid #ff9d00;
+            padding-left: 10px;
+        }
+        
+        .info-bar {
+            display: flex;
+            justify-content: space-between;
+            background-color: rgba(60, 60, 60, 0.7);
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+        }
+        
+        .info-item {
+            text-align: center;
+        }
+        
+        .info-label {
+            font-size: 14px;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        
+        .market-tabs {
+            display: flex;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #555;
+        }
+        
+        .market-tab {
+            padding: 10px 15px;
+            background-color: rgba(60, 60, 60, 0.7);
+            margin-right: 5px;
+            border-radius: 5px 5px 0 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .market-tab.active {
+            background-color: rgba(255, 157, 0, 0.7);
+            color: #fff;
+        }
+        
+        .market-container {
+            background-color: rgba(60, 60, 60, 0.7);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .market-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://s1.ax1x.com/2023/02/14/pSTUEa8.jpg') no-repeat center center;
+            background-size: cover;
+            opacity: 0.1;
+            z-index: -1;
+        }
+        
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+        }
+        
+        .supply-item {
+            background-color: rgba(80, 80, 80, 0.7);
+            border-radius: 8px;
+            padding: 15px;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        
+        .supply-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .supply-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #555;
+            padding-bottom: 8px;
+        }
+        
+        .supply-name {
+            font-size: 18px;
+            color: #ffd700;
+            font-weight: bold;
+        }
+        
+        .supply-price {
+            font-size: 16px;
+            color: #4caf50;
+            font-weight: bold;
+        }
+        
+        .supply-type {
+            display: inline-block;
+            padding: 3px 8px;
+            font-size: 12px;
+            border-radius: 10px;
+            margin-right: 5px;
+            margin-bottom: 8px;
+        }
+        
+        .supply-type.beer {
+            background-color: #ffc107;
+            color: #333;
+        }
+        
+        .supply-type.wine {
+            background-color: #9c27b0;
+            color: #fff;
+        }
+        
+        .supply-type.spirits {
+            background-color: #f44336;
+            color: #fff;
+        }
+        
+        .supply-type.food {
+            background-color: #2196f3;
+            color: #fff;
+        }
+        
+        .supply-type.decorations {
+            background-color: #ff5722;
+            color: #fff;
+        }
+        
+        .supply-type.special {
+            background-color: #e91e63;
+            color: #fff;
+        }
+        
+        .supply-desc {
+            color: #ddd;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .supply-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #aaa;
+        }
+        
+        .supply-quantity {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+        
+        .supply-quality {
+            display: flex;
+            align-items: center;
+        }
+        
+        .quality-stars {
+            margin-left: 5px;
+            letter-spacing: -2px;
+        }
+        
+        .limited-tag {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #e91e63;
+            color: #fff;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+        
+        .supply-action {
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        .buy-btn {
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            padding: 6px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .buy-btn:hover {
+            background-color: #45a049;
+        }
+        
+        .tips-section {
+            background-color: rgba(60, 60, 60, 0.7);
+            border-radius: 12px;
+            padding: 15px;
+        }
+        
+        .tips-title {
+            font-size: 18px;
+            color: #ff9d00;
+            margin-bottom: 10px;
+        }
+        
+        .tips-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .tip-item {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .tip-icon {
+            color: #ff9d00;
+            margin-right: 8px;
+            font-size: 16px;
+        }
+        
+        .tip-content {
+            color: #ddd;
+            font-size: 14px;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>酒馆市场</h1>
+            <div class="subtitle">购买各类物资，提升你的酒馆品质</div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="section">
+            <div class="info-bar">
+                <div class="info-item">
+                    <div class="info-label">当前资金</div>
+                    <div class="info-value">{{userData.money}}元</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">酒馆等级</div>
+                    <div class="info-value">{{userData.tavern.level}}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">市场更新时间</div>
+                    <div class="info-value">{{marketData.lastUpdated ? marketData.lastUpdated.split('T')[0] : '未知'}}</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">可购买物资</div>
+            <div class="market-tabs">
+                <div class="market-tab active">全部</div>
+                <div class="market-tab">饮品原料</div>
+                <div class="market-tab">食物</div>
+                <div class="market-tab">装饰</div>
+                <div class="market-tab">特殊物品</div>
+            </div>
+            <div class="market-container">
+                <div class="market-grid">
+                    {{each marketData.marketItems item}}
+                    <div class="supply-item">
+                        {{if item.limited}}
+                        <div class="limited-tag">限量</div>
+                        {{/if}}
+                        <div class="supply-header">
+                            <div class="supply-name">{{item.name}}</div>
+                            <div class="supply-price">{{item.price}}元</div>
+                        </div>
+                        <div class="supply-type {{item.type}}">{{item.type === 'beer' ? '啤酒' : item.type === 'wine' ? '葡萄酒' : item.type === 'spirits' ? '烈酒' : item.type === 'food' ? '食物' : item.type === 'decorations' ? '装饰' : '特殊物品'}}</div>
+                        <div class="supply-desc">{{item.description}}</div>
+                        <div class="supply-stats">
+                            <div class="supply-quantity">库存: {{item.quantity}}</div>
+                            <div class="supply-quality">
+                                品质:
+                                <div class="quality-stars">
+                                    {{if item.quality === 1}}
+                                    ★☆☆
+                                    {{else if item.quality === 2}}
+                                    ★★☆
+                                    {{else}}
+                                    ★★★
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="supply-action">
+                            <div class="buy-btn" onclick="alert('使用 #购买酒馆物资 {{item.id}} 来购买此物品')">购买</div>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="section">
+            <div class="section-title">采购提示</div>
+            <div class="tips-section">
+                <div class="tips-title">如何高效采购</div>
+                <ul class="tips-list">
+                    <li class="tip-item">
+                        <span class="tip-icon">💡</span>
+                        <span class="tip-content">根据菜单上的饮品需求购买相应原料，避免浪费资金。</span>
+                    </li>
+                    <li class="tip-item">
+                        <span class="tip-icon">💡</span>
+                        <span class="tip-content">市场每天更新，价格和库存会有变动，关注价格波动低价时多囤货。</span>
+                    </li>
+                    <li class="tip-item">
+                        <span class="tip-icon">💡</span>
+                        <span class="tip-content">限量特殊物品可以制作独特的高价值饮品，提高酒馆收益。</span>
+                    </li>
+                    <li class="tip-item">
+                        <span class="tip-icon">💡</span>
+                        <span class="tip-content">高品质原料制作的饮品能获得更高的顾客满意度和价格溢价。</span>
+                    </li>
+                    <li class="tip-item">
+                        <span class="tip-icon">💡</span>
+                        <span class="tip-content">装饰物品可以提升酒馆氛围和吸引力，增加顾客数量。</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer">
+            模拟人生插件 - 酒馆系统 v1.0
+        </div>
+    </div>
+</body>
+</html> 

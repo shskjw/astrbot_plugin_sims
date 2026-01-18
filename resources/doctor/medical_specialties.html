@@ -1,0 +1,338 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @font-face {
+            font-family: "MiaoFont";
+            src: url("./也字工厂喵喵体.ttf");
+        }
+
+        body {
+            font-family: "MiaoFont", sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a1f3c 0%, #2a3166 100%);
+            color: #fff;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0, 195, 255, 0.5);
+        }
+
+        .doctor-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: #4fc3f7;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            color: #4fc3f7;
+            margin: 10px 0;
+            text-shadow: 0 0 10px rgba(79, 195, 247, 0.5);
+        }
+
+        .specialties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .specialty-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .specialty-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border-color: #4fc3f7;
+        }
+
+        .specialty-icon {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #ff4081, #7c4dff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+        }
+
+        .specialty-name {
+            font-size: 1.5em;
+            margin: 15px 0;
+            color: #4fc3f7;
+            padding-right: 70px;
+        }
+
+        .specialty-description {
+            color: #b3e5fc;
+            margin: 10px 0;
+            line-height: 1.5;
+        }
+
+        .skill-tree {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .skill-level {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            position: relative;
+        }
+
+        .skill-node {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .skill-node.unlocked {
+            background: #4fc3f7;
+            border-color: #4fc3f7;
+        }
+
+        .skill-node.current {
+            background: linear-gradient(45deg, #2196f3, #00bcd4);
+            border-color: #2196f3;
+            animation: pulse 2s infinite;
+        }
+
+        .skill-info {
+            flex: 1;
+        }
+
+        .skill-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .skill-description {
+            font-size: 0.9em;
+            color: #b3e5fc;
+        }
+
+        .skill-requirements {
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .requirement-item {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+        }
+
+        .requirement-item i {
+            margin-right: 10px;
+            color: #4fc3f7;
+        }
+
+        .specialty-benefits {
+            margin: 15px 0;
+        }
+
+        .benefit-tag {
+            display: inline-block;
+            padding: 5px 12px;
+            margin: 5px;
+            border-radius: 15px;
+            background: rgba(79, 195, 247, 0.2);
+            border: 1px solid #4fc3f7;
+        }
+
+        .select-specialty-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 25px;
+            background: linear-gradient(45deg, #2196f3, #00bcd4);
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: "MiaoFont";
+            margin-top: 15px;
+        }
+
+        .select-specialty-btn:hover {
+            background: linear-gradient(45deg, #00bcd4, #2196f3);
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(33, 150, 243, 0.5);
+        }
+
+        .select-specialty-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* 自适应布局 */
+        @media (max-width: 768px) {
+            .specialties-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>👨‍⚕️ 医学专科中心</h1>
+            <p>选择专科方向，成就专业医者</p>
+        </div>
+
+        <div class="doctor-stats">
+            <div class="stat-card">
+                <div class="stat-label">当前专科</div>
+                <div class="stat-value">{{doctor.specialty || '未选择'}}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">专科等级</div>
+                <div class="stat-value">{{doctor.specialty_level || 0}}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">专精技能</div>
+                <div class="stat-value">{{doctor.specialty_skills || 0}}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">声望评级</div>
+                <div class="stat-value">{{doctor.reputation_rank || 'D'}}</div>
+            </div>
+        </div>
+
+        <div class="specialties-grid">
+            {{each specialties specialty}}
+            <div class="specialty-card">
+                <div class="specialty-icon">{{specialty.icon}}</div>
+                <div class="specialty-name">{{specialty.name}}</div>
+                <div class="specialty-description">{{specialty.description}}</div>
+
+                <div class="skill-tree">
+                    <h4>🎯 专科技能树</h4>
+                    {{each specialty.skill_tree skill}}
+                    <div class="skill-level">
+                        <div class="skill-node {{skill.status}}">{{skill.level}}</div>
+                        <div class="skill-info">
+                            <div class="skill-name">{{skill.name}}</div>
+                            <div class="skill-description">{{skill.description}}</div>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+
+                <div class="specialty-benefits">
+                    <h4>✨ 专科特长</h4>
+                    {{each specialty.benefits benefit}}
+                    <span class="benefit-tag">{{benefit}}</span>
+                    {{/each}}
+                </div>
+
+                <div class="skill-requirements">
+                    <h4>📋 选择要求</h4>
+                    <div class="requirement-item">
+                        <i>👨‍⚕️</i> 医生等级：{{specialty.required_level}}
+                    </div>
+                    <div class="requirement-item">
+                        <i>💰</i> 培训费用：{{specialty.training_cost}} 金币
+                    </div>
+                    <div class="requirement-item">
+                        <i>📚</i> 所需技能：{{specialty.required_skills}}
+                    </div>
+                </div>
+
+                <button class="select-specialty-btn"
+                        onclick="selectSpecialty('{{specialty.id}}')"
+                        {{if !specialty.can_select}}disabled{{/if}}>
+                    {{specialty.can_select ? '选择专科' : '条件不足'}}
+                </button>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+
+    <script>
+        function selectSpecialty(specialtyId) {
+            window.location.href = `#专科方向?specialty_id=${specialtyId}`;
+        }
+    </script>
+</body>
+</html>

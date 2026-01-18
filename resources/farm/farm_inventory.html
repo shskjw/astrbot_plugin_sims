@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>农场库存</title>
+    <style>
+        body {
+            font-family: 'Arial', '微软雅黑', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #9C27B0 0%, #673AB7 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        .tabs {
+            display: flex;
+            background-color: #f5f5f5;
+            border-bottom: 1px solid #ddd;
+            overflow-x: auto;
+        }
+        .tab {
+            padding: 15px 20px;
+            cursor: pointer;
+            background-color: #f5f5f5;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        .tab.active {
+            background-color: #fff;
+            border-bottom: 3px solid #9C27B0;
+            font-weight: bold;
+        }
+        .content {
+            padding: 20px;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .item-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+        .item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .item-image {
+            height: 100px;
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+        }
+        .item-details {
+            padding: 15px;
+        }
+        .item-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 16px;
+            color: #333;
+        }
+        .item-count {
+            color: #9C27B0;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+        .item-quality {
+            font-size: 14px;
+            color: #388E3C;
+            margin-bottom: 10px;
+        }
+        .item-actions {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+        .empty-inventory {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+        .empty-inventory-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #ddd;
+        }
+        .tool-durability {
+            width: 100%;
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+        .durability-bar {
+            height: 100%;
+            background-color: #4CAF50;
+            border-radius: 4px;
+        }
+        .low-durability {
+            background-color: #F44336;
+        }
+        .medium-durability {
+            background-color: #FFC107;
+        }
+        .section-title {
+            color: #9C27B0;
+            border-bottom: 2px solid #673AB7;
+            padding-bottom: 5px;
+            margin-top: 0;
+        }
+        .inventory-summary {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .footer {
+            background-color: #f5f5f5;
+            padding: 15px;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            border-top: 1px solid #ddd;
+            margin-top: 30px;
+        }
+        .commands-guide {
+            background-color: #E8F5E9;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        .commands-guide h3 {
+            color: #388E3C;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>农场库存</h1>
+        </div>
+        
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('seeds-tab')">种子库存</div>
+            <div class="tab" onclick="showTab('crops-tab')">农作物</div>
+            <div class="tab" onclick="showTab('tools-tab')">农具工具</div>
+        </div>
+        
+        <div class="content">
+            <div id="seeds-tab" class="tab-content active">
+                <h2 class="section-title">种子库存</h2>
+                
+                {{#seeds.length}}
+                <div class="inventory-grid">
+                    {{#seeds}}
+                    <div class="item-card">
+                        <div class="item-image">🌱</div>
+                        <div class="item-details">
+                            <div class="item-name">{{name}}</div>
+                            <div class="item-count">{{count}} 个</div>
+                            <div class="item-actions">
+                                使用指令:
+                                <div>#种植 {{name}} [地块编号]</div>
+                            </div>
+                        </div>
+                    </div>
+                    {{/seeds}}
+                </div>
+                {{/seeds.length}}
+                
+                {{^seeds.length}}
+                <div class="empty-inventory">
+                    <div class="empty-inventory-icon">🌱</div>
+                    <p>你还没有种子！</p>
+                    <p>使用 #农场商店 命令购买种子。</p>
+                </div>
+                {{/seeds.length}}
+            </div>
+            
+            <div id="crops-tab" class="tab-content">
+                <h2 class="section-title">农作物</h2>
+                
+                {{#crops.length}}
+                <div class="inventory-grid">
+                    {{#crops}}
+                    <div class="item-card">
+                        <div class="item-image">🍎</div>
+                        <div class="item-details">
+                            <div class="item-name">{{name}}</div>
+                            <div class="item-count">{{count}} 个</div>
+                            <div class="item-quality">品质: {{quality}}%</div>
+                            <div class="item-actions">
+                                使用指令:
+                                <div>#卖出作物 {{name}} [数量]</div>
+                            </div>
+                        </div>
+                    </div>
+                    {{/crops}}
+                </div>
+                {{/crops.length}}
+                
+                {{^crops.length}}
+                <div class="empty-inventory">
+                    <div class="empty-inventory-icon">🍎</div>
+                    <p>你还没有收获任何作物！</p>
+                    <p>等待你种植的作物成熟后，使用 #收获 命令收获作物。</p>
+                </div>
+                {{/crops.length}}
+            </div>
+            
+            <div id="tools-tab" class="tab-content">
+                <h2 class="section-title">农具工具</h2>
+                
+                {{#tools.length}}
+                <div class="inventory-grid">
+                    {{#tools}}
+                    <div class="item-card">
+                        <div class="item-image">🔧</div>
+                        <div class="item-details">
+                            <div class="item-name">{{name}}</div>
+                            <div class="item-count">耐久度: {{durability}}</div>
+                            <div class="tool-durability">
+                                <div class="durability-bar {{#lowDurability}}low-durability{{/lowDurability}} {{#mediumDurability}}medium-durability{{/mediumDurability}}" style="width: {{durabilityPercentage}}%"></div>
+                            </div>
+                            <div class="item-quality">效率: {{efficiency}}</div>
+                            <div class="item-actions">
+                                自动使用，无需指令
+                            </div>
+                        </div>
+                    </div>
+                    {{/tools}}
+                </div>
+                {{/tools.length}}
+                
+                {{^tools.length}}
+                <div class="empty-inventory">
+                    <div class="empty-inventory-icon">🔧</div>
+                    <p>你还没有任何农具工具！</p>
+                    <p>使用 #农场商店 命令购买农具。</p>
+                </div>
+                {{/tools.length}}
+            </div>
+            
+            <div class="commands-guide">
+                <h3>指令指南</h3>
+                <p>- <strong>#农场商店</strong>: 查看并购买种子和工具</p>
+                <p>- <strong>#种植 [种子名称] [地块编号]</strong>: 在指定地块种植种子</p>
+                <p>- <strong>#卖出作物 [作物名称] [数量]</strong>: 卖出作物获得金币</p>
+                <p>- <strong>#查看库存</strong>: 查看你的库存情况</p>
+                <p>- <strong>#我的农场</strong>: 查看你的农场状态</p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            模拟人生农场系统 - 库存管理，事半功倍
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabId) {
+            // 隐藏所有内容
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // 移除所有标签的活跃状态
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // 显示选中的内容
+            document.getElementById(tabId).classList.add('active');
+            
+            // 设置选中标签的活跃状态
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+</html> 

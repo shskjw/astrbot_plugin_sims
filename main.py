@@ -5,22 +5,25 @@ from astrbot.api.event import filter, AstrMessageEvent
 from .core.common.data_manager import DataManager
 from .core.common.image_utils import HTMLRenderer
 from .core.common.config_manager import get_config
-from .core import stock as stock_module, property as property_module, farm as farm_module, weather as weather_module, pet as pet_module, relationship as relationship_module
+from .core import stock as stock_module, property as property_module, farm as farm_module, weather as weather_module, \
+    pet as pet_module, relationship as relationship_module
 
-@register("astrbot_plugin_sims", "shskjw", "模拟人生插件 - 农场/警察/医生/消防员/钓鱼/网吧/电影院/厨师/酒馆/宠物/关系等多系统经营游戏", "2.1.0")
+
+@register("astrbot_plugin_sims", "shskjw",
+          "模拟人生插件 - 农场/警察/医生/消防员/钓鱼/网吧/电影院/厨师/酒馆/宠物/关系等多系统经营游戏", "2.1.0")
 class SimsPlugin(Star):
     def __init__(self, context: Context, config=None):
         try:
             super().__init__(context, config)
         except TypeError:
             super().__init__(context)
-        
+
         # 加载插件配置
         self.config_manager = get_config()
         plugin_config = config if config else {}
         if plugin_config:
             self.config_manager.load_config(plugin_config)
-        
+
         # 获取全局管理员列表
         self.admins = []
         if plugin_config and "admins_id" in plugin_config:
@@ -29,20 +32,24 @@ class SimsPlugin(Star):
                     self.admins.append(str(admin_id))
             # 同步到配置管理器
             self.config_manager.set_admins(self.admins)
-        
+
         self.data_manager = DataManager()
         # 模板渲染器，自动使用 resources/HTML 目录下的模板
         self.template = HTMLRenderer()
         # 子系统初始化
         self.stock_market = stock_module.logic.StockMarket()
         # 注册示例股票
-        self.stock_market.register_stock(stock_module.models.StockData(id="S001", name="阿兹科技", price=12.34, volatility=0.6))
-        self.stock_market.register_stock(stock_module.models.StockData(id="S002", name="绿能股份", price=8.21, volatility=0.4))
+        self.stock_market.register_stock(
+            stock_module.models.StockData(id="S001", name="阿兹科技", price=12.34, volatility=0.6))
+        self.stock_market.register_stock(
+            stock_module.models.StockData(id="S002", name="绿能股份", price=8.21, volatility=0.4))
 
         self.property_market = property_module.logic.PropertyMarket()
         # 注册示例房产
-        self.property_market.register_property(property_module.models.Property(id="P001", name="小公寓", price=10000, rent=50))
-        self.property_market.register_property(property_module.models.Property(id="P002", name="商铺", price=50000, rent=300))
+        self.property_market.register_property(
+            property_module.models.Property(id="P001", name="小公寓", price=10000, rent=50))
+        self.property_market.register_property(
+            property_module.models.Property(id="P002", name="商铺", price=50000, rent=300))
 
         # 农场子系统
         self.farm = farm_module.logic.FarmLogic(self.data_manager)
@@ -50,11 +57,11 @@ class SimsPlugin(Star):
 
         # 天气系统
         self.weather = weather_module.logic.WeatherLogic(self.data_manager)
-        
+
         # 宠物系统
         self.pet = pet_module.logic.PetLogic(self.data_manager)
         self.pet_renderer = pet_module.render.PetRenderer()
-        
+
         # 关系系统
         self.relationship = relationship_module.logic.RelationshipLogic(self.data_manager)
         self.relationship_renderer = relationship_module.render.RelationshipRenderer()
@@ -98,17 +105,17 @@ class SimsPlugin(Star):
         from .core import cinema as cinema_module
         self.cinema = cinema_module.logic.CinemaLogic(self.data_manager)
         self.cinema_renderer = cinema_module.render.CinemaRenderer()
-    
+
     # ========== 异步辅助方法 ==========
     async def _load_user(self, user_id: str) -> dict:
         """异步加载用户数据，返回默认值如果不存在"""
         data = await self.data_manager.async_load_user(user_id)
         return data or {"name": "玩家", "money": 1000}
-    
+
     async def _save_user(self, user_id: str, data: dict):
         """异步保存用户数据"""
         await self.data_manager.async_save_user(user_id, data)
-    
+
     def _bytes_to_image_path(self, img_bytes: bytes) -> str:
         """将图片字节转换为临时文件路径，供 event.image_result 使用"""
         import tempfile
@@ -117,34 +124,34 @@ class SimsPlugin(Star):
         with os.fdopen(fd, 'wb') as tmp:
             tmp.write(img_bytes)
         return path
-    
+
     @filter.command("模拟人生")
     async def sims_help(self, event: AstrMessageEvent):
         """显示模拟人生帮助"""
         user_id = event.get_sender_id()
         is_admin = self.config_manager.is_admin(user_id)
-        
+
         # 加载帮助配置
         help_config_path = os.path.join(os.path.dirname(__file__), 'resources', 'help_config.json')
         help_data = {
             'helpCfg': {'title': '模拟人生帮助', 'subTitle': 'Yunzai-Bot & sims-Plugin'},
             'helpList': []
         }
-        
+
         try:
             if os.path.exists(help_config_path):
                 with open(help_config_path, 'r', encoding='utf-8') as f:
                     help_data = json.load(f)
         except Exception as e:
             self.logger.error(f"加载帮助配置失败: {e}")
-        
+
         # 处理帮助列表，根据权限过滤
         help_groups = []
         for group in help_data.get('helpList', []):
             # 如果是管理员专属功能且用户不是管理员，则跳过
             if group.get('auth') == 'master' and not is_admin:
                 continue
-            
+
             # 处理每个帮助项的图标CSS
             for help_item in group.get('list', []):
                 icon = help_item.get('icon', 0)
@@ -154,16 +161,16 @@ class SimsPlugin(Star):
                     x = (icon - 1) % 10
                     y = (icon - x - 1) // 10
                     help_item['css'] = f'background-position:-{x * 50}px -{y * 50}px'
-            
+
             help_groups.append(group)
-        
+
         # 获取帮助配置
         help_cfg = help_data.get('helpCfg', {})
         col_count = help_cfg.get('colCount', 3)
-        
+
         # 使用渲染器生成图片
         img = self.template.render(
-            'sims_help.html', 
+            'sims_help.html',
             helpCfg=help_cfg,
             helpGroup=help_groups,
             colCount=col_count,
@@ -174,25 +181,25 @@ class SimsPlugin(Star):
         # 传入base_path以修复CSS加载
         # 宽度调整为1000匹配CSS设定，高度由full_page=True自适应(如果有的话)
         img_bytes = await html_to_image_bytes(img, width=1000, height=2000, base_path=self.template.template_dir)
-        
+
         if img_bytes:
             # AstrBot's event.image_result expects a string path or url, and doesn't support bytes directly.
             # We need to save the bytes to a temp file and pass the path, OR use MessageEventResult interface directly if possible.
-            # However, looking at the error: "startswith first arg must be bytes or a tuple of bytes, not str" 
+            # However, looking at the error: "startswith first arg must be bytes or a tuple of bytes, not str"
             # Wait, the error is:
             # File "H:\AstrBot\astrbot\core\platform\astr_message_event.py", line 309, in image_result
             # if url_or_path.startswith("http"):
             # TypeError: startswith first arg must be bytes or a tuple of bytes, not str
-            # 
+            #
             # This means we passed BYTES (img_bytes) to a function that expected a STRING (url_or_path).
             # The line is `if url_or_path.startswith("http"):`
             # `url_or_path` is the bytes object we passed. "http" is a string.
             # In Python, bytes.startswith(str) raises TypeError.
-            
+
             # Solution: Save bytes to a temp file and pass the path.
             import tempfile
             import os
-            
+
             # Create a temporary file
             fd, path = tempfile.mkstemp(suffix=".png")
             try:
@@ -201,24 +208,25 @@ class SimsPlugin(Star):
                 yield event.image_result(path)
             finally:
                 # We can't delete immediately because yield assumes the framework will read it.
-                # But typically MessageEventResult processes immediately. 
+                # But typically MessageEventResult processes immediately.
                 # To be safe, we might unwantedly leave temp files.
-                # Better approach: check if AstrBot supports bytes? 
+                # Better approach: check if AstrBot supports bytes?
                 # Based on source code read via terminal:
                 # def image_result(self, url_or_path: str) -> MessageEventResult:
                 #     if url_or_path.startswith("http"): ...
                 # It strictly expects a string.
                 pass
-                # The framework likely reads the file content later. 
+                # The framework likely reads the file content later.
                 # Ideally config/logic should clean up old temp files or use a known temp dir.
                 pass
         else:
             # 降级文本
             from .core.common.screenshot import _PLAYWRIGHT_AVAILABLE
             if not _PLAYWRIGHT_AVAILABLE:
-                 yield event.plain_result("无法渲染帮助图片。检测到缺少 Playwright 依赖。\n请在终端执行：\npip install playwright\nplaywright install chromium")
+                yield event.plain_result(
+                    "无法渲染帮助图片。检测到缺少 Playwright 依赖。\n请在终端执行：\npip install playwright\nplaywright install chromium")
             else:
-                 yield event.plain_result("无法渲染帮助图片，未知错误，请检查后台日志。")
+                yield event.plain_result("无法渲染帮助图片，未知错误，请检查后台日志。")
 
     @filter.command("模拟人生版本")
     async def sims_version(self, event: AstrMessageEvent):
@@ -226,21 +234,21 @@ class SimsPlugin(Star):
         yield event.plain_result("模拟人生插件 v2.1.0\nby shskjw")
 
     # ========== 基础功能 ==========
-    
+
     @filter.command("签到")
     async def cmd_daily_sign(self, event: AstrMessageEvent):
         """每日签到"""
         from datetime import datetime, timedelta
         user_id = event.get_sender_id()
         user = await self._load_user(user_id)
-        
+
         today = datetime.now().strftime("%Y-%m-%d")
         last_sign = user.get('last_sign_date', '')
-        
+
         if last_sign == today:
             yield event.plain_result("❌ 你今天已经签到过了，明天再来吧！")
             return
-        
+
         # 计算连续签到
         streak = user.get('sign_streak', 0)
         yesterday = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
@@ -248,19 +256,19 @@ class SimsPlugin(Star):
             streak += 1
         else:
             streak = 1
-        
+
         # 签到奖励：基础100 + 连续签到加成
         base_reward = self.config_manager.daily_sign_reward
         bonus = min(streak * 10, 100)  # 连续签到每天+10，最多+100
         total_reward = base_reward + bonus
-        
+
         user['money'] = user.get('money', 0) + total_reward
         user['last_sign_date'] = today
         user['sign_streak'] = streak
         user['total_signs'] = user.get('total_signs', 0) + 1
-        
+
         await self._save_user(user_id, user)
-        
+
         msg = f"✅ 签到成功！\n"
         msg += f"💰 获得 {total_reward} 金币"
         if bonus > 0:
@@ -274,7 +282,7 @@ class SimsPlugin(Star):
         """查看玩家状态"""
         user_id = event.get_sender_id()
         user = await self._load_user(user_id)
-        
+
         msg = f"👤 玩家状态\n"
         msg += f"━━━━━━━━━━━━━━━\n"
         msg += f"🆔 ID: {user_id}\n"
@@ -282,51 +290,60 @@ class SimsPlugin(Star):
         msg += f"💰 金币: {user.get('money', 0)}\n"
         msg += f"📅 签到天数: {user.get('total_signs', 0)}\n"
         msg += f"🔥 连续签到: {user.get('sign_streak', 0)} 天\n"
-        
+
         # 检查各系统状态
         systems = []
         try:
             if self.farm.load_farm(user_id):
                 systems.append("🌾农场")
-        except: pass
+        except:
+            pass
         try:
             if self.police._load_all_police().get(user_id):
                 systems.append("👮警察")
-        except: pass
+        except:
+            pass
         try:
             if self.doctor._load(self.doctor._doctors_file()).get(user_id):
                 systems.append("👨‍⚕️医生")
-        except: pass
+        except:
+            pass
         try:
             if self.firefighter._load_firefighters().get(user_id):
                 systems.append("🚒消防员")
-        except: pass
+        except:
+            pass
         try:
             if self.fishing._load_users().get(user_id):
                 systems.append("🎣钓鱼")
-        except: pass
+        except:
+            pass
         try:
             if self.chef._load_chef_data(user_id):
                 systems.append("👨‍🍳厨师")
-        except: pass
+        except:
+            pass
         try:
             if self.netbar._load_netbars().get(user_id):
                 systems.append("🖥️网吧")
-        except: pass
+        except:
+            pass
         try:
             if self.cinema._load_cinemas().get(user_id):
                 systems.append("🎬电影院")
-        except: pass
+        except:
+            pass
         try:
             if self.tavern._load_tavern_data(user_id):
                 systems.append("🍺酒馆")
-        except: pass
-        
+        except:
+            pass
+
         if systems:
             msg += f"━━━━━━━━━━━━━━━\n"
             msg += f"📋 已开启系统:\n"
             msg += "  ".join(systems)
-        
+
         yield event.plain_result(msg)
 
     @filter.command("背包")
@@ -334,12 +351,12 @@ class SimsPlugin(Star):
         """查看背包"""
         user_id = event.get_sender_id()
         user = await self._load_user(user_id)
-        
+
         inventory = user.get('inventory', {})
-        
+
         msg = f"🎒 我的背包\n"
         msg += f"━━━━━━━━━━━━━━━\n"
-        
+
         if not inventory:
             msg += "背包是空的，快去探索获取物品吧！"
         else:
@@ -349,10 +366,10 @@ class SimsPlugin(Star):
                     msg += f"• {item_name} x{count}\n"
                 else:
                     msg += f"• {item_name} x{item_data}\n"
-        
+
         msg += f"━━━━━━━━━━━━━━━\n"
         msg += f"💰 金币: {user.get('money', 0)}"
-        
+
         yield event.plain_result(msg)
 
     @filter.command("排行榜")
@@ -360,28 +377,28 @@ class SimsPlugin(Star):
         """查看金币排行榜"""
         # 加载所有用户数据
         all_users = self.data_manager.load_all_users()
-        
+
         if not all_users:
             yield event.plain_result("暂无排行数据")
             return
-        
+
         # 按金币排序
         sorted_users = sorted(
             [(uid, data) for uid, data in all_users.items()],
             key=lambda x: x[1].get('money', 0),
             reverse=True
         )[:10]  # 取前10名
-        
+
         msg = "🏆 金币排行榜 TOP 10\n"
         msg += "━━━━━━━━━━━━━━━\n"
-        
+
         medals = ["🥇", "🥈", "🥉"]
         for i, (uid, data) in enumerate(sorted_users):
-            rank = medals[i] if i < 3 else f"{i+1}."
+            rank = medals[i] if i < 3 else f"{i + 1}."
             name = data.get('name', uid[:8])
             money = data.get('money', 0)
             msg += f"{rank} {name}: {money} 💰\n"
-        
+
         yield event.plain_result(msg)
 
     @filter.command("增加金币")
@@ -391,12 +408,12 @@ class SimsPlugin(Star):
         if not self.config_manager.is_admin(user_id):
             yield event.plain_result("🚫 只有管理员可以使用此命令。")
             return
-            
+
         target_user = await self.data_manager.async_load_user(target_id)
         if not target_user:
             yield event.plain_result(f"找不到用户 {target_id}")
             return
-            
+
         old_money = target_user.get('money', 0)
         target_user['money'] = old_money + amount
         await self.data_manager.async_save_user(target_id, target_user)
@@ -409,12 +426,12 @@ class SimsPlugin(Star):
         if not self.config_manager.is_admin(user_id):
             yield event.plain_result("🚫 只有管理员可以使用此命令。")
             return
-            
+
         target_user = await self.data_manager.async_load_user(target_id)
         if not target_user:
             yield event.plain_result(f"找不到用户 {target_id}")
             return
-            
+
         old_money = target_user.get('money', 0)
         target_user['money'] = max(0, old_money - amount)
         await self.data_manager.async_save_user(target_id, target_user)
@@ -427,7 +444,7 @@ class SimsPlugin(Star):
         if not self.config_manager.is_admin(user_id):
             yield event.plain_result("🚫 只有管理员可以使用此命令。")
             return
-            
+
         # 这里仅重置金币和基础信息作为示例，根据需求可重置更多
         basic_data = {"name": "玩家", "money": 1000}
         await self.data_manager.async_save_user(target_id, basic_data)
@@ -483,12 +500,13 @@ class SimsPlugin(Star):
         if not holdings:
             yield event.plain_result('你当前没有持仓')
             return
-        lines = [f"{k}: {v['amount']} 股 (均价 {v['avg_price']:.2f})" for k,v in holdings.items()]
+        lines = [f"{k}: {v['amount']} 股 (均价 {v['avg_price']:.2f})" for k, v in holdings.items()]
         yield event.plain_result('\n'.join(lines))
 
     @filter.command("房产列表")
     async def property_list(self, event: AstrMessageEvent):
-        props = [f"{p.name} ({p.id}) — 价格: {p.price:.2f} 租金: {p.rent:.2f}" for p in self.property_market.properties.values()]
+        props = [f"{p.name} ({p.id}) — 价格: {p.price:.2f} 租金: {p.rent:.2f}" for p in
+                 self.property_market.properties.values()]
         if not props:
             return event.plain_result("当前没有房产信息。")
         return event.plain_result("\n".join(props))
@@ -500,7 +518,8 @@ class SimsPlugin(Star):
         try:
             farm = self.farm.create_farm(user_id, user)
             # 渲染图片（需要 Playwright 支持）
-            img = await self.farm_renderer.render_image('farm_created.html', farmName=farm['name'], userName=user.get('name'))
+            img = await self.farm_renderer.render_image('farm_created.html', farmName=farm['name'],
+                                                        userName=user.get('name'))
             if img and isinstance(img, (bytes, bytearray)):
                 img_path = self._bytes_to_image_path(img)
                 yield event.image_result(img_path)
@@ -522,7 +541,8 @@ class SimsPlugin(Star):
             await self._save_user(user_id, user)
         try:
             result = self.police.join_police(user_id, user)
-            yield event.plain_result(f"🚔 恭喜你成为了{result['info']['rank']}！\n薪资: {result['info']['salary']}金币/月\n使用 #警察信息 查看详情。")
+            yield event.plain_result(
+                f"🚔 恭喜你成为了{result['info']['rank']}！\n薪资: {result['info']['salary']}金币/月\n使用 #警察信息 查看详情。")
         except Exception as e:
             if str(e).startswith('cooldown:'):
                 yield event.plain_result('操作太快，请稍后再试。')
@@ -595,7 +615,8 @@ class SimsPlugin(Star):
         c = cases[0]
         try:
             accepted = self.police.accept_case(event.get_sender_id(), c['id'])
-            yield event.plain_result(f"📋 你已接取案件：\n{accepted['title']}\n难度: {accepted.get('difficulty', '普通')}\n奖励: {accepted.get('reward', 0)}金币\n\n使用 #处理案件 来破案")
+            yield event.plain_result(
+                f"📋 你已接取案件：\n{accepted['title']}\n难度: {accepted.get('difficulty', '普通')}\n奖励: {accepted.get('reward', 0)}金币\n\n使用 #处理案件 来破案")
         except Exception as e:
             if str(e).startswith('cooldown:'):
                 yield event.plain_result('操作太快，请稍后再试。')
@@ -654,7 +675,8 @@ class SimsPlugin(Star):
         equipment_name = parts[1]
         try:
             result = self.police.buy_equipment(event.get_sender_id(), equipment_name)
-            yield event.plain_result(f"✅ 购买成功!\n装备: {result['equipment']['name']}\n花费: {result['price']}金币\n剩余: {result['remaining_money']}金币")
+            yield event.plain_result(
+                f"✅ 购买成功!\n装备: {result['equipment']['name']}\n花费: {result['price']}金币\n剩余: {result['remaining_money']}金币")
         except Exception as e:
             if str(e).startswith('cooldown:'):
                 yield event.plain_result('操作太快，请稍后再试。')
@@ -671,7 +693,8 @@ class SimsPlugin(Star):
         equipment_name = parts[1]
         try:
             result = self.police.maintain_equipment(event.get_sender_id(), equipment_name)
-            yield event.plain_result(f"🔧 维护完成!\n装备: {result['equipment']}\n花费: {result['cost']}金币\n耐久度: {result['old_durability']}% → {result['new_durability']}%")
+            yield event.plain_result(
+                f"🔧 维护完成!\n装备: {result['equipment']}\n花费: {result['cost']}金币\n耐久度: {result['old_durability']}% → {result['new_durability']}%")
         except Exception as e:
             if str(e).startswith('cooldown:'):
                 yield event.plain_result('操作太快，请稍后再试。')
@@ -715,9 +738,11 @@ class SimsPlugin(Star):
         try:
             result = self.police.police_training(event.get_sender_id(), skill_type)
             if result['success']:
-                yield event.plain_result(f"🎓 培训成功!\n{skill_type}技能: {result['old_level']} → {result['new_level']}\n获得经验: +{result['exp_gain']}\n花费: {result['cost']}金币")
+                yield event.plain_result(
+                    f"🎓 培训成功!\n{skill_type}技能: {result['old_level']} → {result['new_level']}\n获得经验: +{result['exp_gain']}\n花费: {result['cost']}金币")
             else:
-                yield event.plain_result(f"😓 培训失败...\n{skill_type}技能保持: {result['old_level']}级\n花费: {result['cost']}金币")
+                yield event.plain_result(
+                    f"😓 培训失败...\n{skill_type}技能保持: {result['old_level']}级\n花费: {result['cost']}金币")
         except Exception as e:
             if str(e).startswith('cooldown:'):
                 yield event.plain_result('培训中心暂时繁忙，请稍后再试。')
@@ -743,11 +768,11 @@ class SimsPlugin(Star):
         rank_type = parts[1] if len(parts) > 1 else 'exp'
         if rank_type not in ['exp', 'cases', 'reputation']:
             rank_type = 'exp'
-        
+
         rankings = self.police.get_police_ranking(rank_type)
         type_names = {'exp': '经验', 'cases': '破案数', 'reputation': '声望'}
         lines = [f"🏆 警察排行榜 ({type_names[rank_type]}):"]
-        
+
         for i, r in enumerate(rankings[:10], 1):
             if rank_type == 'exp':
                 score = f"{r['experience']}exp"
@@ -756,18 +781,19 @@ class SimsPlugin(Star):
             else:
                 score = f"{r['reputation']}声望"
             lines.append(f"{i}. {r['name']} ({r['rank']}) - {score}")
-        
+
         yield event.plain_result("\n".join(lines))
 
     @filter.command("成为医生")
     async def cmd_join_doctor(self, event: AstrMessageEvent):
         user_id = event.get_sender_id()
-        user = self.data_manager.load_user(user_id) or {"name":"玩家","money":0}
+        user = self.data_manager.load_user(user_id) or {"name": "玩家", "money": 0}
         if not self.data_manager.load_user(user_id):
             self.data_manager.save_user(user_id, user)
         try:
             d = self.doctor.register_doctor(user_id, user)
-            yield event.plain_result(f"🏥 恭喜你成为了{d.get('rank', '实习医生')}！\n薪资: {d.get('salary', 5000)}金币/月\n使用 #医生信息 查看详情。")
+            yield event.plain_result(
+                f"🏥 恭喜你成为了{d.get('rank', '实习医生')}！\n薪资: {d.get('salary', 5000)}金币/月\n使用 #医生信息 查看详情。")
         except Exception as e:
             yield event.plain_result(f"注册失败: {e}")
 
@@ -813,7 +839,8 @@ class SimsPlugin(Star):
         p = patients[0]
         try:
             res = self.doctor.treat_patient(user_id, p['id'])
-            yield event.plain_result(f"✅ 治疗成功!\n患者: {res['patient'].get('name')}\n疾病: {res['patient'].get('disease')}\n获得金币: +{res['reward']}\n获得经验: +{res['exp_gain']}")
+            yield event.plain_result(
+                f"✅ 治疗成功!\n患者: {res['patient'].get('name')}\n疾病: {res['patient'].get('disease')}\n获得金币: +{res['reward']}\n获得经验: +{res['exp_gain']}")
         except Exception as e:
             if str(e).startswith('cooldown:'):
                 yield event.plain_result('操作太快，请稍后再试。')
@@ -868,19 +895,19 @@ class SimsPlugin(Star):
                 lines.append(f"  ID:{m.get('id')} {m.get('name')} - 有效性:{m.get('effectiveness', 70)}%")
             yield event.plain_result("\n".join(lines))
             return
-        
+
         try:
             medicine_id = int(parts[1])
         except:
             yield event.plain_result("药品ID必须是数字")
             return
-        
+
         patients = self.doctor.list_patients()
         if not patients:
             yield event.plain_result('当前没有病人。')
             return
         p = patients[0]
-        
+
         try:
             res = self.doctor.prescribe_medicine(event.get_sender_id(), p['id'], medicine_id)
             status = "✅ 治疗成功!" if res['success'] else "❌ 治疗效果不佳"
@@ -908,22 +935,23 @@ class SimsPlugin(Star):
             surgeries = self.doctor.get_surgeries_list()[:5]
             lines = ["用法: #执行手术 <手术ID>", "\n可用手术:"]
             for s in surgeries:
-                lines.append(f"  ID:{s.get('id')} {s.get('name')} - 成功率:{s.get('success_rate', 70)}% 需要:{s.get('required_level', 1)}级")
+                lines.append(
+                    f"  ID:{s.get('id')} {s.get('name')} - 成功率:{s.get('success_rate', 70)}% 需要:{s.get('required_level', 1)}级")
             yield event.plain_result("\n".join(lines))
             return
-        
+
         try:
             surgery_id = int(parts[1])
         except:
             yield event.plain_result("手术ID必须是数字")
             return
-        
+
         patients = self.doctor.list_patients()
         if not patients:
             yield event.plain_result('当前没有需要手术的病人。')
             return
         p = patients[0]
-        
+
         try:
             res = self.doctor.perform_surgery(event.get_sender_id(), p['id'], surgery_id)
             status = "✅ 手术成功!" if res['success'] else "⚠️ 手术出现并发症"
@@ -955,9 +983,11 @@ class SimsPlugin(Star):
         try:
             res = self.doctor.doctor_training(event.get_sender_id(), skill_type)
             if res['success']:
-                yield event.plain_result(f"🎓 培训成功!\n{skill_type}技能: {res['old_level']} → {res['new_level']}\n获得经验: +{res['exp_gain']}\n花费: {res['cost']}金币")
+                yield event.plain_result(
+                    f"🎓 培训成功!\n{skill_type}技能: {res['old_level']} → {res['new_level']}\n获得经验: +{res['exp_gain']}\n花费: {res['cost']}金币")
             else:
-                yield event.plain_result(f"😓 培训失败...\n{skill_type}技能保持: {res['old_level']}\n花费: {res['cost']}金币")
+                yield event.plain_result(
+                    f"😓 培训失败...\n{skill_type}技能保持: {res['old_level']}\n花费: {res['cost']}金币")
         except Exception as e:
             if str(e).startswith('cooldown:'):
                 yield event.plain_result('培训中心暂时繁忙，请稍后再试。')
@@ -975,7 +1005,8 @@ class SimsPlugin(Star):
         try:
             res = self.doctor.start_research(event.get_sender_id(), project_name)
             project = res['project']
-            yield event.plain_result(f"🔬 研究开始!\n项目: {project['name']}\n进度: {project['progress']}%\n完成奖励: {project['exp_reward']}经验 + {project['money_reward']}金币")
+            yield event.plain_result(
+                f"🔬 研究开始!\n项目: {project['name']}\n进度: {project['progress']}%\n完成奖励: {project['exp_reward']}经验 + {project['money_reward']}金币")
         except Exception as e:
             if str(e).startswith('cooldown:'):
                 yield event.plain_result('操作太快，请稍后再试。')
@@ -1010,11 +1041,11 @@ class SimsPlugin(Star):
         rank_type = parts[1] if len(parts) > 1 else 'exp'
         if rank_type not in ['exp', 'patients', 'surgeries']:
             rank_type = 'exp'
-        
+
         rankings = self.doctor.get_doctor_ranking(rank_type)
         type_names = {'exp': '经验', 'patients': '治愈患者', 'surgeries': '手术数'}
         lines = [f"🏆 医生排行榜 ({type_names[rank_type]}):"]
-        
+
         for i, r in enumerate(rankings[:10], 1):
             if rank_type == 'exp':
                 score = f"{r['experience']}exp"
@@ -1023,7 +1054,7 @@ class SimsPlugin(Star):
             else:
                 score = f"{r['surgeries']}台"
             lines.append(f"{i}. {r['name']} ({r['rank']}) - {score}")
-        
+
         yield event.plain_result("\n".join(lines))
 
     @filter.command("我的农场")
@@ -1043,7 +1074,7 @@ class SimsPlugin(Star):
     @filter.command("购买农田")
     async def cmd_buy_land(self, event: AstrMessageEvent):
         user_id = event.get_sender_id()
-        user = self.data_manager.load_user(user_id) or {"name":"玩家","money":1000}
+        user = self.data_manager.load_user(user_id) or {"name": "玩家", "money": 1000}
         try:
             farm = self.farm.buy_land(user_id, user)
             yield event.plain_result('购买成功，农田已升级。')
@@ -1076,7 +1107,8 @@ class SimsPlugin(Star):
             for plot in status['plots']:
                 if plot['crop']:
                     ready = "✅可收获" if plot.get('harvestReady') else f"🌱{plot.get('growth_progress', 0)}%"
-                    lines.append(f"  地块{plot['index']}: {plot['crop']} {ready} 💧{plot['water']}% 🌿{plot['fertility']}%")
+                    lines.append(
+                        f"  地块{plot['index']}: {plot['crop']} {ready} 💧{plot['water']}% 🌿{plot['fertility']}%")
                 else:
                     lines.append(f"  地块{plot['index']}: 空地")
             # 活动事件
@@ -1104,12 +1136,12 @@ class SimsPlugin(Star):
             lines.append(f"  生长速度: {effects.get('growth', 1.0)}倍")
             lines.append(f"  水分消耗: {effects.get('water', 1.0)}倍")
             lines.append(f"  温度: {effects.get('temperature', '适中')}")
-            
+
             if season_info.get('seasonal'):
                 lines.append("\n🌱 当季作物:")
                 for seed in season_info['seasonal'][:8]:
                     lines.append(f"  - {seed.get('name')} (￥{seed.get('price', 0)})")
-            
+
             yield event.plain_result("\n".join(lines))
         except Exception as e:
             yield event.plain_result(f"查看季节失败: {e}")
@@ -1234,12 +1266,12 @@ class SimsPlugin(Star):
         rank_type = parts[1] if len(parts) > 1 else 'level'
         if rank_type not in ['level', 'harvest', 'income']:
             rank_type = 'level'
-        
+
         try:
             rankings = self.farm.get_farm_ranking(rank_type)
             type_names = {'level': '等级', 'harvest': '收获量', 'income': '总收入'}
             lines = [f"🏆 农场排行榜 ({type_names[rank_type]}):"]
-            
+
             for i, r in enumerate(rankings[:10], 1):
                 if rank_type == 'level':
                     score = f"Lv.{r['level']} ({r['experience']}exp)"
@@ -1248,7 +1280,7 @@ class SimsPlugin(Star):
                 else:
                     score = f"{r['total_income']}金币"
                 lines.append(f"{i}. {r['farm_name']} - {score}")
-            
+
             yield event.plain_result("\n".join(lines))
         except Exception as e:
             yield event.plain_result(f"获取排行榜失败: {e}")
@@ -1288,12 +1320,12 @@ class SimsPlugin(Star):
             from datetime import datetime
             join_date = datetime.fromisoformat(info.join_date)
             days = (datetime.now() - join_date).days
-            
+
             success_rate = 0
             total = info.stats.missions_completed + info.stats.missions_failed
             if total > 0:
                 success_rate = info.stats.missions_completed / total * 100
-            
+
             lines = [
                 "🚒 消防员信息",
                 f"👤 职称：{info.rank}",
@@ -1604,7 +1636,7 @@ class SimsPlugin(Star):
         """查看消防员排行榜"""
         parts = event.message_str.strip().split()
         sort_by = parts[1] if len(parts) > 1 else "experience"
-        
+
         sort_options = {
             "经验": "experience",
             "任务": "missions",
@@ -1612,17 +1644,18 @@ class SimsPlugin(Star):
             "勋章": "medals"
         }
         sort_by = sort_options.get(sort_by, sort_by)
-        
+
         try:
             rankings = self.firefighter.get_firefighter_ranking(sort_by)
             if not rankings:
                 yield event.plain_result("暂无排行数据")
                 return
-            
+
             lines = [f"🚒 消防员排行榜（按{sort_by}排序）", ""]
             for i, entry in enumerate(rankings[:10], 1):
                 lines.append(f"{i}. {entry.user_name}")
-                lines.append(f"   [{entry.rank}] 经验:{entry.experience} 任务:{entry.missions_completed} 救援:{entry.people_rescued}")
+                lines.append(
+                    f"   [{entry.rank}] 经验:{entry.experience} 任务:{entry.missions_completed} 救援:{entry.people_rescued}")
             yield event.plain_result("\n".join(lines))
         except Exception as e:
             yield event.plain_result(f'获取排行榜失败: {e}')
@@ -1723,7 +1756,8 @@ class SimsPlugin(Star):
                 lines.append("鱼篓是空的～")
             else:
                 for fish in basket['fish_list']:
-                    fresh = f"🟢 {fish['freshness']:.0f}%" if fish['freshness'] > 50 else (f"🟡 {fish['freshness']:.0f}%" if fish['freshness'] > 20 else f"🔴 {fish['freshness']:.0f}%")
+                    fresh = f"🟢 {fish['freshness']:.0f}%" if fish['freshness'] > 50 else (
+                        f"🟡 {fish['freshness']:.0f}%" if fish['freshness'] > 20 else f"🔴 {fish['freshness']:.0f}%")
                     if fish['is_spoiled']:
                         fresh = "💀 变质"
                     lines.append(f"• {fish['name']} {fish['weight']}kg {'⭐' * fish['rarity']} {fresh}")
@@ -1811,7 +1845,8 @@ class SimsPlugin(Star):
             lines = ["🐟 鱼类图鉴", ""]
             for fish in fish_list:
                 lines.append(f"【{fish['name']}】 {'⭐' * fish['rarity']}")
-                lines.append(f"  价格: {fish['price']}金币/kg | 重量: {fish['weight_range']} | 难度: Lv.{fish['difficulty']}")
+                lines.append(
+                    f"  价格: {fish['price']}金币/kg | 重量: {fish['weight_range']} | 难度: Lv.{fish['difficulty']}")
             yield event.plain_result("\n".join(lines))
         except Exception as e:
             yield event.plain_result(f'获取图鉴失败: {e}')
@@ -1821,16 +1856,16 @@ class SimsPlugin(Star):
         """查看钓鱼排行榜"""
         parts = event.message_str.strip().split()
         sort_by = parts[1] if len(parts) > 1 else "catch"
-        
+
         sort_options = {"数量": "catch", "重量": "weight", "最佳": "best"}
         sort_by = sort_options.get(sort_by, sort_by)
-        
+
         try:
             rankings = self.fishing.get_fishing_ranking(sort_by)
             if not rankings:
                 yield event.plain_result("暂无排行数据")
                 return
-            
+
             lines = [f"🎣 钓鱼排行榜（按{sort_by}排序）", ""]
             for i, entry in enumerate(rankings[:10], 1):
                 best_info = f" | 最佳:{entry.best_catch_fish} {entry.best_catch_weight}kg" if entry.best_catch_fish else ""
@@ -1846,7 +1881,8 @@ class SimsPlugin(Star):
         user_id = event.get_sender_id()
         try:
             fish = self.fishing.go_fishing(user_id)
-            yield event.plain_result(f"钓到了: {fish.get('name')} ({fish.get('weight', 1)}kg, 稀有度 {'⭐' * fish.get('rarity', 1)})")
+            yield event.plain_result(
+                f"钓到了: {fish.get('name')} ({fish.get('weight', 1)}kg, 稀有度 {'⭐' * fish.get('rarity', 1)})")
         except Exception as e:
             if str(e).startswith('cooldown:'):
                 yield event.plain_result('操作太快，请稍后再试。')
@@ -1891,7 +1927,7 @@ class SimsPlugin(Star):
                 yield event.plain_result(f'租赁失败: {e}')
 
     # ========== 网吧经营系统 ==========
-    
+
     @filter.command("创建网吧")
     async def cmd_create_netbar(self, event: AstrMessageEvent):
         """创建网吧"""
@@ -1925,12 +1961,12 @@ class SimsPlugin(Star):
             msg += f"🧹 清洁度: {netbar.cleanliness:.0f}%\n"
             msg += f"🔧 设备状态: {netbar.maintenance.status:.0f}%\n"
             msg += f"━━━━━━━━━━━━━━\n"
-            
+
             # 电脑信息
             c = netbar.computers
             msg += f"💻 电脑配置:\n"
             msg += f"   基础×{c.basic} | 标准×{c.standard} | 高端×{c.premium}\n"
-            
+
             # 员工信息
             msg += f"👥 员工数量: {len(netbar.staff)}/{netbar.level * 3}\n"
             if netbar.staff:
@@ -1939,7 +1975,7 @@ class SimsPlugin(Star):
                     positions[s.position] = positions.get(s.position, 0) + 1
                 pos_str = ' '.join(f"{p}×{c}" for p, c in positions.items())
                 msg += f"   {pos_str}\n"
-            
+
             # 设施信息
             facilities = []
             if netbar.facilities.snack_bar:
@@ -1949,7 +1985,7 @@ class SimsPlugin(Star):
             if netbar.facilities.gaming_area:
                 facilities.append("电竞区")
             msg += f"🏠 设施: {', '.join(facilities) if facilities else '无特殊设施'}\n"
-            
+
             # 收入信息
             msg += f"━━━━━━━━━━━━━━\n"
             msg += f"💰 累计收入: {netbar.income}元\n"
@@ -2173,14 +2209,15 @@ class SimsPlugin(Star):
         sort_by = parts[1] if len(parts) > 1 else "reputation"
         sort_options = {"声誉": "reputation", "等级": "level", "收入": "income", "电脑": "computers"}
         sort_key = sort_options.get(sort_by, sort_by)
-        
+
         try:
             ranking = self.netbar.get_netbar_ranking(sort_key)
             if not ranking:
                 yield event.plain_result("暂无排行数据")
                 return
-            
-            sort_name = {"reputation": "声誉", "level": "等级", "income": "收入", "computers": "电脑数"}.get(sort_key, "声誉")
+
+            sort_name = {"reputation": "声誉", "level": "等级", "income": "收入", "computers": "电脑数"}.get(sort_key,
+                                                                                                             "声誉")
             msg = f"🏆 网吧排行榜 (按{sort_name}排序)\n"
             msg += "━━━━━━━━━━━━━━\n"
             for i, entry in enumerate(ranking[:10], 1):
@@ -2202,13 +2239,13 @@ class SimsPlugin(Star):
             return event.plain_result("用法： 渲染模板 <模板文件名>")
         tpl_name = parts[1]
         try:
-            html = self.template.render(tpl_name, user={"name":"测试用户","money":123.45})
+            html = self.template.render(tpl_name, user={"name": "测试用户", "money": 123.45})
             return event.plain_result(html[:400])
         except Exception as e:
             return event.plain_result(f"渲染出错: {e}")
 
     # ========== 厨师系统 - 完整版 ==========
-    
+
     @filter.command("成为厨师")
     async def cmd_become_chef(self, event: AstrMessageEvent):
         try:
@@ -2253,7 +2290,8 @@ class SimsPlugin(Star):
         recipe_id = parts[1]
         try:
             res = self.chef.cook_dish(event.get_sender_id(), recipe_id)
-            msg = self.chef_renderer.render_cook_result(res['success'], res['recipe'], res['chef_level'], res['chef_exp'])
+            msg = self.chef_renderer.render_cook_result(res['success'], res['recipe'], res['chef_level'],
+                                                        res['chef_exp'])
             yield event.plain_result(msg)
         except RuntimeError as e:
             if "cooldown" in str(e):
@@ -2415,16 +2453,16 @@ class SimsPlugin(Star):
             if not team:
                 yield event.plain_result("你还没有加入任何团队。\n使用 #创建厨师团队 或 #加入厨师团队 来开始！")
                 return
-            
+
             text = f"👨‍🍳【{team['name']}】\n\n"
             text += f"团队ID: {team['id']}\n"
             text += f"等级: Lv.{team['level']} | 资金: {team['funds']}💰\n"
             text += f"成员 ({len(team['members'])}/5):\n"
-            
+
             for mid in team['members']:
                 is_leader = "👑" if mid == team['leader_id'] else "  "
                 text += f"  {is_leader} {mid}\n"
-            
+
             yield event.plain_result(text)
         except Exception as e:
             yield event.plain_result(f"获取团队信息失败: {e}")
@@ -2437,13 +2475,13 @@ class SimsPlugin(Star):
             if not rankings:
                 yield event.plain_result("暂无团队排行数据。")
                 return
-            
+
             text = "🏆【厨师团队排行榜】\n\n"
             for r in rankings:
                 medal = {1: "🥇", 2: "🥈", 3: "🥉"}.get(r['rank'], f"{r['rank']}.")
                 text += f"{medal} {r['name']} (Lv.{r['level']})\n"
                 text += f"   成员: {r['member_count']}人 | 声望: {r['total_reputation']} | 战力: {r['power']}\n"
-            
+
             yield event.plain_result(text)
         except Exception as e:
             yield event.plain_result(f"获取排行榜失败: {e}")
@@ -2537,7 +2575,7 @@ class SimsPlugin(Star):
             if not contests:
                 yield event.plain_result("当前没有进行中的厨艺比赛。\n使用 #发起厨艺比赛 来创建一个！")
                 return
-            
+
             text = "🎭【进行中的厨艺比赛】\n\n"
             for c in contests:
                 text += f"📋 {c['name']}\n"
@@ -2545,7 +2583,7 @@ class SimsPlugin(Star):
                 text += f"   食谱: {c['recipe_name']}\n"
                 text += f"   参与人数: {c['participant_count']}人\n"
                 text += f"   截止: {c['deadline'][:16]}\n\n"
-            
+
             yield event.plain_result(text)
         except Exception as e:
             yield event.plain_result(f"获取比赛列表失败: {e}")
@@ -2592,7 +2630,8 @@ class SimsPlugin(Star):
         listing_id = parts[1]
         try:
             res = self.chef.cancel_listing(event.get_sender_id(), listing_id)
-            yield event.plain_result(f"✅ 已下架: {res['cancelled_listing']['ingredient_name']} x{res['cancelled_listing']['quantity']}")
+            yield event.plain_result(
+                f"✅ 已下架: {res['cancelled_listing']['ingredient_name']} x{res['cancelled_listing']['quantity']}")
         except Exception as e:
             yield event.plain_result(f"下架失败: {e}")
 
@@ -2604,13 +2643,13 @@ class SimsPlugin(Star):
             if not listings:
                 yield event.plain_result("食材市场暂无挂单。\n使用 #上架食材 来出售你的食材！")
                 return
-            
+
             text = "🏪【食材市场】\n\n"
             for l in listings[:15]:  # 最多显示15条
                 text += f"📦 {l['ingredient_name']} x{l['quantity']}\n"
                 text += f"   单价: {l['price_per_unit']}💰 | 总价: {l['total_price']}💰\n"
                 text += f"   挂单ID: {l['id']}\n\n"
-            
+
             text += "使用 #购买市场食材 <挂单ID> 来购买！"
             yield event.plain_result(text)
         except Exception as e:
@@ -2627,7 +2666,8 @@ class SimsPlugin(Star):
         try:
             res = self.chef.buy_from_market(event.get_sender_id(), listing_id)
             purchased = res['purchased']
-            yield event.plain_result(f"✅ 购买成功！\n获得: {purchased['ingredient_name']} x{purchased['quantity']}\n花费: {res['cost']}💰")
+            yield event.plain_result(
+                f"✅ 购买成功！\n获得: {purchased['ingredient_name']} x{purchased['quantity']}\n花费: {res['cost']}💰")
         except RuntimeError as e:
             if "cooldown" in str(e):
                 yield event.plain_result("操作冷却中，请稍后再试。")
@@ -2644,13 +2684,13 @@ class SimsPlugin(Star):
             if not listings:
                 yield event.plain_result("你没有正在出售的食材。")
                 return
-            
+
             text = "📋【我的挂单】\n\n"
             for l in listings:
                 text += f"📦 {l['ingredient_name']} x{l['quantity']}\n"
                 text += f"   单价: {l['price_per_unit']}💰 | 总价: {l['total_price']}💰\n"
                 text += f"   ID: {l['id']}\n\n"
-            
+
             text += "使用 #下架食材 <挂单ID> 来取消挂单"
             yield event.plain_result(text)
         except Exception as e:
@@ -2760,7 +2800,7 @@ class SimsPlugin(Star):
             if not coops:
                 yield event.plain_result("你没有正在进行的合作料理。\n使用 #发起合作料理 来开始！")
                 return
-            
+
             text = "🍳【我的合作料理】\n\n"
             for c in coops:
                 text += f"📋 {c['recipe_name']}\n"
@@ -2768,7 +2808,7 @@ class SimsPlugin(Star):
                 text += f"   状态: {c['status']}\n"
                 text += f"   参与者: {len(c['participants'])}人\n"
                 text += f"   品质加成: +{c['quality_bonus']}\n\n"
-            
+
             yield event.plain_result(text)
         except Exception as e:
             yield event.plain_result(f"获取失败: {e}")
@@ -2781,22 +2821,22 @@ class SimsPlugin(Star):
         try:
             res = self.chef.get_user_achievements(event.get_sender_id())
             text = f"🏆【厨师成就】 {res['total_unlocked']}/{res['total_achievements']}\n\n"
-            
+
             if res['current_title']:
                 text += f"当前称号: 「{res['current_title']}」\n\n"
-            
+
             text += "✅ 已解锁:\n"
             for ach in res['unlocked'][:5]:
                 text += f"  🏅 {ach['name']} - {ach['description']}\n"
-            
+
             text += "\n🔒 未解锁:\n"
             for ach in res['locked'][:5]:
                 progress = ach.get('current_progress', 0)
                 text += f"  ⬜ {ach['name']} ({progress}/{ach['requirement_value']})\n"
-            
+
             if res['titles']:
                 text += f"\n可用称号: {', '.join(res['titles'])}"
-            
+
             yield event.plain_result(text)
         except Exception as e:
             yield event.plain_result(f"获取成就失败: {e}")
@@ -2960,7 +3000,8 @@ class SimsPlugin(Star):
             available_staff = [
                 {'type': 'bartender', 'name': '酒保', 'salary': 100, 'level_req': 1, 'skills': '提高饮品效率、增加收入'},
                 {'type': 'waiter', 'name': '服务员', 'salary': 80, 'level_req': 1, 'skills': '提高顾客满意度、增加消费'},
-                {'type': 'cleaner', 'name': '清洁工', 'salary': 60, 'level_req': 2, 'skills': '维持清洁度、减缓环境恶化'},
+                {'type': 'cleaner', 'name': '清洁工', 'salary': 60, 'level_req': 2,
+                 'skills': '维持清洁度、减缓环境恶化'},
                 {'type': 'security', 'name': '保安', 'salary': 120, 'level_req': 3, 'skills': '维护秩序、解决冲突'},
                 {'type': 'musician', 'name': '驻唱歌手', 'salary': 200, 'level_req': 4, 'skills': '提高氛围、吸引顾客'}
             ]
@@ -2980,11 +3021,11 @@ class SimsPlugin(Star):
             res = self.tavern.hire_staff(event.get_sender_id(), staff_type, user.get('money', 0))
             staff_obj = res.get('staff')
             hire_cost = res.get('hire_cost', 0)
-            
+
             # 获取员工信息
             staff_name = staff_obj.name if hasattr(staff_obj, 'name') else staff_obj.get('name', '员工')
             staff_id = staff_obj.id if hasattr(staff_obj, 'id') else staff_obj.get('id', 'N/A')
-            
+
             msg = f"✅ 成功雇佣{staff_name}！\n"
             msg += f"━━━━━━━━━━━━━━━━━\n"
             msg += f"🆔 员工ID: {staff_id}\n"
@@ -3007,7 +3048,8 @@ class SimsPlugin(Star):
         if len(parts) < 2:
             try:
                 tavern_info = self.tavern.get_tavern_info(event.get_sender_id())
-                staff_list = tavern_info.get('tavern').staff if isinstance(tavern_info.get('tavern'), object) else tavern_info.get('staff', [])
+                staff_list = tavern_info.get('tavern').staff if isinstance(tavern_info.get('tavern'),
+                                                                           object) else tavern_info.get('staff', [])
                 if not staff_list:
                     yield event.plain_result("当前没有员工可解雇。")
                     return
@@ -3031,8 +3073,9 @@ class SimsPlugin(Star):
             res = self.tavern.fire_staff(event.get_sender_id(), staff_id)
             fired_staff = res.get('fired_staff')
             staff_name = fired_staff.name if hasattr(fired_staff, 'name') else fired_staff.get('name', '员工')
-            staff_type = fired_staff.staff_type if hasattr(fired_staff, 'staff_type') else fired_staff.get('staff_type', 'N/A')
-            
+            staff_type = fired_staff.staff_type if hasattr(fired_staff, 'staff_type') else fired_staff.get('staff_type',
+                                                                                                           'N/A')
+
             msg = f"✅ 已解雇员工！\n"
             msg += f"━━━━━━━━━━━━━━━━━\n"
             msg += f"👤 员工: {staff_name}\n"
@@ -3056,18 +3099,18 @@ class SimsPlugin(Star):
             if not rankings:
                 yield event.plain_result("暂无酒馆排行数据。")
                 return
-            
+
             text = "🏆【酒馆排行榜 TOP20】\n\n"
             for r in rankings:
                 medal = {1: "🥇", 2: "🥈", 3: "🥉"}.get(r['rank'], f"{r['rank']}.")
                 text += f"{medal} {r['name']} (Lv.{r['level']})\n"
                 text += f"   总收入: {r['total_income']}💰 声誉: {r['reputation']}⭐ 评分: {r['rank_score']}\n"
-            
+
             # 显示我的排名
             my_rank = self.tavern.get_my_rank(event.get_sender_id())
             if my_rank:
                 text += f"\n📍你的排名: 第{my_rank['rank']}名 (评分: {my_rank['rank_score']})"
-            
+
             yield event.plain_result(text)
         except Exception as e:
             yield event.plain_result(f"获取排行榜失败: {e}")
@@ -3083,14 +3126,14 @@ class SimsPlugin(Star):
         try:
             res = self.tavern.visit_tavern(event.get_sender_id(), owner_id)
             target = res['target_tavern']
-            
+
             text = f"🍺【参观酒馆】\n\n"
             text += f"酒馆名称: {target['name']}\n"
             text += f"等级: Lv.{target['level']} | 人气: {target['popularity']}\n"
             text += f"氛围: {target['atmosphere']} | 声誉: {target['reputation']}⭐\n"
             text += f"菜单饮品: {target['menu_count']}种 | 员工: {target['staff_count']}人\n\n"
             text += f"✨ 参观灵感：你的酒馆{res['inspiration_bonus']} +{res['bonus_amount']}"
-            
+
             yield event.plain_result(text)
         except RuntimeError as e:
             if "cooldown" in str(e):
@@ -3132,14 +3175,14 @@ class SimsPlugin(Star):
             res = self.tavern.get_tavern_ratings(event.get_sender_id())
             text = f"⭐【{res['tavern_name']} 的评分】\n\n"
             text += f"平均评分: {res['average']}⭐ (共{res['total_ratings']}条)\n\n"
-            
+
             if res['recent_ratings']:
                 text += "最近评价:\n"
                 for r in res['recent_ratings']:
                     text += f"  ⭐{r['rating']} - {r.get('comment', '无评语')}\n"
             else:
                 text += "暂无评价"
-            
+
             yield event.plain_result(text)
         except Exception as e:
             yield event.plain_result(f"获取评分失败: {e}")
@@ -3183,13 +3226,13 @@ class SimsPlugin(Star):
             if not history:
                 yield event.plain_result("暂无事件记录。")
                 return
-            
+
             text = "📜【酒馆事件历史】\n\n"
             for i, h in enumerate(history[-5:], 1):  # 最近5条
                 text += f"{i}. {h['title']}\n"
                 text += f"   选择: {h['choice']}\n"
                 text += f"   效果: {h['effects']}\n"
-            
+
             yield event.plain_result(text)
         except Exception as e:
             yield event.plain_result(f"获取历史失败: {e}")
@@ -3204,7 +3247,7 @@ class SimsPlugin(Star):
             if not activities:
                 yield event.plain_result("你需要先拥有酒馆才能举办活动！")
                 return
-            
+
             text = "🎭【可举办的活动】\n\n"
             for act in activities:
                 status = "✅ 可举办" if act['can_host'] else f"❌ {act.get('missing_requirement', '条件不足')}"
@@ -3214,7 +3257,7 @@ class SimsPlugin(Star):
                 text += f"   效果: {act['effects']}\n"
                 text += f"   状态: {status}\n"
                 text += f"   ID: {act['id']}\n\n"
-            
+
             yield event.plain_result(text)
         except Exception as e:
             yield event.plain_result(f"获取活动列表失败: {e}")
@@ -3258,7 +3301,8 @@ class SimsPlugin(Star):
         activity_id = parts[1]
         try:
             res = self.tavern.join_activity(event.get_sender_id(), activity_id)
-            yield event.plain_result(f"✅ 成功参加「{res['activity_name']}」！\n举办酒馆: {res['host_tavern']}\n你的酒馆人气 +2")
+            yield event.plain_result(
+                f"✅ 成功参加「{res['activity_name']}」！\n举办酒馆: {res['host_tavern']}\n你的酒馆人气 +2")
         except RuntimeError as e:
             if "cooldown" in str(e):
                 yield event.plain_result("参加活动冷却中，请稍后再试。")
@@ -3275,7 +3319,7 @@ class SimsPlugin(Star):
             if not activities:
                 yield event.plain_result("当前没有进行中的活动。\n使用 #举办活动 来开始一个！")
                 return
-            
+
             text = "🎭【进行中的活动】\n\n"
             for act in activities:
                 text += f"📋 {act['activity_name']}\n"
@@ -3283,7 +3327,7 @@ class SimsPlugin(Star):
                 text += f"   参与人数: {len(act['participants'])}人\n"
                 text += f"   剩余: {act['remaining_hours']:.1f}小时\n"
                 text += f"   ID: {act['id']}\n\n"
-            
+
             yield event.plain_result(text)
         except Exception as e:
             yield event.plain_result(f"获取活动列表失败: {e}")
@@ -3297,22 +3341,23 @@ class SimsPlugin(Star):
             yield event.plain_result("用法: 公司上市 <公司名> <股票代号> <发行价>")
             yield event.plain_result(f"示例: 公司上市 张三集团 ZSGP 10")
             return
-        
+
         comp_name = parts[1]
-        stock_name = parts[2] # Actually mapped to 'stock_name' in model, but user provides code usually. 
+        stock_name = parts[2]  # Actually mapped to 'stock_name' in model, but user provides code usually.
         # Wait, my logic takes: user_id: str, company_name: str, stock_name: str, initial_price: float
-        # Let's align: 
+        # Let's align:
         #   company_name -> parts[1] (e.g. "ZhangSan Corp")
         #   stock_name -> parts[2] (e.g. "ZSC")
         try:
             price = float(parts[3])
         except:
-             yield event.plain_result("价格必须是数字")
-             return
+            yield event.plain_result("价格必须是数字")
+            return
 
         try:
             pc = self.stock_market.ipo(self.data_manager, event.get_sender_id(), comp_name, stock_name, price)
-            yield event.plain_result(f"🎉 恭喜！你的公司【{pc.company_name}】已成功上市！\n股票代码: {pc.stock_id}\n当前股价: {pc.share_price}\n快邀请朋友购买你的股票吧！")
+            yield event.plain_result(
+                f"🎉 恭喜！你的公司【{pc.company_name}】已成功上市！\n股票代码: {pc.stock_id}\n当前股价: {pc.share_price}\n快邀请朋友购买你的股票吧！")
         except Exception as e:
             yield event.plain_result(f"上市失败: {e}")
 
@@ -3320,17 +3365,17 @@ class SimsPlugin(Star):
     @filter.command("发布收购")
     async def cmd_post_buy_order(self, event: AstrMessageEvent):
         """发布收购需求 (简化版: 只是喊话功能，配合转账使用)"""
-        # True implementation requires complex Order Book. 
+        # True implementation requires complex Order Book.
         # For valid MVP: Just a broadcasting tool + 'transfer' command.
         parts = event.text.strip().split()
         if len(parts) < 3:
             yield event.plain_result("用法: 发布收购 <物品名> <单价>")
             return
-        
+
         item = parts[1]
         price = parts[2]
         user_name = event.get_sender_name()
-        
+
         msg = f"📢【收购公告】\n"
         msg += f"老板: {user_name}\n"
         msg += f"需求: {item}\n"
@@ -3349,31 +3394,31 @@ class SimsPlugin(Star):
         try:
             amount = int(parts[2])
         except:
-             yield event.plain_result("金额必须是整数")
-             return
-        
+            yield event.plain_result("金额必须是整数")
+            return
+
         if amount <= 0:
             yield event.plain_result("金额必须大于0")
             return
 
         user_id = event.get_sender_id()
         user = await self._load_user(user_id)
-        
+
         if user.get('money', 0) < amount:
             yield event.plain_result("余额不足！")
             return
-        
+
         target = await self.data_manager.async_load_user(target_id)
         if not target:
-             yield event.plain_result("找不到目标用户")
-             return
+            yield event.plain_result("找不到目标用户")
+            return
 
         user['money'] -= amount
         target['money'] = target.get('money', 0) + amount
-        
+
         await self._save_user(user_id, user)
         await self._save_user(target_id, target)
-        
+
         yield event.plain_result(f"✅ 转账成功！已向 {target.get('name', target_id)} 转账 {amount} 金币。")
 
     @filter.command("酿酒配方")
@@ -3457,7 +3502,7 @@ class SimsPlugin(Star):
         try:
             res = self.tavern.check_brewing_progress(project_id)
             proj = res['project']
-            
+
             if res['status'] == 'completed':
                 text = f"🍺【酿酒已完成】\n\n"
                 text += f"酒名: {proj['name']}\n"
@@ -3469,7 +3514,7 @@ class SimsPlugin(Star):
                 text += f"当前品质: {proj['quality']}\n"
                 text += f"参与人数: {len(proj['participants'])}人\n"
                 text += f"剩余时间: {res['remaining_hours']}小时"
-            
+
             yield event.plain_result(text)
         except Exception as e:
             yield event.plain_result(f"查询失败: {e}")
@@ -3502,7 +3547,7 @@ class SimsPlugin(Star):
             if not projects:
                 yield event.plain_result("当前没有进行中的酿酒项目。\n使用 #发起酿酒 来开始！")
                 return
-            
+
             text = "🍺【进行中的酿酒项目】\n\n"
             for p in projects:
                 status = "✅ 可领取" if p['is_complete'] else f"🔄 {p['progress']}%"
@@ -3511,7 +3556,7 @@ class SimsPlugin(Star):
                 text += f"   参与: {p['participant_count']}/{p['max_participants']}人\n"
                 text += f"   品质: {p['quality']} | 状态: {status}\n"
                 text += f"   ID: {p['id']}\n\n"
-            
+
             yield event.plain_result(text)
         except Exception as e:
             yield event.plain_result(f"获取项目列表失败: {e}")
@@ -3524,13 +3569,13 @@ class SimsPlugin(Star):
             if not projects:
                 yield event.plain_result("你没有参与任何酿酒项目。\n使用 #参与酿酒 来加入一个！")
                 return
-            
+
             text = "🍺【我参与的酿酒】\n\n"
             for p in projects:
                 text += f"📋 {p['name']} ({p['type']})\n"
                 text += f"   ID: {p['id']}\n"
                 text += f"   品质: {p['quality']} | 状态: {p['status']}\n\n"
-            
+
             yield event.plain_result(text)
         except Exception as e:
             yield event.plain_result(f"获取失败: {e}")
@@ -3599,7 +3644,7 @@ class SimsPlugin(Star):
             msg = f"🎬 【{cinema.name}】\n"
             msg += f"━━━━━━━━━━━━━━\n"
             msg += f"📊 等级: {cinema.level}级 | 声誉: {cinema.reputation}\n"
-            
+
             # 影厅信息
             msg += f"━━━━━━━━━━━━━━\n"
             msg += f"🎭 影厅数量: {len(cinema.theaters)}/{cinema.level * 2}\n"
@@ -3607,7 +3652,7 @@ class SimsPlugin(Star):
                 from .core.cinema.models import THEATER_TYPES
                 type_name = THEATER_TYPES[t.type]['name']
                 msg += f"   📽️ {t.name}({type_name}) - {t.capacity}座\n"
-            
+
             # 电影版权
             msg += f"━━━━━━━━━━━━━━\n"
             msg += f"🎞️ 电影版权: {len(cinema.movies)}部\n"
@@ -3615,15 +3660,15 @@ class SimsPlugin(Star):
                 msg += f"   🎬 《{m.title}》 ⭐{m.rating}\n"
             if len(cinema.movies) > 3:
                 msg += f"   ... 等{len(cinema.movies)}部电影\n"
-            
+
             # 设施
             msg += f"━━━━━━━━━━━━━━\n"
             facilities = [f.name for f in cinema.facilities] or ['无']
             msg += f"🏠 设施: {', '.join(facilities)}\n"
-            
+
             # 员工
             msg += f"👥 员工: {len(cinema.staff)}人\n"
-            
+
             # 收入
             msg += f"━━━━━━━━━━━━━━\n"
             msg += f"💰 累计收入: {cinema.total_revenue}元\n"
@@ -3909,13 +3954,13 @@ class SimsPlugin(Star):
         """电影院排行榜"""
         parts = event.text.strip().split()
         sort_by = "reputation" if len(parts) > 1 and parts[1] == "声誉" else "revenue"
-        
+
         try:
             ranking = self.cinema.get_cinema_ranking(sort_by)
             if not ranking:
                 yield event.plain_result("暂无排行数据")
                 return
-            
+
             sort_name = "声誉" if sort_by == "reputation" else "收入"
             msg = f"🏆 电影院排行榜 (按{sort_name}排序)\n"
             msg += "━━━━━━━━━━━━━━\n"
@@ -3968,19 +4013,19 @@ class SimsPlugin(Star):
         user_id = event.get_sender_id()
         user = await self._load_user(user_id)
         if user.get('money', 0) < 1000:
-             yield event.plain_result("🚫 每次抽卡需要1000金币！")
-             return
-        
+            yield event.plain_result("🚫 每次抽卡需要1000金币！")
+            return
+
         user['money'] -= 1000
         await self._save_user(user_id, user)
-        
+
         pet = self.pet.draw_pet(user_id)
         # Render image
         img = self.pet_renderer.render_draw(pet)
         # Convert HTML to image
         from .core.common.screenshot import html_to_image_bytes
         img_bytes = await html_to_image_bytes(img, width=600, height=800, base_path=self.template.template_dir)
-        
+
         if img_bytes:
             import tempfile, os
             fd, path = tempfile.mkstemp(suffix=".png")
@@ -4000,11 +4045,11 @@ class SimsPlugin(Star):
         if not pets:
             yield event.plain_result("你还没有宠物哦，快去 #宠物抽卡 吧！")
             return
-            
+
         img = self.pet_renderer.render_my_pets(pets)
         from .core.common.screenshot import html_to_image_bytes
         img_bytes = await html_to_image_bytes(img, width=800, height=1000, base_path=self.template.template_dir)
-        
+
         if img_bytes:
             import tempfile, os
             fd, path = tempfile.mkstemp(suffix=".png")
@@ -4043,23 +4088,23 @@ class SimsPlugin(Star):
         try:
             amount = int(parts[2])
         except:
-             yield event.plain_result("金额必须是整数")
-             return
-             
+            yield event.plain_result("金额必须是整数")
+            return
+
         user_id = event.get_sender_id()
         user = await self._load_user(user_id)
         if user.get('money', 0) < amount:
             yield event.plain_result("金币不足！")
             return
-        
+
         user['money'] -= amount
         await self._save_user(user_id, user)
-        
+
         # Get target name
         target_data = await self.data_manager.async_load_user(target_id)
         target_name = target_data.get('name', target_id) if target_data else target_id
-        
-        rel = self.relationship.add_affection(user_id, target_id, target_name, amount // 100) # 100 gold = 1 affection
+
+        rel = self.relationship.add_affection(user_id, target_id, target_name, amount // 100)  # 100 gold = 1 affection
         yield event.plain_result(f"🎁 赠送成功！你们的关系提升了。\n当前好感度: {rel.affection} ({rel.status})")
 
     @filter.command("查看关系")
@@ -4070,16 +4115,16 @@ class SimsPlugin(Star):
             return
         target_id = parts[1]
         user_id = event.get_sender_id()
-        
+
         rel = self.relationship.get_relationship(user_id, target_id)
         if not rel:
             yield event.plain_result("你们还不够熟悉哦。(无关系数据)")
             return
-            
+
         img = self.relationship_renderer.render_status(rel)
         from .core.common.screenshot import html_to_image_bytes
         img_bytes = await html_to_image_bytes(img, width=600, height=800, base_path=self.template.template_dir)
-        
+
         if img_bytes:
             import tempfile, os
             fd, path = tempfile.mkstemp(suffix=".png")
@@ -4090,7 +4135,7 @@ class SimsPlugin(Star):
             finally:
                 pass
         else:
-             yield event.plain_result(f"💝 {rel.target_name}\n好感度: {rel.affection}\n状态: {rel.status}")
+            yield event.plain_result(f"💝 {rel.target_name}\n好感度: {rel.affection}\n状态: {rel.status}")
 
     @filter.command("求婚")
     async def cmd_propose(self, event: AstrMessageEvent):
@@ -4100,7 +4145,7 @@ class SimsPlugin(Star):
             return
         target_id = parts[1]
         user_id = event.get_sender_id()
-        
+
         can_marry, rel = self.relationship.check_marriage(user_id, target_id)
         if not can_marry:
             if not rel:
@@ -4110,7 +4155,6 @@ class SimsPlugin(Star):
             else:
                 yield event.plain_result(f"感情还不够深厚哦 (需要500好感度，当前{rel.affection})")
             return
-            
-        # Success (Simplified, no target accept needed for now)
+
         res = self.relationship.marry(user_id, target_id)
         yield event.plain_result(f"💍 恭喜！你和 {res.target_name} 结婚了！祝你们百年好合。")

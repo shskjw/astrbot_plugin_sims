@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+    <link rel="shortcut icon" href="#"/>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a237e, #0d47a1);
+            color: white;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        .title {
+            font-size: 2em;
+            margin: 0;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .subtitle {
+            color: #bbdefb;
+            margin-top: 5px;
+        }
+        .result-section {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .result-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+        .result-message {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #ffd700;
+        }
+        .success {
+            color: #4caf50;
+        }
+        .failure {
+            color: #f44336;
+        }
+        .details-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .detail-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        .detail-label {
+            color: #bbdefb;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+        .detail-value {
+            font-size: 1.8em;
+            color: #ffd700;
+        }
+        .progress-container {
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .progress-title {
+            color: #bbdefb;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .progress-bar {
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4caf50, #8bc34a);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 1s ease;
+        }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8em;
+            color: #bbdefb;
+        }
+        .tip-section {
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .tip-title {
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+        .tip-content {
+            color: #bbdefb;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">警员培训结果</h1>
+            <div class="subtitle">警员：{{name}}</div>
+        </div>
+
+        <div class="result-section">
+            {{if success}}
+            <div class="result-icon success">✓</div>
+            <div class="result-message">培训成功！</div>
+            {{else}}
+            <div class="result-icon failure">✗</div>
+            <div class="result-message">培训失败</div>
+            {{/if}}
+        </div>
+
+        <div class="details-section">
+            <div class="detail-card">
+                <div class="detail-label">培训技能</div>
+                <div class="detail-value">{{trainType}}</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-label">获得经验</div>
+                <div class="detail-value">+{{expGain}}</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-label">培训费用</div>
+                <div class="detail-value">{{cost}}元</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-label">剩余体力</div>
+                <div class="detail-value">{{stamina}}%</div>
+            </div>
+        </div>
+
+        {{if success}}
+        <div class="progress-container">
+            <div class="progress-title">技能等级提升</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="skillProgress"></div>
+            </div>
+            <div class="progress-label">
+                <span>Lv.{{oldLevel}}</span>
+                <span>Lv.{{newLevel}}</span>
+            </div>
+        </div>
+        {{/if}}
+
+        <div class="tip-section">
+            <div class="tip-title">培训小贴士</div>
+            <div class="tip-content">
+                {{if success}}
+                恭喜提升了{{trainType}}能力！技能等级越高，相关行动的成功率也越高。继续加油！
+                {{else}}
+                培训并非总是成功，技能等级越高，提升难度也越大。休息一下，稍后再试！
+                {{/if}}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            {{#if success}}
+            // 动画效果
+            setTimeout(function() {
+                document.getElementById('skillProgress').style.width = '100%';
+            }, 500);
+            {{/if}}
+        };
+    </script>
+</body>
+</html> 

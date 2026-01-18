@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>VIP包间状态</title>
+    <link rel="stylesheet" href="../common/base.css">
+    <style>
+        body {
+            background-color: #fff5f7;
+            font-family: 'HYShiGuangTiW_0', sans-serif;
+        }
+        .container {
+            width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(255,105,180,0.2);
+        }
+        .header {
+            text-align: center;
+            color: #ff69b4;
+            margin-bottom: 20px;
+        }
+        .room-card {
+            background-color: #fff0f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .room-detail {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+        }
+        .status-badge {
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+        }
+        .status-available {
+            background-color: #b0e57c;
+            color: #3a6b0a;
+        }
+        .status-occupied {
+            background-color: #ffb6c1;
+            color: #8b0000;
+        }
+        .tips {
+            background-color: #fff0f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .cute-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto;
+            display: block;
+        }
+        .highlight {
+            color: #ff69b4;
+            font-weight: bold;
+        }
+        .feature-tag {
+            background-color: #ffb6c1;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="../img/help/icon.png" class="cute-icon">
+        <div class="header">
+            <h1>📊 VIP包间状态一览</h1>
+        </div>
+        
+        {{#rooms}}
+        <div class="room-card">
+            <div class="room-detail">
+                <span><strong>{{name}} (ID: {{id}})</strong></span>
+                <span class="status-badge {{#if currentBooking}}status-occupied{{else}}status-available{{/if}}">
+                    {{#if currentBooking}}使用中{{else}}空闲{{/if}}
+                </span>
+            </div>
+            <div class="room-detail">
+                <span>清洁度: {{cleanliness}}%</span>
+                <span>维护状态: {{maintenance}}%</span>
+            </div>
+            <div class="room-detail">
+                <span>每小时收费: {{hourlyRate}}元</span>
+                <span>今日收入: {{income}}元</span>
+            </div>
+            {{#if currentBooking}}
+            <div class="room-detail">
+                <span>当前预订: {{currentBooking.id}}</span>
+                <span>剩余时间: {{currentBooking.remainingTime}}小时</span>
+            </div>
+            {{/if}}
+            <div style="margin-top: 10px;">
+                {{#features}}
+                <span class="feature-tag">{{.}}</span>
+                {{/features}}
+            </div>
+        </div>
+        {{/rooms}}
+        
+        <div class="tips">
+            <h3 style="color: #ff69b4;">💡 管理提示</h3>
+            <ul>
+                {{#tips}}
+                <li>{{.}}</li>
+                {{/tips}}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

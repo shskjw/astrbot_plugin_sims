@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>消防演习失败</title>
+    <style>
+        @font-face {
+            font-family: "miao";
+            src: url(./也字工厂喵喵体.ttf);
+        }
+        body {
+            font-size: auto;
+            font-family: "miao";
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: auto;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            width: 380px;
+            padding: 30px;
+            position: relative;
+            text-align: center;
+        }
+        .header {
+            background-color: #e74c3c; /* 失败使用红色 */
+            color: white;
+            padding: 15px;
+            border-radius: 15px 15px 0 0;
+            margin: -30px -30px 20px -30px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .header i {
+            margin-right: 10px;
+            font-size: 24px;
+        }
+        .failed-banner {
+            background-color: #fde9e7;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 2px solid #e74c3c;
+        }
+        .failed-banner h2 {
+            margin: 0;
+            color: #e74c3c;
+            font-size: 20px;
+        }
+        .drill-image {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            background-color: #f9f9f9;
+            border-radius: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border: 3px solid #e74c3c;
+            overflow: hidden;
+        }
+        .drill-image img {
+            width: 90%;
+            height: 90%;
+            object-fit: contain;
+        }
+        .info-section {
+            background-color: #f9f9f9;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .info-section h2 {
+            margin-top: 0;
+            color: #e74c3c;
+            font-size: 18px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e74c3c;
+            padding-bottom: 5px;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 8px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .info-label {
+            font-weight: bold;
+            color: #555;
+        }
+        .info-value {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .stats-section {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .stats-item {
+            flex: 1;
+            background-color: #fde9e7;
+            padding: 10px;
+            border-radius: 10px;
+            margin: 0 5px;
+            text-align: center;
+        }
+        .stats-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+        .stats-label {
+            font-size: 12px;
+            color: #777;
+        }
+        .footer {
+            font-size: 12px;
+            color: #777;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .encouragement {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 20px;
+            font-style: italic;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <i>❌</i><h1>演习失败</h1>
+        </div>
+        
+        <div class="failed-banner">
+            <h2>很遗憾，消防演习未能顺利完成</h2>
+        </div>
+        
+        <div class="drill-image">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iI2U3NGMzYyIgZD0iTTEzLDEzQzEzLjE0LDkuNjYgMTYsOCAxOC41LDZDMTkuMzYsNS42OCAyMiw0LjE3IDIyLDkuNUMyMiwxMS44IDE2LDEyLjUgMTUsMTZDMTQsMTkuMTYgMTUsMjEuNjYgMTUsMjEuNjZDMTMuODgsMjEuODggMTIuNzMsMjIgMTEuNTQsMjJDOC4yOCwyMiA2LDIxIDYsMTdDNiwxNC42OCAxLjYxLDEyIDAuNDYsOC43QzAsNyAxLDYgMy41LDcuNUM0LjczLDguNzMgNiwxMCA2LDEzSjEzTTEzLDE1QzEyLjU5LDE1Ljk4IDEyLjExLDE2LjkxIDEyLjAzLDE3Ljy5TDEyLDE3QzEyLDE3IDE1LDE2LjUgMTUsMTJDMTUsMTIgMTgsMTIgMTgsMTAuNUMxOCw5Ljc4IDE0LDExLjAyIDEzLDE1WiIvPjwvc3ZnPg==" alt="Fire Drill Failed">
+        </div>
+        
+        <div class="info-section">
+            <h2>演习详情</h2>
+            <div class="info-row">
+                <div class="info-label">演习类型</div>
+                <div class="info-value">{{drillType}}</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">参与者</div>
+                <div class="info-value">{{userName}} ({{rank}})</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">成功率</div>
+                <div class="info-value">{{successRate}}%</div>
+            </div>
+        </div>
+        
+        <div class="stats-section">
+            <div class="stats-item">
+                <div class="stats-value">+{{expGained}}</div>
+                <div class="stats-label">获得经验</div>
+            </div>
+            <div class="stats-item">
+                <div class="stats-value">-{{staminaLost}}</div>
+                <div class="stats-label">消耗体力</div>
+            </div>
+            <div class="stats-item">
+                <div class="stats-value">{{healthLost}}</div>
+                <div class="stats-label">当前生命值</div>
+            </div>
+        </div>
+        
+        <div class="encouragement">
+            "失败是成功之母，继续努力，下次一定能成功！"
+        </div>
+        
+        <div class="footer">
+            勤学苦练，保护生命 | sims-plugin · 消防员模拟
+        </div>
+    </div>
+</body>
+</html> 

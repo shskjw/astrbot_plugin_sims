@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>警员状态</title>
+    <link rel="stylesheet" href="../common/base.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .police-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .police-header {
+            background: linear-gradient(135deg, #1a2a6c, #3a7bd5);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        .police-header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .police-badge {
+            position: absolute;
+            top: -15px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: gold;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #1a2a6c;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+        .police-content {
+            padding: 20px;
+        }
+        .info-card {
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 5px solid #3a7bd5;
+        }
+        .info-card h3 {
+            margin-top: 0;
+            color: #1a2a6c;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        .stat-item {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #3a7bd5;
+        }
+        .cute-icon {
+            font-size: 20px;
+            margin-right: 5px;
+        }
+        .equipment-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .equipment-item {
+            background: #e6f2ff;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="police-container">
+        <div class="police-header">
+            <div class="police-badge">{{badgeNumber}}</div>
+            <h1>{{name}}的警员档案</h1>
+            <p>{{rank}} · {{department}}</p>
+        </div>
+        
+        <div class="police-content">
+            <div class="info-card">
+                <h3><span class="cute-icon">👮</span>基本信息</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-label">警衔</div>
+                        <div class="stat-value">{{rank}}</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">部门</div>
+                        <div class="stat-value">{{department}}</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">解决案件</div>
+                        <div class="stat-value">{{casesSolved}}</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">当前经验</div>
+                        <div class="stat-value">{{experience}}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-card">
+                <h3><span class="cute-icon">🛡️</span>装备情况</h3>
+                <div class="equipment-list">
+                    {{each equipment}}
+                    <div class="equipment-item">{{$value}}</div>
+                    {{/each}}
+                </div>
+            </div>
+            
+            <div class="info-card">
+                <h3><span class="cute-icon">📋</span>当前案件</h3>
+                <p>{{currentCase}}</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

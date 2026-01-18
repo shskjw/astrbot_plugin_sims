@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+    <link rel="shortcut icon" href="#"/>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a237e, #0d47a1);
+            color: white;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        .title {
+            font-size: 2em;
+            margin: 0;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .subtitle {
+            margin-top: 10px;
+            color: #bbdefb;
+        }
+        .patrol-area {
+            text-align: center;
+            font-size: 1.2em;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: #e1f5fe;
+        }
+        .result-section {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .section-title {
+            color: #ffd700;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .section-title .icon {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+        .event-description {
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        .rewards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .reward-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.2s;
+        }
+        .reward-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        .reward-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #4caf50;
+            margin-bottom: 5px;
+        }
+        .reward-label {
+            color: #bbdefb;
+            font-size: 0.9em;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        .stat-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .stat-label {
+            color: #e1f5fe;
+        }
+        .stat-value {
+            font-weight: bold;
+            color: #ffd700;
+        }
+        .progress-container {
+            width: 100%;
+            margin: 10px 0;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #4caf50, #8bc34a);
+            width: 0%;
+            transition: width 1s ease;
+        }
+        .next-rank {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9em;
+            color: #bbdefb;
+        }
+        .time-info {
+            text-align: center;
+            margin: 20px 0;
+            color: #bbdefb;
+            font-size: 0.9em;
+        }
+        .items-found {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            padding: 8px 12px;
+            font-size: 0.9em;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .action-button {
+            background: linear-gradient(90deg, #1e88e5, #039be5);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            padding: 10px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .action-button:hover {
+            background: linear-gradient(90deg, #039be5, #00b0ff);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">巡逻任务</h1>
+            <div class="subtitle">{{name}} | {{rank}}</div>
+        </div>
+
+        <div class="patrol-area">巡逻区域: {{area}}</div>
+
+        <div class="result-section">
+            <div class="section-title">
+                <span class="icon">📝</span> 巡逻报告
+            </div>
+            <div class="event-description">
+                {{description}}
+            </div>
+            {{if items && items.length}}
+            <div>
+                <div style="margin-bottom: 10px;">发现物品:</div>
+                <div class="items-found">
+                    {{each items}}
+                    <div class="item">{{name}} x{{quantity}}</div>
+                    {{/each}}
+                </div>
+            </div>
+            {{/if}}
+        </div>
+
+        <div class="result-section">
+            <div class="section-title">
+                <span class="icon">🎁</span> 获得奖励
+            </div>
+            <div class="rewards-grid">
+                <div class="reward-item">
+                    <div class="reward-value">+{{rewards && rewards.exp ? rewards.exp : 0}}</div>
+                    <div class="reward-label">经验值</div>
+                </div>
+                <div class="reward-item">
+                    <div class="reward-value">+{{rewards && rewards.money ? rewards.money : 0}}</div>
+                    <div class="reward-label">元</div>
+                </div>
+                <div class="reward-item">
+                    <div class="reward-value">+{{rewards && rewards.reputation ? rewards.reputation : 0}}</div>
+                    <div class="reward-label">声望</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="result-section">
+            <div class="section-title">
+                <span class="icon">📊</span> 当前状态
+            </div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-label">总经验值</span>
+                    <span class="stat-value">{{stats && stats.totalExp ? stats.totalExp : 0}}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">余额</span>
+                    <span class="stat-value">{{stats && stats.balance ? stats.balance : 0}} 元</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">声望</span>
+                    <span class="stat-value">{{stats && stats.reputation ? stats.reputation : 0}}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">总巡逻次数</span>
+                    <span class="stat-value">{{stats && stats.totalPatrols ? stats.totalPatrols : 0}}</span>
+                </div>
+            </div>
+
+            <div class="progress-container">
+                <div style="margin-bottom: 5px;">升级进度</div>
+                <div class="progress-bar">
+                    <div class="progress" style="width: {{stats && stats.expPercentage ? stats.expPercentage : 0}}%;"></div>
+                </div>
+                <div class="next-rank">
+                    <span>当前: {{rank}}</span>
+                    <span>下一级: {{stats && stats.nextRank ? stats.nextRank : '未知'}} (还需 {{stats && stats.expToNextRank ? stats.expToNextRank : '?'}} 经验)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="time-info">
+            本次巡逻时间: {{time}} | 巡逻用时: {{duration}} 分钟
+        </div>
+
+        <div class="actions">
+            <button class="action-button" onclick="location.href='#'">再次巡逻</button>
+            <button class="action-button" onclick="location.href='#'">警察状态</button>
+        </div>
+    </div>
+
+    <script>
+        // 进度条动画
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                const progressBars = document.querySelectorAll('.progress');
+                progressBars.forEach(bar => {
+                    const width = bar.style.width;
+                    bar.style.width = '0%';
+                    
+                    setTimeout(() => {
+                        bar.style.width = width;
+                    }, 300);
+                });
+            }, 100);
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+    <link rel="shortcut icon" href="#"/>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a237e, #0d47a1);
+            color: white;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        .title {
+            font-size: 2em;
+            margin: 0;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .subtitle {
+            color: #bbdefb;
+            margin-top: 5px;
+        }
+        .welcome-section {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .welcome-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+            color: #ffd700;
+        }
+        .welcome-message {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+        .section {
+            margin-top: 25px;
+        }
+        .section-title {
+            color: #ffd700;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+        }
+        .section-title .icon {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+        .commands-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        .command-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            transition: transform 0.2s ease;
+        }
+        .command-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        .command {
+            color: #4fc3f7;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-family: monospace;
+            font-size: 1.1em;
+        }
+        .description {
+            color: #bbdefb;
+            font-size: 0.9em;
+        }
+        .tips-list {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .tip-item {
+            margin-bottom: 12px;
+            display: flex;
+        }
+        .tip-icon {
+            color: #ffd700;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+        .tip-text {
+            color: #bbdefb;
+        }
+        .ranks-section {
+            margin-top: 20px;
+        }
+        .ranks-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+        }
+        .rank-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+        }
+        .rank-name {
+            color: #ffd700;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .rank-info {
+            color: #bbdefb;
+            font-size: 0.8em;
+        }
+        .cta-section {
+            margin-top: 30px;
+            background: rgba(26, 188, 156, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        .cta-message {
+            color: #1abc9c;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .cta-text {
+            color: #bbdefb;
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #bbdefb;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">模拟人生警察系统攻略</h1>
+            <div class="subtitle">{{if isPolice}}警员：{{name}}{{else}}欢迎加入警察队伍{{/if}}</div>
+        </div>
+
+        <div class="welcome-section">
+            <div class="welcome-icon">👮‍♂️</div>
+            <div class="welcome-message">
+                {{if isPolice}}
+                感谢你为维护城市治安做出的贡献！
+                {{else}}
+                成为一名警察，维护社会治安，体验执法生涯！
+                {{/if}}
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">📋</span> 基础指令
+            </div>
+            <div class="commands-grid">
+                <div class="command-card">
+                    <div class="command">#加入警察</div>
+                    <div class="description">加入警察队伍，开始执法生涯</div>
+                </div>
+                <div class="command-card">
+                    <div class="command">#警察状态</div>
+                    <div class="description">查看当前警察状态和积分</div>
+                </div>
+                <div class="command-card">
+                    <div class="command">#巡逻</div>
+                    <div class="description">进行日常巡逻，获取经验和声望</div>
+                </div>
+                <div class="command-card">
+                    <div class="command">#警察装备</div>
+                    <div class="description">查看和购买警察装备</div>
+                </div>
+                <div class="command-card">
+                    <div class="command">#破案</div>
+                    <div class="description">调查案件，破案可获得丰厚奖励</div>
+                </div>
+                <div class="command-card">
+                    <div class="command">#警察排行</div>
+                    <div class="description">查看警察系统排行榜</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">🌟</span> 警衔等级
+            </div>
+            <div class="ranks-list">
+                <div class="rank-card">
+                    <div class="rank-name">实习警员</div>
+                    <div class="rank-info">初始等级</div>
+                    <div class="rank-info">月薪: 3000元</div>
+                </div>
+                <div class="rank-card">
+                    <div class="rank-name">初级警员</div>
+                    <div class="rank-info">需要1000经验</div>
+                    <div class="rank-info">月薪: 5000元</div>
+                </div>
+                <div class="rank-card">
+                    <div class="rank-name">中级警员</div>
+                    <div class="rank-info">需要3000经验</div>
+                    <div class="rank-info">月薪: 8000元</div>
+                </div>
+                <div class="rank-card">
+                    <div class="rank-name">高级警员</div>
+                    <div class="rank-info">需要6000经验</div>
+                    <div class="rank-info">月薪: 12000元</div>
+                </div>
+                <div class="rank-card">
+                    <div class="rank-name">警长</div>
+                    <div class="rank-info">需要10000经验</div>
+                    <div class="rank-info">月薪: 15000元</div>
+                </div>
+                <div class="rank-card">
+                    <div class="rank-name">警督</div>
+                    <div class="rank-info">需要15000经验</div>
+                    <div class="rank-info">月薪: 20000元</div>
+                </div>
+                <div class="rank-card">
+                    <div class="rank-name">总警监</div>
+                    <div class="rank-info">需要25000经验</div>
+                    <div class="rank-info">月薪: 30000元</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">💡</span> 实用小贴士
+            </div>
+            <div class="tips-list">
+                <div class="tip-item">
+                    <div class="tip-icon">✦</div>
+                    <div class="tip-text">定期巡逻可以增加经验和声望，还有机会获得特殊奖励。</div>
+                </div>
+                <div class="tip-item">
+                    <div class="tip-icon">✦</div>
+                    <div class="tip-text">购买高级装备可以提高巡逻效率和破案成功率。</div>
+                </div>
+                <div class="tip-item">
+                    <div class="tip-icon">✦</div>
+                    <div class="tip-text">警衔越高，月薪越高，可破获的案件等级也越高。</div>
+                </div>
+                <div class="tip-item">
+                    <div class="tip-icon">✦</div>
+                    <div class="tip-text">声望越高，市民对你的信任度就越高，获得线索的概率也更大。</div>
+                </div>
+                <div class="tip-item">
+                    <div class="tip-icon">✦</div>
+                    <div class="tip-text">每天都可以破案，但要注意疲劳值，适当休息很重要。</div>
+                </div>
+            </div>
+        </div>
+
+        {{if !isPolice}}
+        <div class="cta-section">
+            <div class="cta-message">准备好了吗？</div>
+            <div class="cta-text">
+                使用 #加入警察 命令开启你的执法生涯！
+            </div>
+        </div>
+        {{/if}}
+
+        <div class="footer">
+            模拟人生插件 · 警察系统
+        </div>
+    </div>
+</body>
+</html> 

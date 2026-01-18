@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>消防站信息</title>
+    <style>
+        @font-face {
+            font-family: "miao";
+            src: url(./也字工厂喵喵体.ttf);
+        }
+        body {
+            font-size: auto;
+            font-family: "miao";
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: auto;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            width: 380px;
+            padding: 30px;
+            position: relative;
+            text-align: center;
+        }
+        .header {
+            background-color: #e74c3c;
+            color: white;
+            padding: 15px;
+            border-radius: 15px 15px 0 0;
+            margin: -30px -30px 20px -30px;
+            position: relative;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .station-image {
+            width: 100%;
+            height: 180px;
+            background-color: #eee;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .station-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .station-badge {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: rgba(231, 76, 60, 0.9);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+        .station-badge i {
+            margin-right: 5px;
+        }
+        .basic-info {
+            display: flex;
+            justify-content: space-between;
+            background-color: #f9f9f9;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid #e74c3c;
+        }
+        .info-item {
+            text-align: center;
+            flex: 1;
+        }
+        .info-item .label {
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 5px;
+        }
+        .info-item .value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        .info-section {
+            background-color: #f9f9f9;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .info-section h2 {
+            margin-top: 0;
+            color: #e74c3c;
+            font-size: 18px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e74c3c;
+            padding-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .info-section h2 i {
+            margin-right: 10px;
+        }
+        .list-item {
+            background-color: white;
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .upgrade-section {
+            margin-top: 30px;
+            text-align: center;
+        }
+        .upgrade-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #e74c3c;
+            margin-bottom: 10px;
+        }
+        .progress-container {
+            background-color: #f9f9f9;
+            border-radius: 20px;
+            height: 20px;
+            width: 100%;
+            margin-bottom: 10px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #e74c3c;
+            border-radius: 20px;
+            transition: width 0.5s ease;
+        }
+        .progress-text {
+            font-size: 14px;
+            color: #777;
+        }
+        .stats-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .stats-item {
+            text-align: center;
+            flex: 1;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            margin: 0 5px;
+        }
+        .stats-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+        .stats-label {
+            font-size: 12px;
+            color: #777;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+        }
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e74c3c;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        .user-details {
+            text-align: left;
+        }
+        .user-name {
+            font-weight: bold;
+            font-size: 16px;
+            color: #333;
+        }
+        .user-rank {
+            font-size: 14px;
+            color: #777;
+        }
+        .footer {
+            font-size: 12px;
+            color: #777;
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚒 消防站信息</h1>
+        </div>
+        
+        <div class="station-image">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NDAgNDgwIj48ZGVmcz48c3R5bGU+LmNscy0xe2ZpbGw6I2U3NGMzYzt9LmNscy0ye2ZpbGw6I2Q2MmMyZDt9LmNscy0ze2ZpbGw6I2YxYzQwZjt9LmNscy00e2ZpbGw6I2YzOTczOTt9LmNscy01e2ZpbGw6I2U2NzcxOTt9LmNscy02e2ZpbGw6I2QzNTQwMDt9LmNscy03e2ZpbGw6I2UyYTIxNTt9LmNscy04e2ZpbGw6IzgwMjgxMjt9LmNscy05e2ZpbGw6I2M1MjYyNjt9PC9zdHlsZT48L2RlZnM+PHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMzIwLDgwbC0xNjAsODBWNDAwSDQ4MFYxNjBMMzIwLDgwWiIvPjxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTMyMCw4MHY4MEgxNjBMMzIwLDgwWiIvPjxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTMyMCw4MHY4MEg0ODBMMzIwLDgwWiIvPjxwYXRoIGNsYXNzPSJjbHMtMyIgZD0iTTI0MCwzMjB2ODBIMTYwVjMyMEgyNDBaIi8+PHJlY3QgY2xhc3M9ImNscy0zIiB4PSI0MDAiIHk9IjMyMCIgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIi8+PHJlY3QgY2xhc3M9ImNscy00IiB4PSIyODAiIHk9IjMyMCIgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIi8+PHJlY3QgY2xhc3M9ImNscy00IiB4PSIyODAiIHk9IjIwMCIgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIi8+PHJlY3QgY2xhc3M9ImNscy01IiB4PSIyODAiIHk9IjE2MCIgd2lkdGg9IjgwIiBoZWlnaHQ9IjQwIi8+PHJlY3QgY2xhc3M9ImNscy02IiB4PSIzMjAiIHk9IjE2MCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIi8+PHJlY3QgY2xhc3M9ImNscy03IiB4PSIzMjAiIHk9IjE2MCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIi8+PHJlY3QgY2xhc3M9ImNscy04IiB4PSIzMjAiIHk9IjIwMCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjgwIi8+PHJlY3QgY2xhc3M9ImNscy04IiB4PSIzMjAiIHk9IjMyMCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjgwIi8+PHJlY3QgY2xhc3M9ImNscy05IiB4PSIzNjAiIHk9IjMyMCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjgwIi8+PHJlY3QgY2xhc3M9ImNscy01IiB4PSIyMDAiIHk9IjE2MCIgd2lkdGg9IjgwIiBoZWlnaHQ9IjQwIi8+PHJlY3QgY2xhc3M9ImNscy03IiB4PSIyMDAiIHk9IjE2MCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIi8+PC9zdmc+" alt="Fire Station">
+            <div class="station-badge">
+                <i>🏢</i> {{stationName}}
+            </div>
+        </div>
+        
+        <div class="basic-info">
+            <div class="info-item">
+                <div class="label">等级</div>
+                <div class="value">{{stationLevel}}</div>
+            </div>
+            <div class="info-item">
+                <div class="label">人员</div>
+                <div class="value">{{staff}}/{{maxStaff}}</div>
+            </div>
+            <div class="info-item">
+                <div class="label">车辆</div>
+                <div class="value">{{vehicles}}/{{maxVehicles}}</div>
+            </div>
+        </div>
+        
+        <div class="info-section">
+            <h2><i>🚒</i> 消防车辆</h2>
+            <div class="list-item">{{vehiclesList}}</div>
+        </div>
+        
+        <div class="info-section">
+            <h2><i>⚙️</i> 可用装备</h2>
+            <div class="list-item">{{equipmentList}}</div>
+        </div>
+        
+        <div class="upgrade-section">
+            <div class="upgrade-title">🔧 升级进度</div>
+            <div class="progress-container">
+                <div class="progress-bar" style="width: {{upgradeProgress}}%;"></div>
+            </div>
+            <div class="progress-text">已完成 {{upgradeProgress}}% 的升级进度</div>
+        </div>
+        
+        <div class="stats-section">
+            <div class="stats-item">
+                <div class="stats-value">{{responseTime}}分钟</div>
+                <div class="stats-label">平均响应时间</div>
+            </div>
+            <div class="stats-item">
+                <div class="stats-value">Lv.{{stationLevel}}</div>
+                <div class="stats-label">消防站等级</div>
+            </div>
+        </div>
+        
+        <div class="user-info">
+            <div class="user-avatar">{{userName.slice(0,1)}}</div>
+            <div class="user-details">
+                <div class="user-name">{{userName}}</div>
+                <div class="user-rank">{{userRank}}</div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            保卫城市，守护生命 | sims-plugin · 消防员模拟
+        </div>
+    </div>
+</body>
+</html> 

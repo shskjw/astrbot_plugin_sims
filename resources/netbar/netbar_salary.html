@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>工资发放</title>
+    <link rel="stylesheet" href="../common/base.css">
+    <style>
+        body {
+            background-color: #fff5f7;
+            font-family: 'HYShiGuangTiW_0', sans-serif;
+        }
+        .container {
+            width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(255,105,180,0.2);
+        }
+        .header {
+            text-align: center;
+            color: #ff69b4;
+            margin-bottom: 20px;
+        }
+        .salary-summary {
+            background-color: #fff0f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.2em;
+        }
+        .salary-details {
+            margin: 20px 0;
+        }
+        .salary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px dashed #ffb6c1;
+        }
+        .tips {
+            background-color: #fff0f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .cute-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto;
+            display: block;
+        }
+        .highlight {
+            color: #ff69b4;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="../img/help/icon.png" class="cute-icon">
+        <div class="header">
+            <h1>💰 工资发放明细</h1>
+        </div>
+        
+        <div class="salary-summary">
+            本月工资总支出: <span class="highlight">{{totalSalary}}元</span>
+        </div>
+        
+        <div class="salary-details">
+            <h3 style="color: #ff69b4;">📊 工资明细</h3>
+            {{#salaryDetails}}
+            <div class="salary-item">
+                <span>{{position}} (ID: {{id}})</span>
+                <span>{{actualSalary}}元</span>
+            </div>
+            {{/salaryDetails}}
+        </div>
+        
+        <div class="tips">
+            <h3 style="color: #ff69b4;">💡 工资发放提示</h3>
+            <ul>
+                {{#tips}}
+                <li>{{.}}</li>
+                {{/tips}}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

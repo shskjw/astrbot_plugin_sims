@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+    <link rel="shortcut icon" href="#"/>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a237e, #0d47a1);
+            color: white;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        .title {
+            font-size: 2em;
+            margin: 0;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .subtitle {
+            color: #bbdefb;
+            margin-top: 5px;
+        }
+        .operation-section {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .operation-title {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #ffd700;
+        }
+        .difficulty {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0 15px;
+        }
+        .difficulty-star {
+            color: #f1c40f;
+            font-size: 1.2em;
+            margin: 0 2px;
+        }
+        .difficulty-label {
+            color: #bbdefb;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        .result-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .result-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+        .result-message {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #ffd700;
+        }
+        .success {
+            color: #2ecc71;
+        }
+        .failure {
+            color: #e74c3c;
+        }
+        .rewards-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .reward-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        .reward-icon {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+            color: #3498db;
+        }
+        .reward-value {
+            font-size: 1.8em;
+            color: #ffd700;
+        }
+        .reward-label {
+            color: #bbdefb;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        .members-section {
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .section-title {
+            color: #ffd700;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 5px;
+        }
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .member-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        .member-icon {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        .member-type {
+            color: #ffd700;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .member-stats {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .member-stat {
+            text-align: center;
+            flex: 1 0 45%;
+            margin: 5px 0;
+        }
+        .stat-label {
+            color: #bbdefb;
+            font-size: 0.8em;
+            margin-bottom: 3px;
+        }
+        .stat-value {
+            color: #ffd700;
+        }
+        .damaged {
+            color: #e74c3c;
+        }
+        .boosted {
+            color: #2ecc71;
+        }
+        .progress-container {
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .progress-title {
+            color: #bbdefb;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .progress-stats {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        .progress-stat {
+            text-align: center;
+            margin: 10px;
+        }
+        .progress-value {
+            font-size: 1.5em;
+            color: #ffd700;
+        }
+        .progress-label {
+            color: #bbdefb;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        .tip-section {
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .tip-title {
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+        .tip-content {
+            color: #bbdefb;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">特别行动结果</h1>
+            <div class="subtitle">行动小组：{{taskForceName}}</div>
+        </div>
+
+        <div class="operation-section">
+            <div class="operation-title">{{operation}}</div>
+            <div class="difficulty">
+                {{#times difficulty}}
+                <div class="difficulty-star">★</div>
+                {{/times}}
+                {{#times (subtract 5 difficulty)}}
+                <div class="difficulty-star" style="color: rgba(255, 255, 255, 0.3);">★</div>
+                {{/times}}
+            </div>
+            <div class="difficulty-label">难度: {{difficulty}}/5 | 成功率: {{successRate}}%</div>
+        </div>
+
+        <div class="result-section">
+            {{#if success}}
+            <div class="result-icon success">✓</div>
+            <div class="result-message">行动成功！</div>
+            {{else}}
+            <div class="result-icon failure">✗</div>
+            <div class="result-message">行动失败</div>
+            {{/if}}
+        </div>
+
+        <div class="rewards-section">
+            <div class="reward-card">
+                <div class="reward-icon">💰</div>
+                <div class="reward-value">{{rewardGain}}元</div>
+                <div class="reward-label">金钱奖励</div>
+            </div>
+            <div class="reward-card">
+                <div class="reward-icon">⭐</div>
+                <div class="reward-value">+{{expGain}}</div>
+                <div class="reward-label">经验值</div>
+            </div>
+        </div>
+
+        <div class="members-section">
+            <div class="section-title">队员状态 (行动后)</div>
+            <div class="members-grid">
+                {{#each members}}
+                <div class="member-card">
+                    <div class="member-icon">
+                        {{#if (eq type "突击手")}}🔫{{/if}}
+                        {{#if (eq type "狙击手")}}🎯{{/if}}
+                        {{#if (eq type "侦察兵")}}🔍{{/if}}
+                        {{#if (eq type "战术支援")}}🛠️{{/if}}
+                        {{#if (eq type "医疗兵")}}⚕️{{/if}}
+                    </div>
+                    <div class="member-type">{{type}}</div>
+                    <div class="member-stats">
+                        <div class="member-stat">
+                            <div class="stat-label">技能</div>
+                            <div class="stat-value">{{skill}}</div>
+                        </div>
+                        <div class="member-stat">
+                            <div class="stat-label">健康</div>
+                            <div class="stat-value {{#if (lt health 70)}}damaged{{/if}}">{{health}}%</div>
+                        </div>
+                        <div class="member-stat">
+                            <div class="stat-label">士气</div>
+                            <div class="stat-value {{#if (gt morale 90)}}boosted{{/if}} {{#if (lt morale 50)}}damaged{{/if}}">{{morale}}%</div>
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-title">小组统计</div>
+            <div class="progress-stats">
+                <div class="progress-stat">
+                    <div class="progress-value">{{successfulOperations}}</div>
+                    <div class="progress-label">成功行动</div>
+                </div>
+                <div class="progress-stat">
+                    <div class="progress-value">{{reputation}}</div>
+                    <div class="progress-label">声望</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tip-section">
+            <div class="tip-title">行动小贴士</div>
+            <div class="tip-content">
+                {{#if success}}
+                恭喜行动成功！记得关注队员的健康状况，健康低于50%的队员会影响下次行动成功率。适当休息后再执行下一次任务。
+                {{else}}
+                行动失败不要灰心，这是每个特别行动小组都会面临的。建议提升相关技能和装备，并让队员充分恢复士气后再次尝试。
+                {{/if}}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 添加Handlebars自定义助手
+        if (typeof Handlebars !== 'undefined') {
+            Handlebars.registerHelper('times', function(n, block) {
+                var accum = '';
+                for(var i = 0; i < n; ++i)
+                    accum += block.fn(i);
+                return accum;
+            });
+            
+            Handlebars.registerHelper('subtract', function(a, b) {
+                return a - b;
+            });
+            
+            Handlebars.registerHelper('eq', function(a, b) {
+                return a === b;
+            });
+            
+            Handlebars.registerHelper('lt', function(a, b) {
+                return a < b;
+            });
+            
+            Handlebars.registerHelper('gt', function(a, b) {
+                return a > b;
+            });
+        }
+    </script>
+</body>
+</html> 

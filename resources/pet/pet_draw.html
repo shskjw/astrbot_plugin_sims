@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #fce4ec, #f3e5f5);
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .header {
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            color: #e91e63;
+            margin: 0;
+            font-size: 2em;
+        }
+        .pet-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #f8bbd0;
+            position: relative;
+            overflow: hidden;
+        }
+        .rarity-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-weight: bold;
+        }
+        .rarity-R {
+            background: #90caf9;
+            color: white;
+        }
+        .rarity-SR {
+            background: #ce93d8;
+            color: white;
+        }
+        .rarity-SSR {
+            background: linear-gradient(45deg, #ffd700, #ff9800);
+            color: white;
+            animation: shine 2s infinite;
+        }
+        @keyframes shine {
+            0% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
+            100% { filter: brightness(1); }
+        }
+        .pet-name {
+            font-size: 1.8em;
+            color: #e91e63;
+            margin: 10px 0;
+        }
+        .pet-type {
+            color: #9c27b0;
+            font-size: 1.2em;
+            margin: 5px 0;
+        }
+        .pet-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .stat-item {
+            background: #f3e5f5;
+            padding: 8px;
+            border-radius: 8px;
+        }
+        .pet-skills {
+            margin: 15px 0;
+        }
+        .skill-tag {
+            display: inline-block;
+            background: #e1bee7;
+            padding: 5px 10px;
+            border-radius: 15px;
+            margin: 3px;
+            color: #4a148c;
+        }
+        .pet-description {
+            font-style: italic;
+            color: #666;
+            margin: 15px 0;
+        }
+        .footer {
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .cute-icon {
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎉 抽卡结果 🎉</h1>
+        </div>
+        <div class="pet-card">
+            <div class="rarity-badge rarity-{{pet.rarity}}">{{pet.rarity}}</div>
+            <div class="pet-name">
+                <span class="cute-icon">🌟</span>{{pet.name}}
+            </div>
+            <div class="pet-type">
+                <span class="cute-icon">🏷️</span>{{pet.type}}
+            </div>
+            <div class="pet-stats">
+                <div class="stat-item">
+                    <span class="cute-icon">❤️</span>生命: {{pet.baseStats.health}}
+                </div>
+                <div class="stat-item">
+                    <span class="cute-icon">🍖</span>饥饿: {{pet.baseStats.hunger}}
+                </div>
+                <div class="stat-item">
+                    <span class="cute-icon">😊</span>心情: {{pet.baseStats.mood}}
+                </div>
+                <div class="stat-item">
+                    <span class="cute-icon">⚡</span>体力: {{pet.baseStats.energy}}
+                </div>
+            </div>
+            <div class="pet-skills">
+                {{each pet.skills skill}}
+                <span class="skill-tag">{{skill}}</span>
+                {{/each}}
+            </div>
+            <div class="pet-description">
+                <span class="cute-icon">📝</span>{{pet.description}}
+            </div>
+        </div>
+        <div class="footer">
+            <p>💫 使用 #喂养宠物 {{pet.id}} 来照顾你的新伙伴 💫</p>
+        </div>
+    </div>
+</body>
+</html>

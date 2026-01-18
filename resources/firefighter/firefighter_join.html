@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>加入消防队</title>
+    <style>
+        @font-face {
+            font-family: "miao";
+            src: url(./也字工厂喵喵体.ttf);
+        }
+        body {
+            font-size: auto;
+            font-family: "miao";
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: auto;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            width: 380px;
+            padding: 30px;
+            position: relative;
+            text-align: center;
+        }
+        .header {
+            background-color: #e74c3c;
+            color: white;
+            padding: 15px;
+            border-radius: 15px 15px 0 0;
+            margin: -30px -30px 20px -30px;
+            position: relative;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .header-image {
+            position: absolute;
+            top: -35px;
+            right: 20px;
+            width: 70px;
+            height: 70px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .header-image img {
+            width: 50px;
+            height: 50px;
+        }
+        .info-section {
+            background-color: #f9f9f9;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 5px solid #e74c3c;
+        }
+        .info-section h2 {
+            margin-top: 0;
+            color: #e74c3c;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .info-item .label {
+            font-weight: bold;
+            width: 100px;
+            text-align: right;
+            margin-right: 10px;
+            color: #555;
+        }
+        .info-item .value {
+            flex: 1;
+            text-align: left;
+            color: #333;
+        }
+        .station-image {
+            width: 100%;
+            height: 150px;
+            background-color: #eee;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+        .station-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .station-image::after {
+            content: '消防站';
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: rgba(231, 76, 60, 0.9);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .footer {
+            font-size: 12px;
+            color: #777;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .congratulations {
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.03);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        .fire-icon {
+            color: #e74c3c;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔥 加入消防队 🚒</h1>
+            <div class="header-image">
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2U3NGMzYyI+PHBhdGggZD0iTTEyLDEwQTIsMiAwIDAsMCAxMCwxMkEyLDIgMCAwLDAgMTIsMTRBMiwyIDAgMCwwIDE0LDEyQTIsMiAwIDAsMCAxMiwxME0xMiwxNkExLDEgMCAwLDAgMTEsMTdBMSwxIDAgMCwwIDEyLDE4QTEsMSAwIDAsMCAxMywxN0ExLDEgMCAwLDAgMTIsMTZNMTIsNEMyLDQgMiwxNCAyLDE0SDIyQzIyLDE0IDIyLDQgMTIsNE0zLjE0LDE1LjVDMy45MSwxMC4xNSA2LDguMzEgNy43LDdDOS4zMyw1LjY3IDEwLjUsNSAxMi41LDVDMTQuNTgsNSAxNS43NSw1LjY3IDE3LjMsN0MxOSw4LjMxIDIxLjA5LDEwLjE1IDIxLjg2LDE1LjVIMy4xNFoiIC8+PC9zdmc+" alt="Firefighter Icon">
+            </div>
+        </div>
+        
+        <div class="congratulations">
+            恭喜！你已成功加入消防队！
+        </div>
+        
+        <div class="station-image">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NDAgNDgwIj48ZGVmcz48c3R5bGU+LmNscy0xe2ZpbGw6I2U3NGMzYzt9LmNscy0ye2ZpbGw6I2Q2MmMyZDt9LmNscy0ze2ZpbGw6I2YxYzQwZjt9LmNscy00e2ZpbGw6I2YzOTczOTt9LmNscy01e2ZpbGw6I2U2NzcxOTt9LmNscy02e2ZpbGw6I2QzNTQwMDt9LmNscy03e2ZpbGw6I2UyYTIxNTt9LmNscy04e2ZpbGw6IzgwMjgxMjt9LmNscy05e2ZpbGw6I2M1MjYyNjt9PC9zdHlsZT48L2RlZnM+PHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMzIwLDgwbC0xNjAsODBWNDAwSDQ4MFYxNjBMMzIwLDgwWiIvPjxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTMyMCw4MHY4MEgxNjBMMzIwLDgwWiIvPjxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTMyMCw4MHY4MEg0ODBMMzIwLDgwWiIvPjxwYXRoIGNsYXNzPSJjbHMtMyIgZD0iTTI0MCwzMjB2ODBIMTYwVjMyMEgyNDBaIi8+PHJlY3QgY2xhc3M9ImNscy0zIiB4PSI0MDAiIHk9IjMyMCIgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIi8+PHJlY3QgY2xhc3M9ImNscy00IiB4PSIyODAiIHk9IjMyMCIgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIi8+PHJlY3QgY2xhc3M9ImNscy00IiB4PSIyODAiIHk9IjIwMCIgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIi8+PHJlY3QgY2xhc3M9ImNscy01IiB4PSIyODAiIHk9IjE2MCIgd2lkdGg9IjgwIiBoZWlnaHQ9IjQwIi8+PHJlY3QgY2xhc3M9ImNscy02IiB4PSIzMjAiIHk9IjE2MCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIi8+PHJlY3QgY2xhc3M9ImNscy03IiB4PSIzMjAiIHk9IjE2MCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIi8+PHJlY3QgY2xhc3M9ImNscy04IiB4PSIzMjAiIHk9IjIwMCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjgwIi8+PHJlY3QgY2xhc3M9ImNscy04IiB4PSIzMjAiIHk9IjMyMCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjgwIi8+PHJlY3QgY2xhc3M9ImNscy05IiB4PSIzNjAiIHk9IjMyMCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjgwIi8+PHJlY3QgY2xhc3M9ImNscy01IiB4PSIyMDAiIHk9IjE2MCIgd2lkdGg9IjgwIiBoZWlnaHQ9IjQwIi8+PHJlY3QgY2xhc3M9ImNscy03IiB4PSIyMDAiIHk9IjE2MCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIi8+PC9zdmc+" alt="Fire Station">
+        </div>
+        
+        <div class="info-section">
+            <h2>🧑‍🚒 个人信息</h2>
+            <div class="info-item">
+                <div class="label">姓名：</div>
+                <div class="value">{{userName}}</div>
+            </div>
+            <div class="info-item">
+                <div class="label">职称：</div>
+                <div class="value">{{userRank}}</div>
+            </div>
+            <div class="info-item">
+                <div class="label">入职日期：</div>
+                <div class="value">{{joinDate}}</div>
+            </div>
+        </div>
+        
+        <div class="info-section">
+            <h2>🏢 消防站信息</h2>
+            <div class="info-item">
+                <div class="label">名称：</div>
+                <div class="value">{{stationName}}</div>
+            </div>
+            <div class="info-item">
+                <div class="label">等级：</div>
+                <div class="value">Lv.{{stationLevel}}</div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            欢迎加入消防队，保护城市，拯救生命！<br>
+            sims-plugin · 消防员模拟
+        </div>
+    </div>
+</body>
+</html> 

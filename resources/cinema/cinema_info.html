@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>电影院信息</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #2c3e50;
+            font-size: 28px;
+            margin: 0;
+        }
+        .cinema-name {
+            font-size: 24px;
+            color: #3498db;
+            margin: 10px 0;
+        }
+        .section {
+            margin-bottom: 30px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .section-title {
+            font-size: 20px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .stat-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .stat-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+        .list-item:last-child {
+            margin-bottom: 0;
+        }
+        .item-name {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .item-details {
+            color: #666;
+            font-size: 14px;
+        }
+        .reputation {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .reputation-high {
+            background: #d4edda;
+            color: #155724;
+        }
+        .reputation-medium {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .reputation-low {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎬 电影院信息</h1>
+            <div class="cinema-name">{{cinemaName}}</div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">📊 经营状况</div>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-label">今日收入</div>
+                    <div class="stat-value">{{dailyRevenue}}元</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">总收入</div>
+                    <div class="stat-value">{{totalRevenue}}元</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">维护成本</div>
+                    <div class="stat-value">{{maintenanceCost}}元/小时</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">员工成本</div>
+                    <div class="stat-value">{{staffCost}}元/小时</div>
+                </div>
+            </div>
+            <div class="reputation {{#if reputation >= 80}}reputation-high{{else if reputation >= 50}}reputation-medium{{else}}reputation-low{{/if}}">
+                声望：{{reputation}}
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">🎭 影厅列表</div>
+            <ul class="list">
+                {{#each theaters}}
+                <li class="list-item">
+                    <div>
+                        <div class="item-name">{{name}}</div>
+                        <div class="item-details">容量：{{capacity}}人 | 维护费：{{maintenanceCost}}元/小时</div>
+                    </div>
+                    <div class="item-details">
+                        {{#if currentMovie}}
+                        正在放映：{{currentMovie}}
+                        {{else}}
+                        空闲中
+                        {{/if}}
+                    </div>
+                </li>
+                {{/each}}
+            </ul>
+        </div>
+
+        <div class="section">
+            <div class="section-title">🎬 电影列表</div>
+            <ul class="list">
+                {{#each movies}}
+                <li class="list-item">
+                    <div>
+                        <div class="item-name">{{title}}</div>
+                        <div class="item-details">类型：{{genre}} | 评分：{{rating}} | 人气：{{popularity}}</div>
+                    </div>
+                    <div class="item-details">
+                        收入：{{revenue}}元 | 观众：{{viewers}}人
+                    </div>
+                </li>
+                {{/each}}
+            </ul>
+        </div>
+
+        <div class="section">
+            <div class="section-title">🏪 设施列表</div>
+            <ul class="list">
+                {{#each facilities}}
+                <li class="list-item">
+                    <div>
+                        <div class="item-name">{{name}}</div>
+                        <div class="item-details">维护费：{{maintenanceCost}}元/小时</div>
+                    </div>
+                    <div class="item-details">
+                        收入倍率：{{revenueMultiplier}}x
+                    </div>
+                </li>
+                {{/each}}
+            </ul>
+        </div>
+
+        <div class="section">
+            <div class="section-title">👥 员工列表</div>
+            <ul class="list">
+                {{#each staff}}
+                <li class="list-item">
+                    <div>
+                        <div class="item-name">{{name}}</div>
+                        <div class="item-details">职位：{{type}} | 等级：{{level}}</div>
+                    </div>
+                    <div class="item-details">
+                        效率：{{efficiency}} | 工资：{{salary}}元/小时
+                    </div>
+                </li>
+                {{/each}}
+            </ul>
+        </div>
+
+        <div class="footer">
+            使用 #电影院攻略 查看详细玩法
+        </div>
+    </div>
+</body>
+</html> 

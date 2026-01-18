@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>VIP包间开设</title>
+    <link rel="stylesheet" href="../common/base.css">
+    <style>
+        body {
+            background-color: #fff5f7;
+            font-family: 'HYShiGuangTiW_0', sans-serif;
+        }
+        .container {
+            width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(255,105,180,0.2);
+        }
+        .header {
+            text-align: center;
+            color: #ff69b4;
+            margin-bottom: 20px;
+        }
+        .vip-card {
+            background-color: #fff0f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .feature-icon {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+            color: #ff69b4;
+        }
+        .tips {
+            background-color: #fff0f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .cute-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto;
+            display: block;
+        }
+        .highlight {
+            color: #ff69b4;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="../img/help/icon.png" class="cute-icon">
+        <div class="header">
+            <h1>🎉 VIP包间开设成功</h1>
+        </div>
+        
+        <div class="vip-card">
+            <p><strong>包间名称：</strong>{{roomName}}</p>
+            <p><strong>包间ID：</strong>{{roomId}}</p>
+            <p><strong>投资金额：</strong>{{price}}元</p>
+            <p><strong>容纳人数：</strong>{{capacity}}人</p>
+            <p><strong>每小时收费：</strong>{{hourlyRate}}元</p>
+            
+            <h3 style="color: #ff69b4; margin-top: 20px;">✨ 包含设施</h3>
+            {{#features}}
+            <div class="feature-item">
+                <span class="feature-icon">💎</span>
+                <span>{{.}}</span>
+            </div>
+            {{/features}}
+        </div>
+        
+        <div class="tips">
+            <h3 style="color: #ff69b4;">💡 经营提示</h3>
+            <ul>
+                {{#tips}}
+                <li>{{.}}</li>
+                {{/tips}}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

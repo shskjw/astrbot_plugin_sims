@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+    <link rel="shortcut icon" href="#"/>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a237e, #0d47a1);
+            color: white;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        .title {
+            font-size: 2em;
+            margin: 0;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .subtitle {
+            margin-top: 10px;
+            color: #bbdefb;
+        }
+        .shop-section {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .section-title {
+            color: #ffd700;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .section-title .icon {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+        .equipment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
+        }
+        .equipment-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .equipment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        .equipment-name {
+            color: #ffd700;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+        .equipment-description {
+            font-size: 0.9em;
+            margin-bottom: 12px;
+            color: #e1f5fe;
+            min-height: 40px;
+        }
+        .equipment-stats {
+            margin-bottom: 12px;
+            font-size: 0.9em;
+        }
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        .stat-value {
+            color: #4caf50;
+        }
+        .equipment-price {
+            text-align: right;
+            font-weight: bold;
+            color: #ffeb3b;
+        }
+        .requirements {
+            font-size: 0.85em;
+            color: #ff9800;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed rgba(255, 255, 255, 0.2);
+        }
+        .purchase-button {
+            background: linear-gradient(90deg, #1e88e5, #039be5);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            padding: 8px 12px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+        .purchase-button:hover {
+            background: linear-gradient(90deg, #039be5, #00b0ff);
+        }
+        .disabled {
+            background: #78909c;
+            cursor: not-allowed;
+        }
+        .disabled:hover {
+            background: #78909c;
+        }
+        .user-info {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .balance {
+            font-weight: bold;
+            color: #4caf50;
+        }
+        .empty-message {
+            text-align: center;
+            padding: 30px;
+            color: #b0bec5;
+            font-style: italic;
+        }
+        .maintenance-info {
+            font-size: 0.85em;
+            color: #81d4fa;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">警察装备商店</h1>
+            <div class="subtitle">提升你的装备，更好地维护治安</div>
+        </div>
+
+        <div class="user-info">
+            <div>警员：{{name}} | 职级：{{rank}}</div>
+            <div>余额：<span class="balance">{{money}} 元</span></div>
+        </div>
+
+        <!-- 武器装备 -->
+        <div class="shop-section">
+            <div class="section-title">
+                <span class="icon">🔫</span>
+                武器装备
+            </div>
+            <div class="equipment-grid">
+                {{each weapons item}}
+                <div class="equipment-card">
+                    <div class="equipment-name">{{item.name}}</div>
+                    <div class="equipment-description">{{item.description}}</div>
+                    <div class="equipment-stats">
+                        {{each item.stats stat}}
+                        <div class="stat-item">
+                            <span>{{stat.name}}</span>
+                            <span class="stat-value">{{stat.value}}</span>
+                        </div>
+                        {{/each}}
+                    </div>
+                    <div class="equipment-price">价格: {{item.price}} 元</div>
+                    <div class="requirements">
+                        需求: {{item.requirements.rank}} (等级 {{item.requirements.level}})
+                    </div>
+                    <div class="maintenance-info">
+                        维护费: {{item.maintenance.cost}} 元 / {{item.maintenance.intervalDays}} 天
+                    </div>
+                    <button class="purchase-button {{if item.price > money}}disabled{{/if}}" onclick="purchaseItem('{{item.name}}', 'weapons')">购买</button>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+
+        <!-- 防护装备 -->
+        <div class="shop-section">
+            <div class="section-title">
+                <span class="icon">🛡️</span>
+                防护装备
+            </div>
+            <div class="equipment-grid">
+                {{each armor item}}
+                <div class="equipment-card">
+                    <div class="equipment-name">{{item.name}}</div>
+                    <div class="equipment-description">{{item.description}}</div>
+                    <div class="equipment-stats">
+                        {{each item.stats stat}}
+                        <div class="stat-item">
+                            <span>{{stat.name}}</span>
+                            <span class="stat-value">{{stat.value}}</span>
+                        </div>
+                        {{/each}}
+                    </div>
+                    <div class="equipment-price">价格: {{item.price}} 元</div>
+                    <div class="requirements">
+                        需求: {{item.requirements.rank}} (等级 {{item.requirements.level}})
+                    </div>
+                    <div class="maintenance-info">
+                        维护费: {{item.maintenance.cost}} 元 / {{item.maintenance.intervalDays}} 天
+                    </div>
+                    <button class="purchase-button {{if item.price > money}}disabled{{/if}}" onclick="purchaseItem('{{item.name}}', 'armor')">购买</button>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+
+        <!-- 工具装备 -->
+        <div class="shop-section">
+            <div class="section-title">
+                <span class="icon">🔧</span>
+                工具装备
+            </div>
+            <div class="equipment-grid">
+                {{each tools item}}
+                <div class="equipment-card">
+                    <div class="equipment-name">{{item.name}}</div>
+                    <div class="equipment-description">{{item.description}}</div>
+                    <div class="equipment-stats">
+                        {{each item.stats stat}}
+                        <div class="stat-item">
+                            <span>{{stat.name}}</span>
+                            <span class="stat-value">{{stat.value}}</span>
+                        </div>
+                        {{/each}}
+                    </div>
+                    <div class="equipment-price">价格: {{item.price}} 元</div>
+                    <div class="requirements">
+                        需求: {{item.requirements.rank}} (等级 {{item.requirements.level}})
+                    </div>
+                    <div class="maintenance-info">
+                        维护费: {{item.maintenance.cost}} 元 / {{item.maintenance.intervalDays}} 天
+                    </div>
+                    <button class="purchase-button {{if item.price > money}}disabled{{/if}}" onclick="purchaseItem('{{item.name}}', 'tools')">购买</button>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+
+        <!-- 特殊装备 -->
+        <div class="shop-section">
+            <div class="section-title">
+                <span class="icon">✨</span>
+                特殊装备
+            </div>
+            <div class="equipment-grid">
+                {{each special item}}
+                <div class="equipment-card">
+                    <div class="equipment-name">{{item.name}}</div>
+                    <div class="equipment-description">{{item.description}}</div>
+                    <div class="equipment-stats">
+                        {{each item.stats stat}}
+                        <div class="stat-item">
+                            <span>{{stat.name}}</span>
+                            <span class="stat-value">{{stat.value}}</span>
+                        </div>
+                        {{/each}}
+                    </div>
+                    <div class="equipment-price">价格: {{item.price}} 元</div>
+                    <div class="requirements">
+                        需求: {{item.requirements.rank}} (等级 {{item.requirements.level}})
+                    </div>
+                    <div class="maintenance-info">
+                        维护费: {{item.maintenance.cost}} 元 / {{item.maintenance.intervalDays}} 天
+                    </div>
+                    <button class="purchase-button {{if item.price > money}}disabled{{/if}}" onclick="purchaseItem('{{item.name}}', 'special')">购买</button>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function purchaseItem(name, category) {
+            // 这里可以添加购买逻辑
+            console.log(`购买 ${category} 类别的 ${name}`);
+        }
+    </script>
+</body>
+</html> 

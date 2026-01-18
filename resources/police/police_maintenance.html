@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+    <link rel="shortcut icon" href="#"/>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a237e, #0d47a1);
+            color: white;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        .title {
+            font-size: 2em;
+            margin: 0;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .subtitle {
+            color: #bbdefb;
+            margin-top: 5px;
+        }
+        .equipment-section {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .equipment-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+            color: #f1c40f;
+        }
+        .equipment-name {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #ffd700;
+        }
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .detail-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        .detail-label {
+            color: #bbdefb;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+        .detail-value {
+            font-size: 1.8em;
+            color: #ffd700;
+        }
+        .durability-section {
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .durability-title {
+            color: #bbdefb;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .durability-bars {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+        .durability-bar-container {
+            flex: 1;
+            text-align: center;
+        }
+        .durability-label {
+            color: #bbdefb;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+        .durability-value {
+            color: #ffd700;
+            margin-bottom: 5px;
+        }
+        .durability-bar {
+            height: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 7.5px;
+            overflow: hidden;
+        }
+        .durability-fill {
+            height: 100%;
+            border-radius: 7.5px;
+            width: 0%;
+            transition: width 1s ease;
+        }
+        .before {
+            background: linear-gradient(90deg, #e74c3c, #f39c12);
+        }
+        .after {
+            background: linear-gradient(90deg, #2ecc71, #1abc9c);
+        }
+        .arrow {
+            font-size: 2em;
+            color: #3498db;
+        }
+        .cost-section {
+            margin-top: 20px;
+            background: rgba(231, 76, 60, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        .cost-label {
+            color: #bbdefb;
+            margin-bottom: 5px;
+        }
+        .cost-value {
+            font-size: 1.5em;
+            color: #e74c3c;
+        }
+        .tip-section {
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .tip-title {
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+        .tip-content {
+            color: #bbdefb;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">装备维护结果</h1>
+            <div class="subtitle">警员：{{name}}</div>
+        </div>
+
+        <div class="equipment-section">
+            <div class="equipment-icon">🔧</div>
+            <div class="equipment-name">{{equipment}}</div>
+        </div>
+
+        <div class="durability-section">
+            <div class="durability-title">耐久度恢复</div>
+            <div class="durability-bars">
+                <div class="durability-bar-container">
+                    <div class="durability-label">维护前</div>
+                    <div class="durability-value">{{durabilityBefore}}%</div>
+                    <div class="durability-bar">
+                        <div class="durability-fill before" id="beforeBar"></div>
+                    </div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="durability-bar-container">
+                    <div class="durability-label">维护后</div>
+                    <div class="durability-value">{{durabilityAfter}}%</div>
+                    <div class="durability-bar">
+                        <div class="durability-fill after" id="afterBar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="details-grid">
+            <div class="detail-card">
+                <div class="detail-label">维护费用</div>
+                <div class="detail-value">{{cost}}元</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-label">剩余资金</div>
+                <div class="detail-value">{{money}}元</div>
+            </div>
+        </div>
+
+        <div class="tip-section">
+            <div class="tip-title">维护小贴士</div>
+            <div class="tip-content">
+                定期维护装备可以保持其最佳性能。耐久度低于50%时，装备的效果会开始下降；低于20%时，可能会在关键时刻失效。建议在耐久度低于70%时进行维护，以确保任务的顺利进行。
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            // 设置耐久度条动画
+            setTimeout(function() {
+                document.getElementById('beforeBar').style.width = '{{durabilityBefore}}%';
+                document.getElementById('afterBar').style.width = '{{durabilityAfter}}%';
+            }, 300);
+        };
+    </script>
+</body>
+</html> 

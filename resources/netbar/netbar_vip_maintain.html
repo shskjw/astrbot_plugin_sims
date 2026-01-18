@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>VIP包间维护</title>
+    <link rel="stylesheet" href="../common/base.css">
+    <style>
+        body {
+            background-color: #fff5f7;
+            font-family: 'HYShiGuangTiW_0', sans-serif;
+        }
+        .container {
+            width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(255,105,180,0.2);
+        }
+        .header {
+            text-align: center;
+            color: #ff69b4;
+            margin-bottom: 20px;
+        }
+        .maintain-card {
+            background-color: #fff0f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .progress-container {
+            width: 100%;
+            height: 30px;
+            background-color: #ffb6c1;
+            border-radius: 15px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #ff69b4;
+            width: {{maintenance}}%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        .tips {
+            background-color: #fff0f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .cute-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto;
+            display: block;
+        }
+        .highlight {
+            color: #ff69b4;
+            font-weight: bold;
+        }
+        .maintain-detail {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="../img/help/icon.png" class="cute-icon">
+        <div class="header">
+            <h1>🛠️ VIP包间维护完成</h1>
+        </div>
+        
+        <div class="maintain-card">
+            <div class="maintain-detail">
+                <span><strong>包间名称：</strong></span>
+                <span>{{roomName}}</span>
+            </div>
+            <div class="maintain-detail">
+                <span><strong>维护费用：</strong></span>
+                <span class="highlight">{{cost}}元</span>
+            </div>
+            
+            <h3 style="color: #ff69b4; margin-top: 20px;">维护状态</h3>
+            <div class="progress-container">
+                <div class="progress-bar">{{maintenance}}%</div>
+            </div>
+            
+            <p style="margin-top: 10px;">下次维护: 建议在状态低于60%时进行</p>
+        </div>
+        
+        <div class="tips">
+            <h3 style="color: #ff69b4;">💡 维护提示</h3>
+            <ul>
+                {{#tips}}
+                <li>{{.}}</li>
+                {{/tips}}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

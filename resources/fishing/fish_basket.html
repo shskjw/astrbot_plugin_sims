@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <link rel="shortcut icon" href="#"/>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1f35 0%, #2a3149 100%);
+            margin: 0;
+            padding: 20px;
+            color: #fff;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        .title {
+            font-size: 28px;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            margin: 0;
+            padding: 10px 0;
+        }
+        .fish-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 10px;
+        }
+        .fish-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 15px;
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .fish-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .fish-icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #7fdbff;
+        }
+        .fish-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #7fdbff;
+        }
+        .fish-info {
+            font-size: 14px;
+            color: #ccc;
+            margin: 5px 0;
+        }
+        .freshness-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .freshness-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+        .basket-info {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        .cute-fish {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            font-size: 40px;
+            transform: rotate(45deg);
+            opacity: 0.5;
+        }
+        .empty-message {
+            text-align: center;
+            padding: 40px;
+            font-size: 18px;
+            color: #aaa;
+        }
+        @keyframes swim {
+            0% { transform: translateX(-100%) rotate(0deg); }
+            100% { transform: translateX(100%) rotate(10deg); }
+        }
+        .swimming-fish {
+            position: absolute;
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.2);
+            animation: swim 15s linear infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">🎣 我的鱼篓</h1>
+            <div class="swimming-fish">🐠</div>
+            <div class="swimming-fish" style="top: 60px; animation-delay: -5s">🐟</div>
+            <div class="swimming-fish" style="top: 120px; animation-delay: -10s">🐡</div>
+        </div>
+        
+        {{if basket.length === 0}}
+        <div class="empty-message">
+            鱼篓空空如也~ 快去钓鱼吧！ 🎣
+        </div>
+        {{else}}
+        <div class="basket-info">
+            当前已捕获: {{basket.length}} 条鱼
+        </div>
+        <div class="fish-grid">
+            {{each basket fish}}
+            <div class="fish-card">
+                <div class="cute-fish">🐠</div>
+                <div class="fish-name">
+                    {{fishData.fishes.find(f => f.id === fish.id).name}}
+                </div>
+                <div class="fish-info">
+                    重量: {{fish.weight}}kg
+                </div>
+                <div class="fish-info">
+                    {{set fishInfo = fishData.fishes.find(f => f.id === fish.id)}}
+                    {{set freshness = fish.freshness || 100}}
+                    新鲜度: {{freshness.toFixed(1)}}%
+                </div>
+                <div class="freshness-bar">
+                    <div class="freshness-fill" style="width: {{freshness}}%"></div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+        {{/if}}
+    </div>
+</body>
+</html>

@@ -1,0 +1,339 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @font-face {
+            font-family: "MiaoFont";
+            src: url("./也字工厂喵喵体.ttf");
+        }
+
+        body {
+            font-family: "MiaoFont", sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a1f3c 0%, #2a3166 100%);
+            color: #fff;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0, 195, 255, 0.5);
+        }
+
+        .hospital-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .overview-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .overview-card:hover {
+            transform: translateY(-5px);
+            border-color: #4fc3f7;
+        }
+
+        .overview-value {
+            font-size: 2em;
+            color: #4fc3f7;
+            margin: 10px 0;
+            text-shadow: 0 0 10px rgba(79, 195, 247, 0.5);
+        }
+
+        .upgrade-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .upgrade-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upgrade-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border-color: #4fc3f7;
+        }
+
+        .upgrade-type {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            background: linear-gradient(45deg, #ff4081, #7c4dff);
+        }
+
+        .upgrade-title {
+            font-size: 1.5em;
+            margin: 15px 0;
+            color: #4fc3f7;
+            padding-right: 100px;
+        }
+
+        .upgrade-description {
+            color: #b3e5fc;
+            margin: 10px 0;
+            line-height: 1.5;
+        }
+
+        .upgrade-levels {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow-x: auto;
+        }
+
+        .level-node {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            min-width: 60px;
+        }
+
+        .level-node::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            width: 100%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .level-node:last-child::after {
+            display: none;
+        }
+
+        .level-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 0 auto 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .level-completed .level-circle {
+            background: #4fc3f7;
+            border-color: #4fc3f7;
+        }
+
+        .level-current .level-circle {
+            background: linear-gradient(45deg, #2196f3, #00bcd4);
+            border-color: #2196f3;
+            animation: pulse 2s infinite;
+        }
+
+        .upgrade-benefits {
+            margin: 15px 0;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .benefit-icon {
+            margin-right: 10px;
+            color: #4fc3f7;
+        }
+
+        .upgrade-requirements {
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .requirement-item {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+        }
+
+        .requirement-item i {
+            margin-right: 10px;
+            color: #4fc3f7;
+        }
+
+        .upgrade-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 25px;
+            background: linear-gradient(45deg, #2196f3, #00bcd4);
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: "MiaoFont";
+            margin-top: 15px;
+        }
+
+        .upgrade-btn:hover {
+            background: linear-gradient(45deg, #00bcd4, #2196f3);
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(33, 150, 243, 0.5);
+        }
+
+        .upgrade-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* 自适应布局 */
+        @media (max-width: 768px) {
+            .upgrade-sections {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏥 医院升级中心</h1>
+            <p>提升医院规模，完善医疗设施</p>
+        </div>
+
+        <div class="hospital-overview">
+            <div class="overview-card">
+                <div class="overview-label">医院等级</div>
+                <div class="overview-value">Lv.{{hospital.level}}</div>
+            </div>
+            <div class="overview-card">
+                <div class="overview-label">床位数量</div>
+                <div class="overview-value">{{hospital.beds}}</div>
+            </div>
+            <div class="overview-card">
+                <div class="overview-label">医生数量</div>
+                <div class="overview-value">{{hospital.doctors}}</div>
+            </div>
+            <div class="overview-card">
+                <div class="overview-label">声望等级</div>
+                <div class="overview-value">{{hospital.reputation}}</div>
+            </div>
+        </div>
+
+        <div class="upgrade-sections">
+            {{each upgrades upgrade}}
+            <div class="upgrade-card">
+                <div class="upgrade-type">{{upgrade.type}}</div>
+                <div class="upgrade-title">{{upgrade.name}}</div>
+                <div class="upgrade-description">{{upgrade.description}}</div>
+
+                <div class="upgrade-levels">
+                    {{each upgrade.levels level}}
+                    <div class="level-node {{level.status}}">
+                        <div class="level-circle">{{level.number}}</div>
+                        <div class="level-label">{{level.label}}</div>
+                    </div>
+                    {{/each}}
+                </div>
+
+                <div class="upgrade-benefits">
+                    <h4>🎯 升级效果</h4>
+                    {{each upgrade.benefits benefit}}
+                    <div class="benefit-item">
+                        <span class="benefit-icon">{{benefit.icon}}</span>
+                        <span>{{benefit.description}}</span>
+                    </div>
+                    {{/each}}
+                </div>
+
+                <div class="upgrade-requirements">
+                    <h4>📋 升级要求</h4>
+                    <div class="requirement-item">
+                        <i>💰</i> 升级费用：{{upgrade.cost}} 金币
+                    </div>
+                    <div class="requirement-item">
+                        <i>⭐</i> 声望要求：{{upgrade.required_reputation}}
+                    </div>
+                    <div class="requirement-item">
+                        <i>📊</i> 医院等级：{{upgrade.required_level}}
+                    </div>
+                </div>
+
+                <button class="upgrade-btn"
+                        onclick="upgradeHospital('{{upgrade.id}}')"
+                        {{if !upgrade.can_upgrade}}disabled{{/if}}>
+                    {{upgrade.can_upgrade ? '立即升级' : '条件不足'}}
+                </button>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+
+    <script>
+        function upgradeHospital(upgradeId) {
+            window.location.href = `#升级医院?upgrade_id=${upgradeId}`;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能收获系统</title>
+    <link rel="stylesheet" href="farm.css">
+    <style>
+        /* 收获界面特定样式 */
+        .harvest-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        /* 收获物品展示 */
+        .harvest-display {
+            background: var(--glass-bg);
+            border-radius: 15px;
+            padding: 20px;
+            animation: hologram-flicker 5s infinite;
+            text-align: center;
+        }
+
+        .harvest-item {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 20px auto;
+            background: var(--glass-bg);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            animation: float 3s infinite;
+        }
+
+        .harvest-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            background: var(--glass-bg);
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        /* 收获动画 */
+        .harvest-animation {
+            position: relative;
+            height: 300px;
+            background: var(--glass-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        @keyframes harvest-shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .harvest-shine {
+            position: absolute;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: harvest-shine 2s linear infinite;
+            transform: rotate(45deg);
+        }
+
+        /* 收获物品弹出动画 */
+        @keyframes pop-item {
+            0% { transform: scale(0) rotate(0deg); opacity: 0; }
+            60% { transform: scale(1.2) rotate(10deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        .harvested-item {
+            position: absolute;
+            font-size: 32px;
+            animation: pop-item 0.5s ease-out forwards;
+        }
+
+        /* 品质标签 */
+        .quality-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: linear-gradient(45deg, var(--primary-color), var(--highlight-color));
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            animation: glow-pulse 2s infinite;
+        }
+
+        /* 收获统计 */
+        .harvest-summary {
+            background: var(--glass-bg);
+            border-radius: 15px;
+            padding: 20px;
+            animation: hologram-flicker 5s infinite;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .summary-card {
+            background: var(--glass-bg);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            animation: float 3s infinite;
+        }
+
+        .summary-icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        /* 进度条 */
+        .progress-container {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 5px 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--highlight-color));
+            animation: progress-fill 1s ease-out;
+        }
+
+        @keyframes progress-fill {
+            from { width: 0; }
+            to { width: var(--progress); }
+        }
+
+        /* 奖励展示 */
+        .rewards-section {
+            grid-column: 1 / -1;
+            background: var(--glass-bg);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .rewards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .reward-item {
+            background: var(--glass-bg);
+            border-radius: 10px;
+            padding: 15px;
+            animation: pop-item 0.5s ease-out forwards;
+        }
+
+        .reward-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 星空背景 -->
+    <div class="starry-bg" id="starryBg"></div>
+
+    <!-- 主容器 -->
+    <div class="hologram-container">
+        <h1 class="farm-title">智能收获系统</h1>
+
+        <!-- 收获操作区域 -->
+        <div class="harvest-container">
+            <!-- 收获物品展示 -->
+            <div class="harvest-display">
+                <h2>本次收获</h2>
+                <div class="harvest-item">
+                    {{harvestIcon}}
+                    <div class="quality-badge">{{quality}}品质</div>
+                </div>
+                <div class="harvest-stats">
+                    <div class="stat-item">
+                        <div>数量</div>
+                        <div>{{quantity}} 个</div>
+                    </div>
+                    <div class="stat-item">
+                        <div>品质</div>
+                        <div>{{quality}}</div>
+                    </div>
+                    <div class="stat-item">
+                        <div>价值</div>
+                        <div>{{value}} 金币</div>
+                    </div>
+                    <div class="stat-item">
+                        <div>经验</div>
+                        <div>+{{exp}} EXP</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 收获统计 -->
+            <div class="harvest-summary">
+                <h2>收获统计</h2>
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <div class="summary-icon">📊</div>
+                        <div class="summary-title">总收获量</div>
+                        <div>{{totalHarvest}} 个</div>
+                        <div class="progress-container"></div>
+                            <div class="progress-bar" style="--progress: {{harvestProgress}}%"></div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-icon">⭐</div>
+                        <div class="summary-title">平均品质</div>
+                        <div>{{averageQuality}}</div>
+                        <div class="progress-container"></div>
+                            <div class="progress-bar" style="--progress: {{qualityProgress}}%"></div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-icon">💰</div>
+                        <div class="summary-title">总收入</div>
+                        <div></div>{{totalIncome}} 金币</div>
+                        <div class="progress-container"></div>
+                            <div class="progress-bar" style="--progress: {{incomeProgress}}%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 收获动画 -->
+            <div class="harvest-animation" id="harvestAnimation">
+                <div class="harvest-shine"></div>
+                <!-- 收获物品动画将由JS动态生成 -->
+            </div>
+
+            <!-- 奖励展示 -->
+            <div class="rewards-section">
+                <h2>额外奖励</h2>
+                <div class="rewards-grid">
+                    {{#rewards}}
+                    <div class="reward-item">
+                        <div class="reward-icon">{{icon}}</div>
+                        <div class="reward-name">{{name}}</div>
+                        <div class="reward-value">{{value}}</div>
+                    </div>
+                    {{/rewards}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 机器人助手 -->
+    <div class="robot-assistant">
+        <div class="shopkeeper-bubble">恭喜收获！需要帮助吗？</div>
+        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='30' r='20' fill='%231E90FF'/><rect x='30' y='50' width='40' height='40' rx='5' fill='%231E90FF'/><circle cx='40' cy='25' r='5' fill='white'/><circle cx='60' cy='25' r='5' fill='white'/><path d='M40 35 Q50 45 60 35' stroke='white' fill='none' stroke-width='2'/></svg>" alt="机器人助手">
+    </div>
+
+    <script>
+        // 生成星空背景
+        function createStarryBackground() {
+            const starryBg = document.getElementById('starryBg');
+            const numberOfStars = 100;
+
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starryBg.appendChild(star);
+            }
+        }
+
+        // 创建收获动画
+        function createHarvestAnimation() {
+            const container = document.getElementById('harvestAnimation');
+            const itemCount = 10;
+
+            for (let i = 0; i < itemCount; i++) {
+                setTimeout(() => {
+                    const item = document.createElement('div');
+                    item.className = 'harvested-item';
+                    item.textContent = '🌾';
+                    item.style.left = `${Math.random() * 80 + 10}%`;
+                    item.style.top = `${Math.random() * 80 + 10}%`;
+                    container.appendChild(item);
+
+                    // 移除动画元素
+                    setTimeout(() => {
+                        item.remove();
+                    }, 2000);
+                }, i * 200);
+            }
+        }
+
+        // 页面加载时初始化
+        window.addEventListener('load', () => {
+            createStarryBackground();
+            createHarvestAnimation();
+        });
+    </script>
+</body>
+</html>

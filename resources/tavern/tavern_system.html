@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>酒馆系统</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: url('https://s1.ax1x.com/2023/02/14/pSTUVmQ.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #e8e8e8;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 90%;
+            margin: 0 auto;
+            background-color: rgba(40, 40, 40, 0.85);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 36px;
+            color: #ffd700;
+            margin: 0;
+            padding: 10px;
+            text-shadow: 2px 2px 4px #000;
+        }
+        
+        .header .subtitle {
+            font-size: 18px;
+            color: #bbb;
+            margin-top: 5px;
+        }
+        
+        .header .emblem {
+            position: absolute;
+            top: 0;
+            left: 20px;
+            width: 60px;
+            height: 60px;
+        }
+        
+        .divider {
+            border-bottom: 2px solid #555;
+            margin: 20px 0;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+        }
+        
+        .section-title {
+            font-size: 22px;
+            color: #ff9d00;
+            margin-bottom: 10px;
+            border-left: 4px solid #ff9d00;
+            padding-left: 10px;
+        }
+        
+        .command-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+        }
+        
+        .command-item {
+            background-color: rgba(60, 60, 60, 0.7);
+            border-radius: 8px;
+            padding: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .command-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+            background-color: rgba(80, 80, 80, 0.7);
+        }
+        
+        .command-name {
+            font-weight: bold;
+            color: #ffc107;
+            margin-bottom: 5px;
+        }
+        
+        .command-desc {
+            color: #ddd;
+            font-size: 14px;
+        }
+        
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .feature-item {
+            background-color: rgba(60, 60, 60, 0.7);
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .feature-icon {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #ff9d00;
+        }
+        
+        .feature-title {
+            font-weight: bold;
+            color: #ffc107;
+            margin-bottom: 5px;
+        }
+        
+        .feature-desc {
+            color: #ddd;
+            font-size: 14px;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img class="emblem" src="https://s1.ax1x.com/2023/02/14/pSTUj0J.png" alt="酒馆徽章">
+            <h1>模拟人生酒馆系统</h1>
+            <div class="subtitle">创建并经营你的特色酒馆，成为知名酒馆老板！</div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="section">
+            <div class="section-title">系统特色</div>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <div class="feature-icon">🏆</div>
+                    <div class="feature-title">真实模拟</div>
+                    <div class="feature-desc">模拟真实酒馆经营，包括物资采购、饮品制作、员工管理等多方面内容</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🎮</div>
+                    <div class="feature-title">高可玩性</div>
+                    <div class="feature-desc">丰富的随机事件、员工系统和饮品设计让游戏充满变数</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📈</div>
+                    <div class="feature-title">成长系统</div>
+                    <div class="feature-desc">酒馆可以逐步升级，扩大规模提高收益</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🌟</div>
+                    <div class="feature-title">社交互动</div>
+                    <div class="feature-desc">参观其他玩家酒馆，在排行榜上一较高下</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="section">
+            <div class="section-title">可用指令</div>
+            <div class="command-list">
+                {{each commands command}}
+                <div class="command-item">
+                    <div class="command-name">{{command.name}}</div>
+                    <div class="command-desc">{{command.desc}}</div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="section">
+            <div class="section-title">开始你的酒馆之旅</div>
+            <p>使用 <b>#创建酒馆+名称</b> 创建你的第一家酒馆，需要5000元初始资金。</p>
+            <p>创建后，你可以购买物资、添加饮品到菜单、雇佣员工，然后开始营业赚取收益！</p>
+            <p>每天营业一次，随着酒馆等级提升，你将解锁更多功能和更高收益。</p>
+        </div>
+        
+        <div class="footer">
+            模拟人生插件 - 酒馆系统 v1.0
+        </div>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>酒馆创建成功</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: url('https://s1.ax1x.com/2023/02/14/pSTUVmQ.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #e8e8e8;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 90%;
+            margin: 0 auto;
+            background-color: rgba(40, 40, 40, 0.85);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 36px;
+            color: #ffd700;
+            margin: 0;
+            padding: 10px;
+            text-shadow: 2px 2px 4px #000;
+        }
+        
+        .header .subtitle {
+            font-size: 18px;
+            color: #bbb;
+            margin-top: 5px;
+        }
+        
+        .divider {
+            border-bottom: 2px solid #555;
+            margin: 20px 0;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+        }
+        
+        .section-title {
+            font-size: 22px;
+            color: #ff9d00;
+            margin-bottom: 10px;
+            border-left: 4px solid #ff9d00;
+            padding-left: 10px;
+        }
+        
+        .tavern-info {
+            background-color: rgba(60, 60, 60, 0.7);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tavern-info::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://s1.ax1x.com/2023/02/14/pSTUEa8.jpg') no-repeat center center;
+            background-size: cover;
+            opacity: 0.2;
+            z-index: -1;
+        }
+        
+        .tavern-name {
+            font-size: 28px;
+            color: #ffd700;
+            margin-bottom: 15px;
+            text-align: center;
+            text-shadow: 2px 2px 4px #000;
+        }
+        
+        .tavern-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .stat-item {
+            background-color: rgba(80, 80, 80, 0.7);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 18px;
+            color: #ff9d00;
+            font-weight: bold;
+        }
+        
+        .supplies-section {
+            margin-top: 25px;
+        }
+        
+        .supplies-title {
+            font-size: 18px;
+            color: #ff9d00;
+            margin-bottom: 10px;
+        }
+        
+        .supplies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+        
+        .supply-item {
+            background-color: rgba(60, 60, 60, 0.7);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .supply-name {
+            font-size: 14px;
+            color: #ddd;
+            margin-bottom: 5px;
+        }
+        
+        .supply-value {
+            font-size: 16px;
+            color: #4caf50;
+            font-weight: bold;
+        }
+        
+        .next-steps {
+            background-color: rgba(60, 60, 60, 0.7);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .next-steps-title {
+            font-size: 18px;
+            color: #ff9d00;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .steps-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .step-item {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .step-number {
+            background-color: #ff9d00;
+            color: #333;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .step-content {
+            flex-grow: 1;
+        }
+        
+        .step-command {
+            font-weight: bold;
+            color: #ffc107;
+            margin-bottom: 3px;
+        }
+        
+        .step-desc {
+            color: #ddd;
+            font-size: 14px;
+        }
+        
+        .celebrate {
+            text-align: center;
+            margin: 30px 0;
+            font-size: 18px;
+            color: #ffd700;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>酒馆创建成功！</h1>
+            <div class="subtitle">你已成为一名光荣的酒馆老板！</div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="section">
+            <div class="tavern-info">
+                <div class="tavern-name">{{tavern.name}}</div>
+                <div class="tavern-stats">
+                    <div class="stat-item">
+                        <div class="stat-label">等级</div>
+                        <div class="stat-value">{{tavern.level}}</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">人气</div>
+                        <div class="stat-value">{{tavern.popularity}}</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">容量</div>
+                        <div class="stat-value">{{tavern.capacity}}人</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">清洁度</div>
+                        <div class="stat-value">{{tavern.cleanliness}}</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">氛围</div>
+                        <div class="stat-value">{{tavern.atmosphere}}</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">创建费用</div>
+                        <div class="stat-value">{{cost}}元</div>
+                    </div>
+                </div>
+                
+                <div class="supplies-section">
+                    <div class="supplies-title">初始物资：</div>
+                    <div class="supplies-grid">
+                        <div class="supply-item">
+                            <div class="supply-name">啤酒</div>
+                            <div class="supply-value">{{tavern.supplies.beer}}单位</div>
+                        </div>
+                        <div class="supply-item">
+                            <div class="supply-name">葡萄酒</div>
+                            <div class="supply-value">{{tavern.supplies.wine}}单位</div>
+                        </div>
+                        <div class="supply-item">
+                            <div class="supply-name">烈酒</div>
+                            <div class="supply-value">{{tavern.supplies.spirits}}单位</div>
+                        </div>
+                        <div class="supply-item">
+                            <div class="supply-name">食材</div>
+                            <div class="supply-value">{{tavern.supplies.food}}单位</div>
+                        </div>
+                        <div class="supply-item">
+                            <div class="supply-name">装饰</div>
+                            <div class="supply-value">{{tavern.supplies.decorations}}单位</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">接下来该做什么？</div>
+            <div class="next-steps">
+                <div class="next-steps-title">新手酒馆老板指南</div>
+                <ul class="steps-list">
+                    <li class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <div class="step-command">#酒馆市场</div>
+                            <div class="step-desc">查看并购买物资，确保酒馆原料充足。推荐优先购买啤酒和葡萄酒原料。</div>
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <div class="step-command">#添加饮品 [名称] [价格] [原料类型] [描述]</div>
+                            <div class="step-desc">添加特色饮品到菜单，吸引顾客光临。建议添加2-3种不同类型的饮品。</div>
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <div class="step-command">#营业酒馆</div>
+                            <div class="step-desc">开始每日营业，赚取收益。记得每天只能营业一次！</div>
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <div class="step-command">#酒馆员工</div>
+                            <div class="step-desc">查看可雇佣的员工，随着酒馆等级提升解锁更多员工类型。</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="celebrate">
+            🎉 恭喜你成为酒馆老板！祝你生意兴隆！🎉
+        </div>
+        
+        <div class="footer">
+            模拟人生插件 - 酒馆系统 v1.0
+        </div>
+    </div>
+</body>
+</html> 

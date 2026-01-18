@@ -1,0 +1,309 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>料理结果</title>
+    <style>
+        :root {
+            --primary-color: #ff9ecd;
+            --secondary-color: #7b88ff;
+            --success-color: #4cd964;
+            --fail-color: #ff3b30;
+            --bg-color: #fef6f9;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --border-color: rgba(255, 158, 205, 0.3);
+            --shadow-color: rgba(123, 136, 255, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 158, 205, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(123, 136, 255, 0.15) 0%, transparent 50%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .result-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px var(--shadow-color);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .result-title {
+            font-size: 2rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px var(--shadow-color);
+        }
+
+        .recipe-name {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .result-status {
+            display: inline-block;
+            padding: 0.5rem 2rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin: 1rem 0;
+            animation: pulse 2s infinite;
+        }
+
+        .success {
+            background: rgba(76, 217, 100, 0.1);
+            color: var(--success-color);
+            border: 2px solid var(--success-color);
+        }
+
+        .fail {
+            background: rgba(255, 59, 48, 0.1);
+            color: var(--fail-color);
+            border: 2px solid var(--fail-color);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.5);
+            padding: 1rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-label {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .bonus-section {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(123, 136, 255, 0.1);
+            border-radius: 15px;
+        }
+
+        .bonus-title {
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .bonus-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .bonus-item {
+            background: var(--card-bg);
+            padding: 0.8rem;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .bonus-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.3rem;
+        }
+
+        .bonus-value {
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+
+        .decoration {
+            position: fixed;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .decoration-1 {
+            top: 20px;
+            right: 20px;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%);
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .decoration-2 {
+            bottom: 20px;
+            left: 20px;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, var(--secondary-color) 0%, transparent 70%);
+            opacity: 0.1;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .sparkles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            opacity: 0;
+            animation: sparkle 1.5s infinite;
+        }
+
+        .sparkle:nth-child(1) { top: 20%; left: 20%; animation-delay: 0s; }
+        .sparkle:nth-child(2) { top: 60%; left: 80%; animation-delay: 0.2s; }
+        .sparkle:nth-child(3) { top: 80%; left: 40%; animation-delay: 0.4s; }
+        .sparkle:nth-child(4) { top: 40%; left: 60%; animation-delay: 0.6s; }
+        .sparkle:nth-child(5) { top: 30%; left: 90%; animation-delay: 0.8s; }
+
+        @keyframes sparkle {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .bonus-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .result-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="decoration decoration-1"></div>
+    <div class="decoration decoration-2"></div>
+    <div class="container">
+        <div class="result-card">
+            <div class="sparkles">
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+            </div>
+            <div class="result-header">
+                <h1 class="result-title">✨ 料理结果 ✨</h1>
+                <div class="recipe-name">{{recipe.name}}</div>
+                <div class="result-status {{isSuccess ? 'success' : 'fail'}}">
+                    {{isSuccess ? '制作成功！' : '制作失败...'}}
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-label">厨师等级</div>
+                    <div class="stat-value">Lv.{{chefData.level}}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">成功率</div>
+                    <div class="stat-value">{{(chefData.successDishes / chefData.totalDishes * 100).toFixed(1)}}%</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">声望</div>
+                    <div class="stat-value">{{chefData.reputation}}</div>
+                </div>
+            </div>
+
+            {{if kitchenwareBonus}}
+            <div class="bonus-section">
+                <h2 class="bonus-title">🎯 厨具加成</h2>
+                <div class="bonus-grid">
+                    {{if kitchenwareBonus.successRate}}
+                    <div class="bonus-item">
+                        <div class="bonus-label">成功率提升</div>
+                        <div class="bonus-value">+{{kitchenwareBonus.successRate}}%</div>
+                    </div>
+                    {{/if}}
+                    {{if kitchenwareBonus.timeReduction}}
+                    <div class="bonus-item">
+                        <div class="bonus-label">时间减少</div>
+                        <div class="bonus-value">{{kitchenwareBonus.timeReduction}}秒</div>
+                    </div>
+                    {{/if}}
+                    {{if kitchenwareBonus.qualityBonus}}
+                    <div class="bonus-item">
+                        <div class="bonus-label">品质提升</div>
+                        <div class="bonus-value">+{{kitchenwareBonus.qualityBonus}}</div>
+                    </div>
+                    {{/if}}
+                </div>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>灭火任务</title>
+    <style>
+        @font-face {
+            font-family: "miao";
+            src: url(./也字工厂喵喵体.ttf);
+        }
+        body {
+            font-size: auto;
+            font-family: "miao";
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: auto;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            width: 380px;
+            padding: 30px;
+            position: relative;
+            text-align: center;
+        }
+        .header {
+            background-color: #e74c3c;
+            color: white;
+            padding: 15px;
+            border-radius: 15px 15px 0 0;
+            margin: -30px -30px 20px -30px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .header i {
+            margin-right: 10px;
+            font-size: 24px;
+        }
+        .emergency-banner {
+            background-color: #fde9e7;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 2px solid #e74c3c;
+            animation: blink 1.5s infinite;
+        }
+        @keyframes blink {
+            0% {
+                border-color: #e74c3c;
+                background-color: #fde9e7;
+            }
+            50% {
+                border-color: #ff5e57;
+                background-color: #ffedec;
+            }
+            100% {
+                border-color: #e74c3c;
+                background-color: #fde9e7;
+            }
+        }
+        .emergency-banner h2 {
+            margin: 0;
+            color: #e74c3c;
+            font-size: 20px;
+            animation: shake 0.5s infinite;
+        }
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            50% { transform: translateX(0); }
+            75% { transform: translateX(2px); }
+            100% { transform: translateX(0); }
+        }
+        .fire-image {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            background-color: #f9f9f9;
+            border-radius: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border: 3px solid #e74c3c;
+            overflow: hidden;
+            position: relative;
+        }
+        .fire-image img {
+            width: 90%;
+            height: 90%;
+            object-fit: contain;
+        }
+        .fire-image::after {
+            content: '紧急';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: #e74c3c;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .info-section {
+            background-color: #f9f9f9;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .info-section h2 {
+            margin-top: 0;
+            color: #e74c3c;
+            font-size: 18px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e74c3c;
+            padding-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .info-section h2 i {
+            margin-right: 8px;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 8px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .info-label {
+            font-weight: bold;
+            color: #555;
+        }
+        .info-value {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .danger-level {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .danger-label {
+            font-weight: bold;
+            color: #555;
+            margin-right: 10px;
+            width: 80px;
+        }
+        .danger-stars {
+            flex: 1;
+            display: flex;
+        }
+        .star {
+            color: #e74c3c;
+            margin-right: 2px;
+            font-size: 20px;
+        }
+        .star-empty {
+            color: #ddd;
+            margin-right: 2px;
+            font-size: 20px;
+        }
+        .equipment-section {
+            background-color: #f9f9f9;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .equipment-section h2 {
+            margin-top: 0;
+            color: #e74c3c;
+            font-size: 18px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e74c3c;
+            padding-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .equipment-section h2 i {
+            margin-right: 8px;
+        }
+        .equipment-list {
+            background-color: white;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+            text-align: left;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .equipment-list p {
+            margin: 0;
+            padding: 5px;
+            font-size: 14px;
+            color: #555;
+        }
+        .skills-list {
+            background-color: white;
+            border-radius: 10px;
+            padding: 12px;
+            text-align: left;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .skills-list p {
+            margin: 0;
+            padding: 5px;
+            font-size: 14px;
+            color: #555;
+        }
+        .timer-section {
+            background-color: #fde9e7;
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(231, 76, 60, 0.2);
+        }
+        .timer-icon {
+            font-size: 24px;
+            color: #e74c3c;
+            margin-right: 10px;
+        }
+        .timer-text {
+            font-size: 18px;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+        .footer {
+            font-size: 12px;
+            color: #777;
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <i>🔥</i><h1>灭火任务</h1>
+        </div>
+        
+        <div class="emergency-banner">
+            <h2>紧急火灾警报！</h2>
+        </div>
+        
+        <div class="fire-image">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iI2U3NGMzYyIgZD0iTTEyLDEyQzEyLjUzLDEyIDE0Ljg3LDExLjk3IDE2LjA2LDkuNzZDMTcuMjUsNy41NSAxNi45OSw1LjQ5IDE1LjU4LDMuNTlDMTQuMDgsMS41NyAxMi42OSwwLjgxIDExLjgxLDEuMDhDMTEuMTksMC4zNiA5LjE3LC4xOCA2LjE5LC45NkMzLjIsMi43NSAxLDcuMjQgMS4wMiwxMkM5MSAx4LjkxIDE1LjYyLDIwLjQ4IDE2LDIxQzE2LjI3LDIxLjUgMTcuMjMsMjIgMTgsMjJIMTlDMjEuMzMsMjIgMjQsMTQuOTkgMjQsOEMyNCwzLjg0IDIxLjg5LDIuMjIgMTkuOSwzLjE4QzE5LjkxLDIuMTQgMTkuMDcsMS11IC43NUMxNi41MSw1LjM3IDEyLDEyIEz8TTE0LDgQ0xMy43OCw3LjUxQzMuNzUsNy43MyAzLjMxLDEyIDguMzksNy45MkMxMC4yNSw3LjM1IDExLjQzLDguODUgMTEsOC44NUM5LjA0LDguODUgOSwxMC4yMyA5LDEyLjE1QzEwLjI5LDEyLjczIDExLDEzLjE4IDExLDE1LjM8TDEwLjM3LDE2Ljgzky44OSwxNi4zIDEwLjI1LDEzLjc1QyEwLjI1LDEzLjc1IDEwLjg5LDE0LjQ3IDEwLjg5LDE1LjY4QzExLjg5LDE2LjMyIDEyLjI4LDE2LjY4IDEyLjQ2LDE3LjM0QzEyLjQ2LDE3LjM0IDEzLjI0LDE3IDEzLjQxLDE1LjMxQzEzLjU5LDEzLjEgMTIuOTQsMTEuODEgMTIsMTEuODFDMTIsMTEuODEgMTUuNSwxMC4zNSAxNS41LDEyLjM1QzE1LjUsMTQuMzEgMTMuMjUsMTYuNDIgMTMuMjUsMTYuNDJDMTMuMjUsMTYuNDIgMTQuMjEsMTYuNjggMTQuNywxNi4wOEMxNS4xOSwxNS4zMyAxNi44OSwxMi4zNSAxNC44OSwxMC4xOFoiLz48L3N2Zz4=" alt="Fire Emergency">
+        </div>
+        
+        <div class="info-section">
+            <h2><i>📍</i> 火灾信息</h2>
+            <div class="info-row">
+                <div class="info-label">火灾类型</div>
+                <div class="info-value">{{fireName}}</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">发生地点</div>
+                <div class="info-value">{{fireLocation}}</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">被困人数</div>
+                <div class="info-value">{{casualties}}人</div>
+            </div>
+            
+            <div class="danger-level">
+                <div class="danger-label">难度等级</div>
+                <div class="danger-stars">
+                    <!-- 根据difficulty动态生成星星 -->
+                    <span class="star">★</span>
+                    <span class="star" style="display: {{difficulty >= 2 ? 'inline' : 'none'}}">★</span>
+                    <span class="star" style="display: {{difficulty >= 3 ? 'inline' : 'none'}}">★</span>
+                    <span class="star" style="display: {{difficulty >= 4 ? 'inline' : 'none'}}">★</span>
+                    <span class="star" style="display: {{difficulty >= 5 ? 'inline' : 'none'}}">★</span>
+                    <span class="star-empty" style="display: {{difficulty < 5 ? 'inline' : 'none'}}">☆</span>
+                    <span class="star-empty" style="display: {{difficulty < 4 ? 'inline' : 'none'}}">☆</span>
+                    <span class="star-empty" style="display: {{difficulty < 3 ? 'inline' : 'none'}}">☆</span>
+                    <span class="star-empty" style="display: {{difficulty < 2 ? 'inline' : 'none'}}">☆</span>
+                </div>
+            </div>
+            
+            <div class="danger-level">
+                <div class="danger-label">危险等级</div>
+                <div class="danger-stars">
+                    <!-- 根据danger动态生成星星 -->
+                    <span class="star">★</span>
+                    <span class="star" style="display: {{danger >= 2 ? 'inline' : 'none'}}">★</span>
+                    <span class="star" style="display: {{danger >= 3 ? 'inline' : 'none'}}">★</span>
+                    <span class="star" style="display: {{danger >= 4 ? 'inline' : 'none'}}">★</span>
+                    <span class="star" style="display: {{danger >= 5 ? 'inline' : 'none'}}">★</span>
+                    <span class="star-empty" style="display: {{danger < 5 ? 'inline' : 'none'}}">☆</span>
+                    <span class="star-empty" style="display: {{danger < 4 ? 'inline' : 'none'}}">☆</span>
+                    <span class="star-empty" style="display: {{danger < 3 ? 'inline' : 'none'}}">☆</span>
+                    <span class="star-empty" style="display: {{danger < 2 ? 'inline' : 'none'}}">☆</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="equipment-section">
+            <h2><i>⚙️</i> 装备与技能</h2>
+            <div class="equipment-list">
+                <p><strong>推荐装备：</strong>{{requiredEquipment}}</p>
+            </div>
+            <div class="skills-list">
+                <p><strong>推荐技能：</strong>{{recommendedSkills}}</p>
+            </div>
+        </div>
+        
+        <div class="timer-section">
+            <div class="timer-icon">⏱️</div>
+            <div class="timer-text">时间限制: {{timeLimit}}秒</div>
+        </div>
+        
+        <div class="footer">
+            迅速响应，有效灭火 | sims-plugin · 消防员模拟
+        </div>
+    </div>
+</body>
+</html> 
