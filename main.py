@@ -1,3 +1,5 @@
+import os
+import json
 from astrbot.api.star import Context, Star, register
 from astrbot.api.event import filter, AstrMessageEvent
 from .core.common.data_manager import DataManager
@@ -122,10 +124,50 @@ class SimsPlugin(Star):
         user_id = event.get_sender_id()
         is_admin = self.config_manager.is_admin(user_id)
         
+        # 加载帮助配置
+        help_config_path = os.path.join(os.path.dirname(__file__), 'resources', 'help_config.json')
+        help_data = {
+            'helpCfg': {'title': '模拟人生帮助', 'subTitle': 'Yunzai-Bot & sims-Plugin'},
+            'helpList': []
+        }
+        
+        try:
+            if os.path.exists(help_config_path):
+                with open(help_config_path, 'r', encoding='utf-8') as f:
+                    help_data = json.load(f)
+        except Exception as e:
+            self.logger.error(f"加载帮助配置失败: {e}")
+        
+        # 处理帮助列表，根据权限过滤
+        help_groups = []
+        for group in help_data.get('helpList', []):
+            # 如果是管理员专属功能且用户不是管理员，则跳过
+            if group.get('auth') == 'master' and not is_admin:
+                continue
+            
+            # 处理每个帮助项的图标CSS
+            for help_item in group.get('list', []):
+                icon = help_item.get('icon', 0)
+                if not icon:
+                    help_item['css'] = 'display:none'
+                else:
+                    x = (icon - 1) % 10
+                    y = (icon - x - 1) // 10
+                    help_item['css'] = f'background-position:-{x * 50}px -{y * 50}px'
+            
+            help_groups.append(group)
+        
+        # 获取帮助配置
+        help_cfg = help_data.get('helpCfg', {})
+        col_count = help_cfg.get('colCount', 3)
+        
         # 使用渲染器生成图片
         img = self.template.render(
             'sims_help.html', 
-            is_admin=is_admin
+            helpCfg=help_cfg,
+            helpGroup=help_groups,
+            colCount=col_count,
+            bgType=''
         )
         # 转为图片字节
         from .core.common.screenshot import html_to_image_bytes
@@ -177,6 +219,11 @@ class SimsPlugin(Star):
                  yield event.plain_result("无法渲染帮助图片。检测到缺少 Playwright 依赖。\n请在终端执行：\npip install playwright\nplaywright install chromium")
             else:
                  yield event.plain_result("无法渲染帮助图片，未知错误，请检查后台日志。")
+
+    @filter.command("模拟人生版本")
+    async def sims_version(self, event: AstrMessageEvent):
+        """显示模拟人生版本信息"""
+        yield event.plain_result("模拟人生插件 v2.1.0\nby shskjw")
 
     # ========== 基础功能 ==========
     
@@ -1922,25 +1969,29 @@ class SimsPlugin(Star):
         parts = event.text.strip().split()
         if len(parts) < 2:
             types = self.netbar.get_staff_types()
-            msg = "📋 可雇佣的员工类型:\n"
-            msg += "━━━━━━━━━━━━━━\n"
+            msg = "�【网吧员工招聘】\n"
+            msg += "━━━━━━━━━━━━━━━━━\n"
             for t in types:
-                msg += f"👤 {t['position']}\n"
-                msg += f"   💰 月薪: {t['salary']}元\n"
-                msg += f"   💡 {t['description']}\n"
-            msg += "━━━━━━━━━━━━━━\n"
-            msg += "用法: 雇佣员工 <职位>"
+                msg += f"👤 {t.get('position', 'N/A')}\n"
+                msg += f"   💰 月薪: {t.get('salary', 0)}元\n"
+                msg += f"   ⭐ 技能: {t.get('skill_level', 0)}\n"
+                msg += f"   📝 {t.get('description', '暂无描述')}\n"
+            msg += "━━━━━━━━━━━━━━━━━\n"
+            msg += "用法: #雇佣员工 <职位>"
             yield event.plain_result(msg)
             return
         position = parts[1]
         try:
             result = self.netbar.hire_employee(event.get_sender_id(), position)
-            msg = f"✅ 成功雇佣{result['position']}！\n"
-            msg += f"━━━━━━━━━━━━━━\n"
-            msg += f"🆔 员工编号: {result['employee_id']}\n"
-            msg += f"💰 首月工资: {result['salary']}元\n"
-            msg += f"⭐ 技能等级: {result['skill']}\n"
-            msg += f"💡 {result['description']}"
+            msg = f"✅ 成功雇佣{result.get('position', '员工')}！\n"
+            msg += f"━━━━━━━━━━━━━━━━━\n"
+            msg += f"🆔 员工编号: {result.get('employee_id', 'N/A')}\n"
+            msg += f"👤 职位: {result.get('position', 'N/A')}\n"
+            msg += f"💰 首月工资: {result.get('salary', 0)}元\n"
+            msg += f"⭐ 技能等级: {result.get('skill', 0)}\n"
+            msg += f"😊 满意度: {result.get('satisfaction', 100)}%\n"
+            msg += f"📝 {result.get('description', '暂无描述')}\n"
+            msg += f"\n💡 提示: 员工工资每月自动扣费，需合理管理现金流"
             yield event.plain_result(msg)
         except Exception as e:
             if str(e).startswith('cooldown:'):
@@ -1955,27 +2006,35 @@ class SimsPlugin(Star):
         if len(parts) < 2:
             try:
                 netbar = self.netbar.get_netbar_info(event.get_sender_id())
-                if not netbar.staff:
-                    yield event.plain_result("当前没有员工。")
+                staff_list = netbar.get('staff', []) if isinstance(netbar, dict) else getattr(netbar, 'staff', [])
+                if not staff_list:
+                    yield event.plain_result("当前没有员工可解雇。")
                     return
-                msg = "👥 当前员工列表:\n"
-                msg += "━━━━━━━━━━━━━━\n"
-                for s in netbar.staff:
-                    msg += f"🆔 {s.id} - {s.position}\n"
-                    msg += f"   💰 月薪: {s.salary}元 | 绩效: {s.performance}%\n"
-                msg += "━━━━━━━━━━━━━━\n"
-                msg += "用法: 解雇员工 <员工编号>"
+                msg = "👥【网吧员工列表】\n"
+                msg += "━━━━━━━━━━━━━━━━━\n"
+                for s in staff_list:
+                    s_id = s.get('id') if isinstance(s, dict) else getattr(s, 'id', 'N/A')
+                    s_pos = s.get('position') if isinstance(s, dict) else getattr(s, 'position', 'N/A')
+                    s_sal = s.get('salary') if isinstance(s, dict) else getattr(s, 'salary', 0)
+                    s_perf = s.get('performance', 100) if isinstance(s, dict) else getattr(s, 'performance', 100)
+                    msg += f"🆔 {s_id} - {s_pos}\n"
+                    msg += f"   💰 月薪: {s_sal}元 | 🎯 绩效: {s_perf}%\n"
+                msg += "━━━━━━━━━━━━━━━━━\n"
+                msg += "用法: #解雇员工 <员工编号>"
                 yield event.plain_result(msg)
             except Exception as e:
-                yield event.plain_result(f'❌ {e}')
+                yield event.plain_result(f'❌ 获取员工列表失败: {e}')
             return
         employee_id = parts[1]
         try:
             result = self.netbar.fire_employee(event.get_sender_id(), employee_id)
-            msg = f"✅ 已解雇{result['position']}\n"
-            msg += f"━━━━━━━━━━━━━━\n"
-            msg += f"📅 工作天数: {result['work_days']}天\n"
-            msg += f"💰 遣散费: {result['severance_pay']}元"
+            msg = f"✅ 已解雇{result.get('position', '员工')}！\n"
+            msg += f"━━━━━━━━━━━━━━━━━\n"
+            msg += f"👤 职位: {result.get('position', 'N/A')}\n"
+            msg += f"📅 工作期限: {result.get('work_days', 0)}天\n"
+            msg += f"💰 遣散费: {result.get('severance_pay', 0)}元\n"
+            msg += f"📈 获得经验: {result.get('experience_gained', 0)}\n"
+            msg += f"\n💡 提示: 解雇员工会失去其带来的收益加成"
             yield event.plain_result(msg)
         except Exception as e:
             if str(e).startswith('cooldown:'):
@@ -2892,33 +2951,100 @@ class SimsPlugin(Star):
         except Exception as e:
             yield event.plain_result(f"获取员工信息失败: {e}")
 
-    @filter.command("雇佣员工")
-    async def cmd_hire_staff(self, event: AstrMessageEvent):
+    @filter.command("酒馆雇佣员工")
+    async def cmd_hire_tavern_staff(self, event: AstrMessageEvent):
+        """酒馆雇佣员工"""
         parts = event.text.strip().split()
         if len(parts) < 2:
-            yield event.plain_result('用法：#雇佣员工 <员工类型>')
+            # 显示所有可用员工类型
+            available_staff = [
+                {'type': 'bartender', 'name': '酒保', 'salary': 100, 'level_req': 1, 'skills': '提高饮品效率、增加收入'},
+                {'type': 'waiter', 'name': '服务员', 'salary': 80, 'level_req': 1, 'skills': '提高顾客满意度、增加消费'},
+                {'type': 'cleaner', 'name': '清洁工', 'salary': 60, 'level_req': 2, 'skills': '维持清洁度、减缓环境恶化'},
+                {'type': 'security', 'name': '保安', 'salary': 120, 'level_req': 3, 'skills': '维护秩序、解决冲突'},
+                {'type': 'musician', 'name': '驻唱歌手', 'salary': 200, 'level_req': 4, 'skills': '提高氛围、吸引顾客'}
+            ]
+            msg = "🍺【酒馆员工招聘】\n"
+            msg += "━━━━━━━━━━━━━━━━━\n"
+            for staff in available_staff:
+                msg += f"👤 {staff['name']} (ID: {staff['type']})\n"
+                msg += f"   💰 月薪: {staff['salary']}元 | 📊 等级需求: {staff['level_req']}级\n"
+                msg += f"   🎯 技能: {staff['skills']}\n"
+            msg += "━━━━━━━━━━━━━━━━━\n"
+            msg += "用法: #酒馆雇佣员工 <员工类型>"
+            yield event.plain_result(msg)
             return
         staff_type = parts[1]
         try:
             user = self.data_manager.load_user(event.get_sender_id()) or {}
             res = self.tavern.hire_staff(event.get_sender_id(), staff_type, user.get('money', 0))
-            msg = self.tavern_renderer.render_hire_result(res['staff'], res['hire_cost'])
+            staff_obj = res.get('staff')
+            hire_cost = res.get('hire_cost', 0)
+            
+            # 获取员工信息
+            staff_name = staff_obj.name if hasattr(staff_obj, 'name') else staff_obj.get('name', '员工')
+            staff_id = staff_obj.id if hasattr(staff_obj, 'id') else staff_obj.get('id', 'N/A')
+            
+            msg = f"✅ 成功雇佣{staff_name}！\n"
+            msg += f"━━━━━━━━━━━━━━━━━\n"
+            msg += f"🆔 员工ID: {staff_id}\n"
+            msg += f"👤 姓名: {staff_name}\n"
+            msg += f"📊 职位: {staff_type}\n"
+            msg += f"💰 首月工资: {hire_cost}元\n"
+            msg += f"📈 晋升奖励: 经验+10\n"
+            msg += f"\n💡 提示: 员工每天工作会增加经验，经验满后可升级"
             yield event.plain_result(msg)
         except Exception as e:
-            yield event.plain_result(f"雇佣失败: {e}")
+            if str(e).startswith('cooldown:'):
+                yield event.plain_result('操作太快，请稍后再试。')
+            else:
+                yield event.plain_result(f"❌ 雇佣失败: {e}")
 
-    @filter.command("解雇员工")
-    async def cmd_fire_staff(self, event: AstrMessageEvent):
+    @filter.command("酒馆解雇员工")
+    async def cmd_fire_tavern_staff(self, event: AstrMessageEvent):
+        """酒馆解雇员工"""
         parts = event.text.strip().split()
         if len(parts) < 2:
-            yield event.plain_result('用法：#解雇员工 <员工ID>')
+            try:
+                tavern_info = self.tavern.get_tavern_info(event.get_sender_id())
+                staff_list = tavern_info.get('tavern').staff if isinstance(tavern_info.get('tavern'), object) else tavern_info.get('staff', [])
+                if not staff_list:
+                    yield event.plain_result("当前没有员工可解雇。")
+                    return
+                msg = "👥【酒馆员工列表】\n"
+                msg += "━━━━━━━━━━━━━━━━━\n"
+                for staff in staff_list:
+                    s_id = staff.id if hasattr(staff, 'id') else staff.get('id', 'N/A')
+                    s_name = staff.name if hasattr(staff, 'name') else staff.get('name', '未知')
+                    s_type = staff.staff_type if hasattr(staff, 'staff_type') else staff.get('staff_type', 'N/A')
+                    s_sal = staff.salary if hasattr(staff, 'salary') else staff.get('salary', 0)
+                    msg += f"🆔 {s_id}\n"
+                    msg += f"   姓名: {s_name} | 职位: {s_type} | 工资: {s_sal}元\n"
+                msg += "━━━━━━━━━━━━━━━━━\n"
+                msg += "用法: #酒馆解雇员工 <员工ID>"
+                yield event.plain_result(msg)
+            except Exception as e:
+                yield event.plain_result(f'❌ 获取员工列表失败: {e}')
             return
         staff_id = parts[1]
         try:
             res = self.tavern.fire_staff(event.get_sender_id(), staff_id)
-            yield event.plain_result(f"✅ 已解雇员工: {res['fired_staff'].name}")
+            fired_staff = res.get('fired_staff')
+            staff_name = fired_staff.name if hasattr(fired_staff, 'name') else fired_staff.get('name', '员工')
+            staff_type = fired_staff.staff_type if hasattr(fired_staff, 'staff_type') else fired_staff.get('staff_type', 'N/A')
+            
+            msg = f"✅ 已解雇员工！\n"
+            msg += f"━━━━━━━━━━━━━━━━━\n"
+            msg += f"👤 员工: {staff_name}\n"
+            msg += f"💼 职位: {staff_type}\n"
+            msg += f"📝 状态: 已离职\n"
+            msg += f"\n💡 提示: 解雇员工会失去其技能加成，可重新雇佣其他员工"
+            yield event.plain_result(msg)
         except Exception as e:
-            yield event.plain_result(f"解雇失败: {e}")
+            if str(e).startswith('cooldown:'):
+                yield event.plain_result('操作太快，请稍后再试。')
+            else:
+                yield event.plain_result(f"❌ 解雇失败: {e}")
 
     # ========== 酒馆系统 - 高级功能 ==========
 
@@ -3720,6 +3846,48 @@ class SimsPlugin(Star):
                 yield event.plain_result('操作太快，请稍后再试。')
             else:
                 yield event.plain_result(f'❌ 培训失败: {e}')
+
+    @filter.command("解雇电影院员工")
+    async def cmd_fire_cinema_staff(self, event: AstrMessageEvent):
+        """解雇电影院员工"""
+        parts = event.text.strip().split()
+        if len(parts) < 2:
+            try:
+                cinema = self.cinema.get_cinema_info(event.get_sender_id())
+                staff_list = cinema.get('staff', []) if isinstance(cinema, dict) else getattr(cinema, 'staff', [])
+                if not staff_list:
+                    yield event.plain_result("当前没有员工可解雇。")
+                    return
+                msg = "👥【电影院员工列表】\n"
+                msg += "━━━━━━━━━━━━━━━━\n"
+                for staff in staff_list:
+                    s_name = staff.get('name') if isinstance(staff, dict) else getattr(staff, 'name', 'N/A')
+                    s_type = staff.get('type') if isinstance(staff, dict) else getattr(staff, 'type', 'N/A')
+                    s_sal = staff.get('salary') if isinstance(staff, dict) else getattr(staff, 'salary', 0)
+                    msg += f"👤 {s_name} ({s_type})\n"
+                    msg += f"   💰 月薪: {s_sal}元\n"
+                msg += "━━━━━━━━━━━━━━━━\n"
+                msg += "用法: #解雇电影院员工 <员工名>"
+                yield event.plain_result(msg)
+            except Exception as e:
+                yield event.plain_result(f'❌ 获取员工列表失败: {e}')
+            return
+        staff_name = parts[1]
+        try:
+            result = self.cinema.fire_staff(event.get_sender_id(), staff_name)
+            msg = f"✅ 已解雇员工！\n"
+            msg += f"━━━━━━━━━━━━━━━━\n"
+            msg += f"👤 员工: {result.get('staff_name', '未知员工')}\n"
+            msg += f"💼 职位: {result.get('staff_type', 'N/A')}\n"
+            msg += f"📅 服务天数: {result.get('service_days', 0)}天\n"
+            msg += f"💰 遣散费: {result.get('severance', 0)}元\n"
+            msg += f"📈 获得经验: {result.get('experience_gained', 0)}"
+            yield event.plain_result(msg)
+        except Exception as e:
+            if str(e).startswith('cooldown:'):
+                yield event.plain_result('操作太快，请稍后再试。')
+            else:
+                yield event.plain_result(f'❌ 解雇失败: {e}')
 
     @filter.command("收取电影院收入")
     async def cmd_collect_cinema_revenue(self, event: AstrMessageEvent):

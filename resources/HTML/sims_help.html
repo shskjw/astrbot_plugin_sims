@@ -1,367 +1,47 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>模拟人生帮助</title>
-    <link rel="stylesheet" href="../../common/common.css">
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-        body {
-            background-color: #f0f2f5;
-            font-family: 'Microsoft YaHei', sans-serif;
-            transform: none !important;
-            width: 1000px !important;
-            margin: 0;
-            padding: 0;
-        }
-        .help-container {
-            width: 1000px;
-            padding: 30px;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 25px;
-            background: white;
-            padding: 15px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        .header h1 {
-            color: #2c3e50;
-            font-size: 28px;
-            margin: 0 0 5px 0;
-        }
-        .header p {
-            color: #7f8c8d;
-            font-size: 14px;
-            margin: 0;
-        }
-        
-        .system-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-        }
+{{extend defaultLayout}}
 
-        /* Span 3 cols for Admin or full-width items */
-        .system-card.full-width {
-            grid-column: span 3;
-        }
-        
-        .system-card {
-            background: white;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            page-break-inside: avoid;
-        }
-        
-        .system-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            padding-bottom: 5px;
-            border-bottom: 2px solid #ecf0f1;
-        }
-        
-        .system-icon {
-            font-size: 20px;
-            margin-right: 8px;
-        }
-        
-        .system-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: #34495e;
-        }
-        
-        .command-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-        
-        .command-tag {
-            background: #f1f2f6;
-            color: #2f3542;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 13px;
-            font-weight: 500;
-            border: 1px solid #dfe4ea;
-        }
-        
-        .admin-section {
-            background: #fff0f0;
-            border: 2px dashed #ff6b6b;
-        }
-        .admin-section .system-title {
-            color: #c0392b;
-        }
-    </style>
-</head>
-<body>
-    <div class="help-container">
-        <div class="header">
-            <h1>🏘️ 模拟人生插件 - 指令大全</h1>
-            <p>Sims Plugin v2.0.0 by shskjw</p>
-        </div>
+{{block 'css'}}
+<link rel="stylesheet" type="text/css" href="{{_res_path}}/help/index.css"/>
+<% style = style.replace(/{{_res_path}}/g, _res_path) %>
+{{@style}}
+{{/block}}
 
-        <div class="system-grid">
-            <!-- 基础 -->
-            <div class="system-card">
-                <div class="system-header">
-                    <span class="system-icon">👤</span>
-                    <span class="system-title">基础功能</span>
-                </div>
-                <div class="command-list">
-                    <span class="command-tag">#模拟人生</span>
-                    <span class="command-tag">#签到</span>
-                    <span class="command-tag">#背包</span>
-                    <span class="command-tag">#状态</span>
-                    <span class="command-tag">#转账</span>
-                    <span class="command-tag">#排行榜</span>
-                </div>
-            </div>
+{{block 'main'}}
 
-            <!-- 农场 -->
-            <div class="system-card">
-                <div class="system-header">
-                    <span class="system-icon">🌾</span>
-                    <span class="system-title">农场系统</span>
-                </div>
-                <div class="command-list">
-                    <span class="command-tag">#创建农场</span>
-                    <span class="command-tag">#我的农场</span>
-                    <span class="command-tag">#农场商店</span>
-                    <span class="command-tag">#种植 [作物]</span>
-                    <span class="command-tag">#收获</span>
-                    <span class="command-tag">#灌溉</span>
-                    <span class="command-tag">#施肥</span>
-                    <span class="command-tag">#出售农产品</span>
-                    <span class="command-tag">#偷菜</span>
-                </div>
-            </div>
+<div class="info-box">
+  <div class="head-box type{{bgType}}">
+    <div class="title">{{helpCfg.title||"使用帮助"}}</div>
+    <div class="label">{{helpCfg.subTitle || "Yunzai-Bot & sims-Plugin"}}</div>
+  </div>
+  <div class="logo-container">
+    <img class="logo-img" src="{{_res_path}}/logo.png" alt="模拟人生Logo"/>
+  </div>
+</div>
 
-            <!-- 警察 -->
-            <div class="system-card">
-                <div class="system-header">
-                    <span class="system-icon">👮</span>
-                    <span class="system-title">警察系统</span>
-                </div>
-                <div class="command-list">
-                    <span class="command-tag">#成为警察</span>
-                    <span class="command-tag">#警察信息</span>
-                    <span class="command-tag">#接警</span>
-                    <span class="command-tag">#巡逻</span>
-                    <span class="command-tag">#购买警察装备</span>
-                    <span class="command-tag">#维护警察装备</span>
-                    <span class="command-tag">#警察晋升</span>
-                </div>
-            </div>
-
-            <!-- 医生 -->
-            <div class="system-card">
-                <div class="system-header">
-                    <span class="system-icon">👨‍⚕️</span>
-                    <span class="system-title">医生系统</span>
-                </div>
-                <div class="command-list">
-                    <span class="command-tag">#成为医生</span>
-                    <span class="command-tag">#医生信息</span>
-                    <span class="command-tag">#诊断患者</span>
-                    <span class="command-tag">#开药</span>
-                    <span class="command-tag">#手术</span>
-                    <span class="command-tag">#医学研究</span>
-                    <span class="command-tag">#学习医学技能</span>
-                </div>
-            </div>
-
-            <!-- 消防 -->
-            <div class="system-card">
-                <div class="system-header">
-                    <span class="system-icon">🚒</span>
-                    <span class="system-title">消防系统</span>
-                </div>
-                <div class="command-list">
-                    <span class="command-tag">#加入消防队</span>
-                    <span class="command-tag">#消防员信息</span>
-                    <span class="command-tag">#消防演习</span>
-                    <span class="command-tag">#灭火行动</span>
-                    <span class="command-tag">#购买消防装备</span>
-                    <span class="command-tag">#学习消防技能</span>
-                </div>
-            </div>
-
-            <!-- 钓鱼 -->
-            <div class="system-card">
-                <div class="system-header">
-                    <span class="system-icon">🎣</span>
-                    <span class="system-title">钓鱼系统</span>
-                </div>
-                <div class="command-list">
-                    <span class="command-tag">#钓鱼</span>
-                    <span class="command-tag">#收杆</span>
-                    <span class="command-tag">#鱼篓</span>
-                    <span class="command-tag">#出售鱼获</span>
-                    <span class="command-tag">#渔具店</span>
-                    <span class="command-tag">#购买鱼竿</span>
-                    <span class="command-tag">#鱼类图鉴</span>
-                    <span class="command-tag">#钓鱼排名</span>
-                </div>
-            </div>
-
-            <!-- 网吧 -->
-            <div class="system-card">
-                <div class="system-header">
-                    <span class="system-icon">💻</span>
-                    <span class="system-title">网吧系统</span>
-                </div>
-                <div class="command-list">
-                    <span class="command-tag">#创建网吧</span>
-                    <span class="command-tag">#我的网吧</span>
-                    <span class="command-tag">#网吧管理</span>
-                    <span class="command-tag">#购买设备</span>
-                    <span class="command-tag">#招募员工</span>
-                    <span class="command-tag">#网吧宣传</span>
-                    <span class="command-tag">#网吧扩建</span>
-                </div>
-            </div>
-            
-             <!-- 厨师 -->
-            <div class="system-card">
-                <div class="system-header">
-                    <span class="system-icon">👨‍🍳</span>
-                    <span class="system-title">厨师系统</span>
-                </div>
-                <div class="command-list">
-                    <span class="command-tag">#成为厨师</span>
-                    <span class="command-tag">#厨师信息</span>
-                    <span class="command-tag">#查看食谱</span>
-                    <span class="command-tag">#学习食谱</span>
-                    <span class="command-tag">#制作料理</span>
-                    <span class="command-tag">#出售料理</span>
-                    <span class="command-tag">#购买食材</span>
-                    <span class="command-tag">#购买厨具</span>
-                    <span class="command-tag">#厨师排行榜</span>
-                </div>
-            </div>
-
-            <!-- 酒馆 -->
-            <div class="system-card">
-                <div class="system-header">
-                    <span class="system-icon">🍺</span>
-                    <span class="system-title">酒馆系统</span>
-                </div>
-                <div class="command-list">
-                    <span class="command-tag">#创建酒馆</span>
-                    <span class="command-tag">#我的酒馆</span>
-                    <span class="command-tag">#酒馆管理</span>
-                    <span class="command-tag">#酒馆市场</span>
-                    <span class="command-tag">#雇佣员工</span>
-                    <span class="command-tag">#添加菜单</span>
-                    <span class="command-tag">#酒馆营业</span>
-                </div>
-            </div>
-
-            <!-- 房产 -->
-            <div class="system-card">
-                <div class="system-header">
-                    <span class="system-icon">🏠</span>
-                    <span class="system-title">房产系统</span>
-                </div>
-                <div class="command-list">
-                    <span class="command-tag">#房产列表</span>
-                    <span class="command-tag">#购买房产</span>
-                    <span class="command-tag">#我的房产</span>
-                    <span class="command-tag">#收取租金</span>
-                </div>
-            </div>
-
-            <!-- 股票 -->
-            <div class="system-card">
-                <div class="system-header">
-                    <span class="system-icon">📈</span>
-                    <span class="system-title">股票系统</span>
-                </div>
-                <div class="command-list">
-                    <span class="command-tag">#股票列表</span>
-                    <span class="command-tag">#买股票 [代码] [数量]</span>
-                    <span class="command-tag">#卖股票 [代码] [数量]</span>
-                    <span class="command-tag">#我的股票</span>
-                </div>
-            </div>
-            <!-- 电影院 -->
-            <div class="system-card">
-                <div class="system-header">
-                    <span class="system-icon">🎬</span>
-                    <span class="system-title">电影院系统</span>
-                </div>
-                <div class="command-list">
-                    <span class="command-tag">#购买电影院</span>
-                    <span class="command-tag">#电影院信息</span>
-                    <span class="command-tag">#购买影厅</span>
-                    <span class="command-tag">#升级影厅</span>
-                    <span class="command-tag">#购买电影</span>
-                    <span class="command-tag">#排片</span>
-                    <span class="command-tag">#购买设施</span>
-                    <span class="command-tag">#雇佣员工</span>
-                    <span class="command-tag">#培训员工</span>
-                    <span class="command-tag">#电影院排行榜</span>
-                </div>
-            </div>
-
-            <!-- 宠物系统 -->
-            <div class="system-card">
-                <div class="system-header">
-                    <span class="system-icon">🐾</span>
-                    <span class="system-title">宠物系统</span>
-                </div>
-                <div class="command-list">
-                    <span class="command-tag">#宠物抽卡</span>
-                    <span class="command-tag">#我的宠物</span>
-                    <span class="command-tag">#喂养宠物 [ID]</span>
-                    <span class="command-tag">#宠物图鉴</span>
-                    <span class="command-tag">#宠物排行</span>
-                </div>
-            </div>
-
-            <!-- 关系系统 -->
-            <div class="system-card">
-                <div class="system-header">
-                    <span class="system-icon">💕</span>
-                    <span class="system-title">关系系统</span>
-                </div>
-                <div class="command-list">
-                    <span class="command-tag">#赠送礼物 [QQ] [金额]</span>
-                    <span class="command-tag">#查看关系 [QQ]</span>
-                    <span class="command-tag">#我的关系</span>
-                    <span class="command-tag">#表白 [QQ]</span>
-                    <span class="command-tag">#离婚</span>
-                </div>
-            </div>
-
-            {% if is_admin %}
-            <!-- 管理员 -->
-            <div class="system-card full-width admin-section">
-                <div class="system-header">
-                    <span class="system-icon">🔑</span>
-                    <span class="system-title">管理员功能</span>
-                </div>
-                <div class="command-list">
-                    <span class="command-tag">#增加金币 [ID] [数量]</span>
-                    <span class="command-tag">#扣除金币 [ID] [数量]</span>
-                    <span class="command-tag">#重置玩家 [ID]</span>
-                </div>
-            </div>
-            {% endif %}
-
-        </div>
+{{each helpGroup group}}
+{{set len = group?.list?.length || 0 }}
+<div class="cont-box">
+  <div class="help-group">{{group.group}}</div>
+  {{if len > 0}}
+  <div class="help-table">
+    <div class="tr">
+      {{each group.list help idx}}
+      <div class="td">
+        <span class="help-icon" style="{{help.css}}"></span>
+        <strong class="help-title">{{help.title}}</strong>
+        <span class="help-desc">{{help.desc}}</span>
+      </div>
+      {{if idx%colCount === colCount-1 && idx>0 && idx< len-1}}
     </div>
-</body>
-</html>
+    <div class="tr">
+      {{/if}}
+      {{/each}}
+      <% for(let i=(len-1)%colCount; i< colCount-1 ; i++){ %>
+      <div class="td"></div>
+      <% } %>
+    </div>
+  </div>
+  {{/if}}
+</div>
+{{/each}}
+{{/block}}
