@@ -183,44 +183,18 @@ class SimsPlugin(Star):
         img_bytes = await html_to_image_bytes(img, width=1000, height=2000, base_path=self.template.template_dir)
 
         if img_bytes:
-            # AstrBot's event.image_result expects a string path or url, and doesn't support bytes directly.
-            # We need to save the bytes to a temp file and pass the path, OR use MessageEventResult interface directly if possible.
-            # However, looking at the error: "startswith first arg must be bytes or a tuple of bytes, not str"
-            # Wait, the error is:
-            # File "H:\AstrBot\astrbot\core\platform\astr_message_event.py", line 309, in image_result
-            # if url_or_path.startswith("http"):
-            # TypeError: startswith first arg must be bytes or a tuple of bytes, not str
-            #
-            # This means we passed BYTES (img_bytes) to a function that expected a STRING (url_or_path).
-            # The line is `if url_or_path.startswith("http"):`
-            # `url_or_path` is the bytes object we passed. "http" is a string.
-            # In Python, bytes.startswith(str) raises TypeError.
-
-            # Solution: Save bytes to a temp file and pass the path.
+            # 将图片字节保存到临时文件
             import tempfile
-            import os
-
-            # Create a temporary file
             fd, path = tempfile.mkstemp(suffix=".png")
             try:
                 with os.fdopen(fd, 'wb') as tmp:
                     tmp.write(img_bytes)
                 yield event.image_result(path)
-            finally:
-                # We can't delete immediately because yield assumes the framework will read it.
-                # But typically MessageEventResult processes immediately.
-                # To be safe, we might unwantedly leave temp files.
-                # Better approach: check if AstrBot supports bytes?
-                # Based on source code read via terminal:
-                # def image_result(self, url_or_path: str) -> MessageEventResult:
-                #     if url_or_path.startswith("http"): ...
-                # It strictly expects a string.
-                pass
-                # The framework likely reads the file content later.
-                # Ideally config/logic should clean up old temp files or use a known temp dir.
-                pass
+            except Exception as e:
+                self.logger.error(f"保存图片失败: {e}")
+                yield event.plain_result("无法保存帮助图片，请检查后台日志。")
         else:
-            # 降级文本
+            # 降级文本响应
             from .core.common.screenshot import _PLAYWRIGHT_AVAILABLE
             if not _PLAYWRIGHT_AVAILABLE:
                 yield event.plain_result(
