@@ -119,14 +119,13 @@ class SimsPlugin(Star):
     def _bytes_to_image_path(self, img_bytes: bytes) -> str:
         """将图片字节转换为临时文件路径，供 event.image_result 使用"""
         import tempfile
-        import os
         fd, path = tempfile.mkstemp(suffix=".png")
         with os.fdopen(fd, 'wb') as tmp:
             tmp.write(img_bytes)
         return path
 
-    @filter.command("模拟人生")
-    async def sims_help(self, event: AstrMessageEvent, *args, **kwargs):
+    @filter.command("模拟人生", priority=100)
+    async def sims_help(self, event: AstrMessageEvent):
         """显示模拟人生帮助"""
         user_id = event.get_sender_id()
         is_admin = self.config_manager.is_admin(user_id)
@@ -162,7 +161,7 @@ class SimsPlugin(Star):
                     y = (icon - x - 1) // 10
                     help_item['css'] = f'background-position:-{x * 50}px -{y * 50}px'
 
-            help_groups.append(group)
+            help_groups.append({"group": group.get('group'), "list": group.get('list', [])})
 
         # 获取帮助配置
         help_cfg = help_data.get('helpCfg', {})
@@ -189,23 +188,23 @@ class SimsPlugin(Star):
             try:
                 with os.fdopen(fd, 'wb') as tmp:
                     tmp.write(img_bytes)
-                yield event.image_result(path)
+                return event.image_result(path)
             except Exception as e:
                 self.logger.error(f"保存图片失败: {e}")
-                yield event.plain_result("无法保存帮助图片，请检查后台日志。")
+                return event.plain_result("无法保存帮助图片，请检查后台日志。")
         else:
             # 降级文本响应
             from .core.common.screenshot import _PLAYWRIGHT_AVAILABLE
             if not _PLAYWRIGHT_AVAILABLE:
-                yield event.plain_result(
+                return event.plain_result(
                     "无法渲染帮助图片。检测到缺少 Playwright 依赖。\n请在终端执行：\npip install playwright\nplaywright install chromium")
             else:
-                yield event.plain_result("无法渲染帮助图片，未知错误，请检查后台日志。")
+                return event.plain_result("无法渲染帮助图片，未知错误，请检查后台日志。")
 
-    @filter.command("模拟人生版本")
-    async def sims_version(self, event: AstrMessageEvent, *args, **kwargs):
+    @filter.command("模拟人生版本", priority=100)
+    async def sims_version(self, event: AstrMessageEvent):
         """显示模拟人生版本信息"""
-        yield event.plain_result("模拟人生插件 v2.1.0\nby shskjw")
+        return event.plain_result("模拟人生插件 v2.1.0\nby shskjw")
 
     # ========== 基础功能 ==========
 
