@@ -173,7 +173,8 @@ class SimsPlugin(Star):
             helpCfg=help_cfg,
             helpGroup=help_groups,
             colCount=col_count,
-            bgType=''
+            bgType='',
+            _res_path='file:///AstrBot/data/plugins/astrbot_plugin_sims/resources'
         )
         # 转为图片字节
         from .core.common.screenshot import html_to_image_bytes

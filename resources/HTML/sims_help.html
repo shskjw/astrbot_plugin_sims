@@ -1,42 +1,57 @@
-{{extend defaultLayout}}
-
-{{block 'css'}}
-<link rel="stylesheet" type="text/css" href="{{_res_path}}/help/index.css"/>
-{{/block}}
-
-{{block 'main'}}
-
-<div class="info-box">
-  <div class="head-box type{{bgType}}">
-    <div class="title">{{helpCfg.title||"使用帮助"}}</div>
-    <div class="label">{{helpCfg.subTitle || "Yunzai-Bot & sims-Plugin"}}</div>
-  </div>
-  <div class="logo-container">
-    <img class="logo-img" src="{{_res_path}}/logo.png" alt="模拟人生Logo"/>
-  </div>
-</div>
-
-{{each helpGroup group}}
-{{set len = group?.list?.length || 0 }}
-<div class="cont-box">
-  <div class="help-group">{{group.group}}</div>
-  {{if len > 0}}
-  <div class="help-table">
-    <div class="tr">
-      {{each group.list help idx}}
-      <div class="td">
-        <span class="help-icon" style="{{help.css}}"></span>
-        <strong class="help-title">{{help.title}}</strong>
-        <span class="help-desc">{{help.desc}}</span>
-      </div>
-      {{if idx%colCount === colCount-1 && idx > 0 && idx < len-1}}
-      </div>
-      <div class="tr">
-      {{/if}}
-      {{/each}}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ helpCfg.title or "使用帮助" }}</title>
+    <link rel="stylesheet" type="text/css" href="{{ _res_path }}/help/index.css"/>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f5f5f5; }
+        .info-box { width: 100%; max-width: 1000px; margin: 0 auto; }
+        .head-box { padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-align: center; }
+        .head-box.type0 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .head-box .title { font-size: 32px; font-weight: bold; margin-bottom: 10px; }
+        .head-box .label { font-size: 14px; opacity: 0.9; }
+        .logo-container { text-align: center; padding: 20px; }
+        .logo-img { max-width: 200px; height: auto; }
+        .cont-box { margin: 20px; padding: 20px; background: white; border-radius: 8px; }
+        .help-group { font-size: 18px; font-weight: bold; margin-bottom: 15px; color: #333; border-bottom: 2px solid #667eea; padding-bottom: 10px; }
+        .help-table { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; }
+        .tr { display: contents; }
+        .td { background: #f9f9f9; padding: 15px; border-radius: 6px; border-left: 4px solid #667eea; }
+        .help-icon { display: inline-block; width: 40px; height: 50px; background-image: url('{{ _res_path }}/icon.png'); background-repeat: no-repeat; background-size: 400px 500px; vertical-align: middle; margin-right: 10px; }
+        .help-title { display: block; font-weight: bold; color: #333; margin: 5px 0; }
+        .help-desc { display: block; font-size: 12px; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="info-box">
+        <div class="head-box type{{ bgType or '0' }}">
+            <div class="title">{{ helpCfg.title or "使用帮助" }}</div>
+            <div class="label">{{ helpCfg.subTitle or "Yunzai-Bot & sims-Plugin" }}</div>
+        </div>
+        <div class="logo-container">
+            <img class="logo-img" src="{{ _res_path }}/logo.png" alt="模拟人生Logo"/>
+        </div>
     </div>
-  </div>
-  {{/if}}
-</div>
-{{/each}}
-{{/block}}
+
+    {% for group in helpGroup %}
+    {% set len = group.list|length %}
+    <div class="cont-box">
+        <div class="help-group">{{ group.group }}</div>
+        {% if len > 0 %}
+        <div class="help-table">
+            {% for help in group.list %}
+            <div class="td">
+                <span class="help-icon" style="{{ help.css }}"></span>
+                <strong class="help-title">{{ help.title }}</strong>
+                <span class="help-desc">{{ help.desc }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+</body>
+</html>
